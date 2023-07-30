@@ -3,8 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/OopCourse.iml" filepath="$PROJECT_DIR$/.idea/OopCourse.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Range/Range.iml" filepath="$PROJECT_DIR$/Range/Range.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Vector/Vector.iml" filepath="$PROJECT_DIR$/Vector/Vector.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Vector/PetrushinMainRange/PetrushinMainRange.iml" filepath="$PROJECT_DIR$/Vector/PetrushinMainRange/PetrushinMainRange.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Range/PetrushinRange.iml" filepath="$PROJECT_DIR$/Range/PetrushinRange.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Vector/PetrushinVector.iml" filepath="$PROJECT_DIR$/Vector/PetrushinVector.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PetrusinRange/PetrusinRange.iml" filepath="$PROJECT_DIR$/PetrusinRange/PetrusinRange.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Shapes/Shapes.iml" filepath="$PROJECT_DIR$/Shapes/Shapes.iml" />
     </modules>
   </component>
 </project>
