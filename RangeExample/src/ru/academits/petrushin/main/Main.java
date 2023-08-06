@@ -1,6 +1,6 @@
-package main;
+package ru.academits.petrushin.main;
 
-import petrushin.range.Range;
+import ru.academits.petrushin.range.Range;
 
 import java.util.Scanner;
 
@@ -27,6 +27,7 @@ public class Main {
         Range range1 = new Range(from1, to1);
         Range range2 = new Range(from2, to2);
 
+
         // это функция длины диапазона
         System.out.println("Длина диапазона 1 составляет: " + range1.getLength());
         System.out.println("Длина диапазона 2 составляет: " + range2.getLength());
@@ -41,20 +42,31 @@ public class Main {
         } else {
             if (range2.isInside(number)) {
                 System.out.println("Число относится к диапазону чисел # 2");
+            } else {
+                System.out.println("Число не относится ни к какому диапазону чисел");
             }
-
-            System.out.println("Число не относится ник к какому диапазону чисел");
         }
 
         // функция вызова результата пересечения диапазонов
         range1.getIntersection(range2);
-        System.out.println();
+        System.out.println("Перечечение диапазонов: " + range1.getIntersection(range2));
 
         // получение объединения двух интервалов
         range1.getUnion(range2);
+        System.out.print("Результат объединения двух интервалов: ");
+
+        for (Range e : range1.getUnion(range2)) {
+            System.out.print(e);
+        }
+
         System.out.println();
 
         // Получение разности двух интервалов
         range1.getDifference(range2);
+        System.out.print("Результат разности двух интервалов: ");
+
+        for (Range e : range1.getDifference(range2)) {
+            System.out.print(e);
+        }
     }
 }
