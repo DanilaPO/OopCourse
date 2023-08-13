@@ -1,4 +1,6 @@
-class Square implements Shape {
+package ru.academits.petrushinShape.Shape;
+
+public class Square implements Shape {
     private final double sideLength;
 
     public Square(double sideLength) {
@@ -16,18 +18,29 @@ class Square implements Shape {
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Квадрат с длиной стороны: ")
-                .append(sideLength)
-                .append("; ")
-                .append("Площадь фигуры: ")
-                .append(getArea())
-                .append("; ")
-                .append("Периметер фигуры: ")
-                .append(getPerimeter());
+    public double getArea() {
+        return sideLength * sideLength;
+    }
 
-        return sb.toString();
+    @Override
+    public double getPerimeter() {
+        return 4 * sideLength;
+    }
+
+    @Override
+    public String toString() {
+        return "Квадрат с длиной стороны: " +
+                sideLength +
+                "; " +
+                "Площадь фигуры: " +
+                getArea() +
+                "; " +
+                "Периметр фигуры: " +
+                getPerimeter();
+    }
+
+    public double getSideLength() {
+        return sideLength;
     }
 
     @Override
@@ -40,7 +53,7 @@ class Square implements Shape {
         return hash;
     }
 
-    public boolean equals(Shape shape) {
+    public boolean equals(Object shape) {
         if (shape == this) {
             return true;
         }
@@ -52,15 +65,5 @@ class Square implements Shape {
         Square square = (Square) shape;
 
         return sideLength == square.sideLength;
-    }
-
-    @Override
-    public double getArea() {
-        return sideLength * sideLength;
-    }
-
-    @Override
-    public double getPerimeter() {
-        return 4 * sideLength;
     }
 }

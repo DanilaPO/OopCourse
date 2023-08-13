@@ -1,6 +1,6 @@
-package ru.academits.petrushin.main;
+package ru.academits.petrushinRange.main;
 
-import ru.academits.petrushin.range.Range;
+import ru.academits.petrushinRange.range.Range;
 
 import java.util.Scanner;
 

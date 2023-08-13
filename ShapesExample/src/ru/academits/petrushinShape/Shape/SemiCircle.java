@@ -1,8 +1,14 @@
-class SemiCircle implements Shape {
+package ru.academits.petrushinShape.Shape;
+
+public class SemiCircle implements Shape {
     private final double radius;
 
     public SemiCircle(double radius) {
         this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     @Override
@@ -16,18 +22,25 @@ class SemiCircle implements Shape {
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Полукруг с радиусом: ")
-                .append(radius)
-                .append("; ")
-                .append("Площадь фигуры: ")
-                .append(getArea())
-                .append("; ")
-                .append("Периметер фигуры: ")
-                .append(getPerimeter());
+    public double getArea() {
+        return Math.pow(radius, 2) * Math.PI / 2;
+    }
 
-        return sb.toString();
+    @Override
+    public double getPerimeter() {
+        return Math.PI * radius + 2 * radius;
+    }
+
+    @Override
+    public String toString() {
+        return "Полукруг с радиусом: " +
+                radius +
+                "; " +
+                "Площадь фигуры: " +
+                getArea() +
+                "; " +
+                "Периметр фигуры: " +
+                getPerimeter();
     }
 
     @Override
@@ -40,7 +53,7 @@ class SemiCircle implements Shape {
         return hash;
     }
 
-    public boolean equals(Shape shape) {
+    public boolean equals(Object shape) {
         if (shape == this) {
             return true;
         }
@@ -52,15 +65,5 @@ class SemiCircle implements Shape {
         SemiCircle semiCircle = (SemiCircle) shape;
 
         return radius == semiCircle.radius;
-    }
-
-    @Override
-    public double getArea() {
-        return (2 * radius / 2 * Math.PI) / 2;
-    }
-
-    @Override
-    public double getPerimeter() {
-        return Math.PI * radius + 2 * radius;
     }
 }
