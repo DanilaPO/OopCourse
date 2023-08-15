@@ -1,4 +1,4 @@
-package ru.academits.petrushin.range;
+package ru.academits.petrushin.range_main.range;
 
 import java.util.Arrays;
 
@@ -35,18 +35,16 @@ public class Range {
         return number >= from && number <= to;
     }
 
-    public String toString () {
-        double[] range = {from, to};
+    @Override
+    public String toString() {
+        String string = "(" + String.valueOf(from) + "; " + String.valueOf(to) + ")";
 
-        return Arrays.toString(range);
+        return string;
     }
 
     public Range getIntersection(Range range) {
-        if (range.from >= from && range.from <= to) {
-            double newFrom = Math.max(range.from, from);
-            double newTo = Math.min(range.to, to);
-
-            return new Range(newFrom, newTo);
+        if (range.from >= from && range.from <= to && range.to <= to) {
+            return new Range(Math.max(range.from, from), Math.min(range.to, to));
         }
 
         return null;
@@ -54,10 +52,7 @@ public class Range {
 
     public Range[] getUnion(Range range) {
         if (range.from <= to && range.to >= from) {
-            double newFrom = Math.min(from, range.from);
-            double newTo = Math.max(range.to, to);
-
-            return new Range[]{new Range(newFrom, newTo)};
+            return new Range[]{new Range(Math.min(from, range.from), Math.max(range.to, to))};
         }
 
         return new Range[]{new Range(from, to), new Range(range.from, range.to)};

@@ -1,7 +1,8 @@
-package ru.academits.petrushinRange.main;
+package ru.academits.petrushin.range_main;
 
-import ru.academits.petrushinRange.range.Range;
+import ru.academits.petrushin.range_main.range.Range;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -27,7 +28,6 @@ public class Main {
         Range range1 = new Range(from1, to1);
         Range range2 = new Range(from2, to2);
 
-
         // это функция длины диапазона
         System.out.println("Длина диапазона 1 составляет: " + range1.getLength());
         System.out.println("Длина диапазона 2 составляет: " + range2.getLength());
@@ -48,25 +48,14 @@ public class Main {
         }
 
         // функция вызова результата пересечения диапазонов
-        range1.getIntersection(range2);
-        System.out.println("Перечечение диапазонов: " + range1.getIntersection(range2));
+        System.out.println("Пересечение диапазонов: " + range1.getIntersection(range2));
 
         // получение объединения двух интервалов
-        range1.getUnion(range2);
-        System.out.print("Результат объединения двух интервалов: ");
-
-        for (Range e : range1.getUnion(range2)) {
-            System.out.print(e);
-        }
+        System.out.print("Результат объединения двух интервалов: " + Arrays.toString(range1.getUnion(range2)));
 
         System.out.println();
 
         // Получение разности двух интервалов
-        range1.getDifference(range2);
-        System.out.print("Результат разности двух интервалов: ");
-
-        for (Range e : range1.getDifference(range2)) {
-            System.out.print(e);
-        }
+        System.out.print("Результат разности двух интервалов: " + Arrays.toString(range1.getDifference(range2)));
     }
 }
