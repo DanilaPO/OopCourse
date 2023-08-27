@@ -1,6 +1,4 @@
-package ru.academits.petrushin.range_main.range;
-
-import java.util.Arrays;
+package ru.academits.petrushin_range.range;
 
 public class Range {
     private double from;
@@ -37,13 +35,11 @@ public class Range {
 
     @Override
     public String toString() {
-        String string = "(" + String.valueOf(from) + "; " + String.valueOf(to) + ")";
-
-        return string;
+        return "(" + String.valueOf(from) + "; " + String.valueOf(to) + ")";
     }
 
     public Range getIntersection(Range range) {
-        if (range.from >= from && range.from <= to && range.to <= to) {
+        if (range.from >= from && range.to <= to || from >= range.from && to <= range.to) {
             return new Range(Math.max(range.from, from), Math.min(range.to, to));
         }
 
