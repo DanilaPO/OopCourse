@@ -22,12 +22,12 @@ public class Main {
 
         // распечатка информации о фигуре с наибольшей площадью
         Arrays.sort(shapesArray, new Comparator<Shape>() {
+            @Override
             public int compare(Shape shape1, Shape shape2) {
                 return (int) Math.abs(shape2.getArea() - shape1.getArea());
             }
         });
-// TODO: 10. В этой задаче для практики компараторы нужно сделать отдельными классами в отдельных файлах
-        //TODO: 12. В компараторах лучше использовать Double.compare. Текущий вариант через приведение типа работает неверно для близких чисел
+
         System.out.print("Фигура с наибольшей площадью: " + shapesArray[0] + System.lineSeparator());
 
         // распечатка информации о фигуре со вторым по величине периметром
