@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shape.shape;
+package ru.academits.petrushin_shapes.shape;
 
 public interface Shape {
     double getWidth();

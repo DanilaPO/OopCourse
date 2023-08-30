@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shape.shape;
+package ru.academits.petrushin_shapes.shape;
 
 public class Triangle implements Shape {
     private final double x1;
@@ -51,30 +51,31 @@ public class Triangle implements Shape {
         return Math.max(Math.max(y1, y2), y3) - Math.min(Math.min(y1, y2), y3);
     }
 
-    public static double triangleSideLength(double x1, double x2, double y1, double y2) {
+    private static double getSideLength(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 
     @Override
     public double getArea() {
-        double semiPerimeter = (triangleSideLength(x1, x2, y1, y2) + triangleSideLength(x2, x3, y2, y3) + triangleSideLength(x1, x3, y1, y3)) / 2;
+        double sideLength1 = getSideLength(x1, x2, y1, y2);
+        double sideLength2 = getSideLength(x2, x3, y2, y3);
+        double sideLength3 = getSideLength(x1, x3, y1, y3);
 
-        return Math.sqrt(semiPerimeter * (semiPerimeter - triangleSideLength(x1, x2, y1, y2)) * (semiPerimeter - triangleSideLength(x2, x3, y2, y3)) * (semiPerimeter - triangleSideLength(x1, x3, y1, y3)));
+        double semiPerimeter = (sideLength1 + sideLength2 + sideLength3) / 2;
+
+        return Math.sqrt(semiPerimeter * (semiPerimeter - sideLength1) * (semiPerimeter - sideLength2) * (semiPerimeter - sideLength3));
     }
 
     @Override
     public double getPerimeter() {
-        return triangleSideLength(x1, x2, y1, y2) + triangleSideLength(x2, x3, y2, y3) + triangleSideLength(x1, x3, y1, y3);
+        return getSideLength(x1, x2, y1, y2) + getSideLength(x2, x3, y2, y3) + getSideLength(x1, x3, y1, y3);
     }
 
     @Override
     public String toString() {
-        return "Треугольник с координатами: " +
-                "(" + x1 + "; " + y1 + "), " + "(" + x2 + "; " + y2 + "), " + "(" + x3 + "; " + y3 + ")" +
-                "; " + "Площадь фигуры: " +
+        return "Треугольник с координатами: (" + x1 + "; " + y1 + "), (" + x2 + "; " + y2 + "), (" + x3 + "; " + y3 + "); Площадь фигуры: " +
                 getArea() +
-                "; " +
-                "Периметр фигуры: " +
+                "; Периметр фигуры: " +
                 getPerimeter();
     }
 
@@ -93,16 +94,17 @@ public class Triangle implements Shape {
         return hash;
     }
 
-    public boolean equals(Object shape) {
-        if (shape == this) {
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
             return true;
         }
 
-        if (shape == null || shape.getClass() != getClass()) {
+        if (object == null || object.getClass() != getClass()) {
             return false;
         }
 
-        Triangle triangle = (Triangle) shape;
+        Triangle triangle = (Triangle) object;
 
         return x1 == triangle.x1 && x2 == triangle.x2 && x3 == triangle.x3 && y1 == triangle.y1 && y2 == triangle.y2 && y3 == triangle.y3;
     }

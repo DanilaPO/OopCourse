@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Main {
     public static void main(String[] args) {
         double[] array1 = {1, 2, 3};
@@ -8,8 +10,10 @@ public class Main {
 
         Vector[] vectorsArray = {new Vector(array1), new Vector(vector2)};
 
-        Matrix matrix = new Matrix(5,-6);
-        matrix.getMatrixSize();
+        Matrix matrix = new Matrix(5, 5);
 
+        matrix.setVector(0, vector1);
+
+        System.out.println(matrix.toString());
     }
 }

@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shape.shape;
+package ru.academits.petrushin_shapes.shape;
 
 public class SemiCircle implements Shape {
     private final double radius;
@@ -23,7 +23,7 @@ public class SemiCircle implements Shape {
 
     @Override
     public double getArea() {
-        return Math.pow(radius, 2) * Math.PI / 2;
+        return radius * radius * Math.PI / 2;
     }
 
     @Override
@@ -35,11 +35,9 @@ public class SemiCircle implements Shape {
     public String toString() {
         return "Полукруг с радиусом: " +
                 radius +
-                "; " +
-                "Площадь фигуры: " +
+                "; Площадь фигуры: " +
                 getArea() +
-                "; " +
-                "Периметр фигуры: " +
+                "; Периметр фигуры: " +
                 getPerimeter();
     }
 
@@ -53,16 +51,17 @@ public class SemiCircle implements Shape {
         return hash;
     }
 
-    public boolean equals(Object shape) {
-        if (shape == this) {
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
             return true;
         }
 
-        if (shape == null || shape.getClass() != getClass()) {
+        if (object == null || object.getClass() != getClass()) {
             return false;
         }
 
-        SemiCircle semiCircle = (SemiCircle) shape;
+        SemiCircle semiCircle = (SemiCircle) object;
 
         return radius == semiCircle.radius;
     }

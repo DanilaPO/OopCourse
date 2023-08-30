@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shape.shape;
+package ru.academits.petrushin_shapes.shape;
 
 public class Square implements Shape {
     private final double sideLength;
@@ -31,11 +31,9 @@ public class Square implements Shape {
     public String toString() {
         return "Квадрат с длиной стороны: " +
                 sideLength +
-                "; " +
-                "Площадь фигуры: " +
+                "; Площадь фигуры: " +
                 getArea() +
-                "; " +
-                "Периметр фигуры: " +
+                "; Периметр фигуры: " +
                 getPerimeter();
     }
 
@@ -53,16 +51,17 @@ public class Square implements Shape {
         return hash;
     }
 
-    public boolean equals(Object shape) {
-        if (shape == this) {
+    @Override
+    public boolean equals(Object object) {
+        if (object == this) {
             return true;
         }
 
-        if (shape == null || shape.getClass() != getClass()) {
+        if (object == null || object.getClass() != getClass()) {
             return false;
         }
 
-        Square square = (Square) shape;
+        Square square = (Square) object;
 
         return sideLength == square.sideLength;
     }
