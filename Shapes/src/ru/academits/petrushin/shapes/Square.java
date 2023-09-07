@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shapes.shape;
+package ru.academits.petrushin.shapes;
 
 public class Square implements Shape {
     private final double sideLength;
@@ -29,12 +29,9 @@ public class Square implements Shape {
 
     @Override
     public String toString() {
-        return "Квадрат с длиной стороны: " +
-                sideLength +
-                "; Площадь фигуры: " +
-                getArea() +
-                "; Периметр фигуры: " +
-                getPerimeter();
+        return "Квадрат с длиной стороны: " + sideLength +
+                "; Площадь фигуры: " + getArea() +
+                "; Периметр фигуры: " + getPerimeter();
     }
 
     public double getSideLength() {

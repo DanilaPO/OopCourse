@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shapes.shape;
+package ru.academits.petrushin.shapes;
 
 public class Rectangle implements Shape {
     private final double width;
@@ -31,14 +31,10 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return "Прямоугольник с длиной сторон: ширина 1 = " +
-                width +
-                ", высота = " +
-                height +
-                "; Площадь фигуры: " +
-                getArea() +
-                "; Периметр фигуры: " +
-                getPerimeter();
+        return "Прямоугольник с длиной сторон: ширина 1 = " + width +
+                ", высота = " + height +
+                "; Площадь фигуры: " + getArea() +
+                "; Периметр фигуры: " + getPerimeter();
     }
 
     @Override

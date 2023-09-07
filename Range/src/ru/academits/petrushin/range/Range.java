@@ -1,4 +1,4 @@
-package ru.academits.petrushin_range.range;
+package ru.academits.petrushin.range;
 
 public class Range {
     private double from;
@@ -35,11 +35,11 @@ public class Range {
 
     @Override
     public String toString() {
-        return "(" + String.valueOf(from) + "; " + String.valueOf(to) + ")";
+        return "(" + from + "; " + to + ")";
     }
 
     public Range getIntersection(Range range) {
-        if (range.from >= from && range.to <= to || from >= range.from && to <= range.to) {
+        if ((range.from >= from && range.from <= to) || (from >= range.from && from <= range.to)) {
             return new Range(Math.max(range.from, from), Math.min(range.to, to));
         }
 
@@ -56,10 +56,6 @@ public class Range {
 
     public Range[] getDifference(Range range) {
         if (from < range.from) {
-            if (to < range.from) {
-                return new Range[]{new Range(from, to)};
-            }
-
             if (to >= range.from && to <= range.to) {
                 return new Range[]{new Range(from, range.from)};
             }
@@ -67,7 +63,7 @@ public class Range {
             return new Range[]{new Range(from, range.from), new Range(range.to, to)};
         }
 
-        if (range.to < from) {
+        if ((from > range.from && range.to < from) || (from < range.from && to < range.from)) {
             return new Range[]{new Range(from, to)};
         }
 

@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shapes.shape;
+package ru.academits.petrushin.shapes;
 
 public class Circle implements Shape {
     private final double radius;
@@ -33,12 +33,9 @@ public class Circle implements Shape {
 
     @Override
     public String toString() {
-        return "Круг с радиусом: " +
-                radius +
-                "; Площадь фигуры: " +
-                getArea() +
-                "; Периметр фигуры: " +
-                getPerimeter();
+        return "Круг с радиусом: " + radius +
+                "; Площадь фигуры: " + getArea() +
+                "; Периметр фигуры: " + getPerimeter();
     }
 
     @Override

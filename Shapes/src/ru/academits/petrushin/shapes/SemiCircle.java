@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shapes.shape;
+package ru.academits.petrushin.shapes;
 
 public class SemiCircle implements Shape {
     private final double radius;
@@ -33,12 +33,9 @@ public class SemiCircle implements Shape {
 
     @Override
     public String toString() {
-        return "Полукруг с радиусом: " +
-                radius +
-                "; Площадь фигуры: " +
-                getArea() +
-                "; Периметр фигуры: " +
-                getPerimeter();
+        return "Полукруг с радиусом: " + radius +
+                "; Площадь фигуры: " + getArea() +
+                "; Периметр фигуры: " + getPerimeter();
     }
 
     @Override

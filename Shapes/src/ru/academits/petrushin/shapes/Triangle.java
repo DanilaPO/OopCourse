@@ -1,4 +1,4 @@
-package ru.academits.petrushin_shapes.shape;
+package ru.academits.petrushin.shapes;
 
 public class Triangle implements Shape {
     private final double x1;
@@ -57,9 +57,9 @@ public class Triangle implements Shape {
 
     @Override
     public double getArea() {
-        double sideLength1 = getSideLength(x1, x2, y1, y2);
-        double sideLength2 = getSideLength(x2, x3, y2, y3);
-        double sideLength3 = getSideLength(x1, x3, y1, y3);
+        double sideLength1 = getSideLength(x1, y1, x2, y2);
+        double sideLength2 = getSideLength(x2, y2, x3, y3);
+        double sideLength3 = getSideLength(x1, y1, x3, y3);
 
         double semiPerimeter = (sideLength1 + sideLength2 + sideLength3) / 2;
 
@@ -68,15 +68,14 @@ public class Triangle implements Shape {
 
     @Override
     public double getPerimeter() {
-        return getSideLength(x1, x2, y1, y2) + getSideLength(x2, x3, y2, y3) + getSideLength(x1, x3, y1, y3);
+        return getSideLength(x1, y1, x2, y2) + getSideLength(x2, y2, x3, y3) + getSideLength(x1, y1, x3, y3);
     }
 
     @Override
     public String toString() {
-        return "Треугольник с координатами: (" + x1 + "; " + y1 + "), (" + x2 + "; " + y2 + "), (" + x3 + "; " + y3 + "); Площадь фигуры: " +
-                getArea() +
-                "; Периметр фигуры: " +
-                getPerimeter();
+        return "Треугольник с координатами: (" + x1 + "; " + y1 + "), (" + x2 + "; " + y2 + "), (" + x3 + "; " + y3 +
+                "); Площадь фигуры: " + getArea() +
+                "; Периметр фигуры: " + getPerimeter();
     }
 
     @Override
