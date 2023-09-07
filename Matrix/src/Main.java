@@ -10,10 +10,13 @@ public class Main {
 
         Vector[] vectorsArray = {new Vector(array1), new Vector(vector2)};
 
-        Matrix matrix = new Matrix(5, 5);
+        Matrix matrix = new Matrix(3, 5);
 
-        matrix.setVector(0, vector1);
-
-        System.out.println(matrix.toString());
+        matrix.setStringVector(0, vector1);
+        matrix.setStringVector(1, vector2);
+        matrix.getColumnVector(0);
+        //matrix.transpose();
+        System.out.println(matrix);
+        //System.out.println(matrix.toString());
     }
 }

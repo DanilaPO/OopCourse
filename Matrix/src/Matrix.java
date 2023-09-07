@@ -57,6 +57,7 @@ class Matrix {
     public Matrix(double[][] array) {
         this.array = array;
     }
+
     public double[][] getArray() {
         return array;
     }
@@ -83,7 +84,7 @@ class Matrix {
     }
 
     // b.	Получение вектора-строки по индексу
-    public Vector getVector(int index) {
+    public Vector getStringVector(int index) {
         if (index < 0) {
             throw new IllegalArgumentException("Значение индекса не может быть < 0");
         }
@@ -100,7 +101,7 @@ class Matrix {
     }
 
     // b.	Задание вектора-строки по индексу
-    public void setVector(int index, Vector newVector) {
+    public void setStringVector(int index, Vector newVector) {
         if (index < 0) {
             throw new IllegalArgumentException("Значение индекса не может быть < 0");
         }
@@ -110,12 +111,46 @@ class Matrix {
         }
 
         if (newVector.getSize() < column) {
-
-
-            vector[index] = new newVector.getVectorComponents();
+            vector[index].setVectorComponents(Arrays.copyOf(newVector.getVectorComponents(), column));
+            return;
         }
 
         vector[index] = newVector;
+    }
+
+    // c. Получение вектора-столбца по индексу
+    public Vector getColumnVector(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("Значение индекса не может быть < 0");
+        }
+
+        if (index >= column) {
+            throw new ArrayIndexOutOfBoundsException("Выход индекса за пределы массива векторов");
+        }
+
+        if (vector == null) {
+            throw new NullPointerException("В матрице нет векторов - нужно положить вектор");
+        }
+
+        double[] newArray = new double[string];
+
+        for (int i = 0; i < string; ++i) {
+            newArray[i] = vector[i].getVectorComponents()[index];
+        }
+
+        return new Vector(newArray);
+    }
+
+    //d. Транспонирование матрицы
+
+    public void transpose() {
+        Vector[] newVector = new Vector[column];
+
+        for (int i = 0; i < column; ++i) {
+            newVector[i] = getColumnVector(i);
+        }
+
+        vector = newVector;
     }
 
     public String toString() {
@@ -123,12 +158,12 @@ class Matrix {
             throw new IllegalArgumentException("Значение не может быть < 0");
         }
 
-        String string = "";
+        StringBuilder string = new StringBuilder();
 
         for (Vector e : vector) {
-            string += Arrays.toString(e.getVectorComponents()) + System.lineSeparator();
+            string.append(Arrays.toString(e.getVectorComponents())).append(System.lineSeparator());
         }
 
-        return string;
+        return string.toString();
     }
 }

@@ -1,11 +1,10 @@
-package ru.academits.petrushin.main.array_list;
-
+package ru.academits.petrushin.vector_main.array_list;
 
 import ru.academits.petrushin.array_list.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList list = new ArrayList();
+        ArrayList<Integer> list =  new ArrayList<>();
         Integer x = 0;
         Integer x1 = 1;
         Integer x2 = 2;
@@ -30,9 +29,6 @@ public class Main {
         list.add(x9);
         list.add(x10);
 
-        Integer y = 10;
-
-        System.out.println(list.contains(10));
-
+        System.out.println(list);
     }
 }

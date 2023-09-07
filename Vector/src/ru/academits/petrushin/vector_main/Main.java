@@ -1,6 +1,6 @@
-package ru.academits.petrushin_vector.main;
+package ru.academits.petrushin.vector_main;
 
-import ru.academits.petrushin_vector.vector.Vector;
+import ru.academits.petrushin.vector.Vector;
 
 public class Main {
     public static void main(String[] args) {
@@ -23,10 +23,10 @@ public class Main {
         System.out.println("Скалярное произведение векторов нестатическим методом: " + vector1);
 
         // Инверсия вектора
-        vector1.reversal();
+        vector1.unwrap();
         System.out.println("Инверсия вектора 1: " + vector1);
 
-        vector2.reversal();
+        vector2.unwrap();
         System.out.println("Инверсия вектора 2: " + vector2);
 
         // Длина вектора
@@ -47,7 +47,7 @@ public class Main {
         // Результат получения нового вектора от разности векторов статическим методом
         System.out.println("Результат получения нового вектора от разности векторов статическим методом" + Vector.getDifference(vector1, vector2));
 
-        // Скалярное произведение векторов татическим методом
+        // Скалярное произведение векторов статическим методом
         System.out.println("Результат скалярного произведения векторов статическим методом " + Vector.getScalarProduct(vector1, vector2));
     }
 }

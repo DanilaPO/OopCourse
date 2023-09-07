@@ -1,4 +1,4 @@
-package ru.academits.petrushin_vector.vector;
+package ru.academits.petrushin.vector;
 
 import java.util.Arrays;
 
@@ -26,17 +26,11 @@ public class Vector {
     }
 
     public Vector(int size, double[] array) {
-        if (size <= 0 || size < array.length) {
+        if (size <= 0) {
             throw new IllegalArgumentException("Размерность вектора должна быть > 0  и >= длине массива, а не " + size);
         }
 
         components = Arrays.copyOf(array, size);
-
-        if (array.length < size) {
-            for (int i = array.length; i < size; ++i) {
-                components[i] = 0;
-            }
-        }
     }
 
     public int getSize() {
@@ -45,17 +39,15 @@ public class Vector {
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder("{");
+        StringBuilder stringBuilder = new StringBuilder("{");
 
         for (int i = 0; i < components.length; ++i) {
-            if (i == components.length - 1) {
-                string.append(components[i]).append("}");
-            } else {
-                string.append(components[i]).append(", ");
-            }
+            stringBuilder.append(components[i]).append(";");
         }
 
-        return string.toString();
+        stringBuilder.append("}");
+
+        return stringBuilder.toString();
     }
 
     // Прибавление к вектору другого вектора
@@ -81,14 +73,14 @@ public class Vector {
     }
 
     // Умножение вектора на скаляр
-    public void multiplyByScalar(int scalar) {
+    public void multiplyByScalar(double scalar) {
         for (int i = 0; i < components.length; ++i) {
             components[i] *= scalar;
         }
     }
 
     // Разворот вектора (умножение всех компонент на -1)
-    public void reversal() {
+    public void unwrap() {
         multiplyByScalar(-1);
     }
 
@@ -106,11 +98,11 @@ public class Vector {
     // Получение и установка компоненты вектора по индексу
     public double getComponent(int index) {
         if (index >= components.length) {
-            throw new IndexOutOfBoundsException("Index должен быть < " + components.length + ", а не " + index);
+            throw new IndexOutOfBoundsException("Index должен быть < " + components.length + ". Передано значение " + index);
         }
 
         if (index < 0) {
-            throw new IndexOutOfBoundsException("Index должен быть >= 0" + ", а не " + index);
+            throw new IndexOutOfBoundsException("Index должен быть >= 0. Передано значение  " + index);
         }
 
         return components[index];
@@ -118,11 +110,11 @@ public class Vector {
 
     public void setComponent(int index, double component) {
         if (index >= components.length) {
-            throw new IndexOutOfBoundsException("Index должен быть < " + components.length + ", а не " + index);
+            throw new IndexOutOfBoundsException("Index должен быть < " + components.length + ". Передано значение " + index);
         }
 
         if (index < 0) {
-            throw new IndexOutOfBoundsException("Index должен быть >= 0" + ", а не " + index);
+            throw new IndexOutOfBoundsException("Index должен быть >= 0. Передано значение " + index);
         }
 
         components[index] = component;
@@ -153,23 +145,23 @@ public class Vector {
     public static Vector getSum(Vector vector1, Vector vector2) {
         vector1.add(vector2);
 
-        return vector1;
+        return new Vector(vector1);
     }
 
     // Вычитание векторов – должен создаваться новый вектор
     public static Vector getDifference(Vector vector1, Vector vector2) {
         vector1.subtract(vector2);
 
-        return vector1;
+        return new Vector(vector1);
     }
 
     // Скалярное произведение векторов
     public static double getScalarProduct(Vector vector1, Vector vector2) {
-        int limit = Math.min(vector1.components.length, vector2.components.length);
+        int minSize = Math.min(vector1.components.length, vector2.components.length);
 
         double scalarProduct = 0;
 
-        for (int i = 0; i < limit; ++i) {
+        for (int i = 0; i < minSize; ++i) {
             scalarProduct += vector1.components[i] * vector2.components[i];
         }
 
