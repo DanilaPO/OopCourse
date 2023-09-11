@@ -14,8 +14,8 @@ public class Main {
 
         matrix.setStringVector(0, vector1);
         matrix.setStringVector(1, vector2);
-        matrix.getColumnVector(0);
-        //matrix.transpose();
+
+        matrix.multiplyByScalar(2);
         System.out.println(matrix);
         //System.out.println(matrix.toString());
     }

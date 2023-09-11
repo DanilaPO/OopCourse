@@ -111,7 +111,7 @@ class Matrix {
         }
 
         if (newVector.getSize() < column) {
-            vector[index].setVectorComponents(Arrays.copyOf(newVector.getVectorComponents(), column));
+            vector[index].setComponent(Arrays.copyOf(newVector.components, column));
             return;
         }
 
@@ -135,7 +135,7 @@ class Matrix {
         double[] newArray = new double[string];
 
         for (int i = 0; i < string; ++i) {
-            newArray[i] = vector[i].getVectorComponents()[index];
+            newArray[i] = vector[i].getComponent()[index];
         }
 
         return new Vector(newArray);
@@ -153,6 +153,15 @@ class Matrix {
         vector = newVector;
     }
 
+    // e. Умножение на скаляр
+    public void multiplyByScalar(double scalar) {
+        for (int i = 0; i < string; ++i) {
+            for (int j = 0; j < column; ++j) {
+                vector *= scalar;
+            }
+        }
+    }
+
     public String toString() {
         if (string < 0 || column < 0) {
             throw new IllegalArgumentException("Значение не может быть < 0");
@@ -161,7 +170,7 @@ class Matrix {
         StringBuilder string = new StringBuilder();
 
         for (Vector e : vector) {
-            string.append(Arrays.toString(e.getVectorComponents())).append(System.lineSeparator());
+            string.append(Arrays.toString(e.getComponent())).append(System.lineSeparator());
         }
 
         return string.toString();

@@ -1,6 +1,11 @@
-package ru.academits.petrushin.vector_main.array_list;
+package ru.academits.petrushin.array_list_main;
 
 import ru.academits.petrushin.array_list.ArrayList;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -29,6 +34,13 @@ public class Main {
         list.add(x9);
         list.add(x10);
 
-        System.out.println(list);
+        List<Integer> list2 = new LinkedList<>();
+        list2.add(x3);
+        list2.add(x4);
+        list2.add(x5);
+
+        list.toArray(list.toArray());
+
+        System.out.println(Arrays.toString(list.toArray(list.toArray())));
     }
 }
