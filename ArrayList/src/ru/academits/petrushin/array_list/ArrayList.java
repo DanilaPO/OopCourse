@@ -1,12 +1,14 @@
 package ru.academits.petrushin.array_list;
 
 import java.util.*;
-
+import java.util.ListIterator;
 
 public class ArrayList<T> {
     private T[] list;
     private int size;
     private final int DEFAULT_CAPACITY = 10;
+
+    int n = 0;
 
     //  В список надо добавить поле modCount – число изменений,
     //и менять его во всех методах удаления и добавления
@@ -62,9 +64,9 @@ public class ArrayList<T> {
                 throw new NoSuchElementException("Коллекция кончилась");
             }
 
-            if (currentModCount != modCount) {
-                throw new ConcurrentModificationException("в коллекции добавились/удалились элементы за время обхода");
-            }
+//            if (currentModCount != modCount) {
+//                throw new ConcurrentModificationException("в коллекции добавились/удалились элементы за время обхода");
+//            }
 
             ++currentIndex;
             return list[currentIndex];
@@ -89,45 +91,106 @@ public class ArrayList<T> {
         return (T[]) list;
     }
 
-//    @Override
-//    public boolean remove(Object o) {
-//        if (index >= size) {
-//            throw new IndexOutOfBoundsException("Выход за пределы size");
-//        }
-//
-//        if (index < 0) {
-//            throw new IllegalArgumentException("Индекс не может быть отрицательным");
-//        }
-//
-//        if (index < size - 1) {
-//            System.arraycopy(list, index + 1, list, index, size - index - 1);
-//        }
-//
-//        list[size - 1] = null;
-//        --size;
-//
-//        return false;
-//    }
-//
+    public void remove(Object o) {
+        int index;
 
-//    public boolean containsAll(Collection<?> c) {
-//
-//    }
-//
-//    @Override
-//    public boolean addAll(Collection<? extends T> c) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean addAll(int index, Collection<? extends T> c) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean removeAll(Collection<?> c) {
-//        return false;
-//    }
+        for (Iterator<?> i = iterator(); i.hasNext(); ) {
+            Object element1 = i.next();
+
+            if (element1.equals(o)) {
+                index = indexOf(element1);
+
+                System.arraycopy(list, index + 1, list, index, size - index - 1);
+
+                list[size - 1] = null;
+                --size;
+
+                --modCount;
+            }
+        }
+    }
+
+    public boolean containsAll(Collection<?> c) {
+        boolean isContains = true;
+
+        for (Iterator<?> i = iterator(); i.hasNext(); ) {
+            Object element1 = i.next();
+
+            if (!isContains) {
+                return false;
+            }
+
+            for (Iterator<?> j = c.iterator(); j.hasNext(); ) {
+                Object element2 = j.next();
+
+                if (element1.equals(element2)) {
+                    isContains = true;
+                    break;
+                } else {
+                    isContains = false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void addAll(Collection<? extends T> c) {
+        for (Iterator<?> i = c.iterator(); i.hasNext(); ) {
+            Object element = i.next();
+            add((T) element);
+            ++modCount;
+        }
+    }
+
+    public void addAll(int index, Collection<T> c) {
+        if (index > size) {
+            throw new IndexOutOfBoundsException("Выход за пределы size");
+        }
+
+        if (index < 0) {
+            throw new IllegalArgumentException("Индекс не может быть отрицательным");
+        }
+
+        if (size == list.length - 1) {
+            increaseCapacity();
+        }
+
+        if (index == size) {
+            for (Iterator<?> i = c.iterator(); i.hasNext(); ) {
+                Object element = i.next();
+
+                add((T) element);
+                index++;
+            }
+            return;
+        }
+
+        for (Iterator<?> i = c.iterator(); i.hasNext(); ) {
+            Object element = i.next();
+
+            add(index, (T) element);
+            index++;
+        }
+
+    }
+
+    public void removeAll(Collection<?> c) {
+        for (Iterator<?> i = iterator(); i.hasNext(); ) {
+            Object element1 = i.next();
+
+            for (Iterator<?> j = c.iterator(); j.hasNext(); ) {
+                Object element2 = j.next();
+
+                if (element1.equals(element2)) {
+                    System.arraycopy(list, indexOf(element1) + 1, list, indexOf(element1), size - indexOf(element1) - 1);
+                    list[size - 1] = null;
+                    --size;
+                    ++modCount;
+                }
+            }
+        }
+    }
 
     public T[] retainAll(Collection<?> c) {
         int count = 0;
@@ -231,6 +294,8 @@ public class ArrayList<T> {
         }
 
         list[index] = element;
+
+        size++;
 
         ++modCount;
     }

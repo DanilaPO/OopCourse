@@ -1,9 +1,10 @@
-import java.util.Arrays;
+package ru.acaemits.petrushin.matrix;
 
-class Matrix {
+import ru.acaemits.petrushin.matrix_vector.Vector;
+
+public class Matrix implements Cloneable {
     private int string;
     private int column;
-    private Matrix matrix;
     private double[][] array;
     private Vector[] vector;
 
@@ -26,6 +27,87 @@ class Matrix {
         }
     }
 
+    public Matrix(double[][] array) {
+        this.array = array;
+
+        int maxArrayLength = 0;
+
+        for (double[] e : array) {
+            ++string;
+
+            if (e.length > maxArrayLength) {
+                maxArrayLength = e.length;
+            }
+        }
+
+        this.column = maxArrayLength;
+
+        this.vector = new Vector[string];
+
+        for (int i = 0; i < string; ++i) {
+            for (int j = 0; j < maxArrayLength; ++j) {
+                vector[i] = new Vector(maxArrayLength, array[i]);
+            }
+        }
+    }
+
+    public Matrix(Vector[] vector) {
+        int maxVectorSize = 0;
+
+        for (Vector e : vector) {
+            ++string;
+
+            if (e.getSize() > maxVectorSize) {
+                maxVectorSize = e.getSize();
+            }
+        }
+
+        this.column = maxVectorSize;
+
+        this.array = new double[string][maxVectorSize];
+
+        for (int i = 0; i < string; ++i) {
+            for (int j = 0; j < maxVectorSize; ++j) {
+                try {
+                    array[i][j] = vector[i].getComponents()[j];
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    array[i][j] = 0;
+                }
+            }
+        }
+
+        this.vector = new Vector[string];
+
+        for (int i = 0; i < string; ++i) {
+            for (int j = 0; j < maxVectorSize; ++j) {
+                this.vector[i] = new Vector(maxVectorSize, array[i]);
+            }
+        }
+    }
+
+    public Matrix(Matrix matrix) {
+        this.string = matrix.string;
+        this.column = matrix.column;
+
+        this.vector = new Vector[this.string];
+
+        for (int i = 0; i < this.vector.length; ++i) {
+            this.vector[i] = new Vector(matrix.vector[i].getComponents());
+        }
+
+        this.array = new double[this.string][this.column];
+
+        for (int i = 0; i < this.string; ++i) {
+            for (int j = 0; j < this.column; ++j) {
+                try {
+                    array[i][j] = vector[i].getComponents()[j];
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    array[i][j] = 0;
+                }
+            }
+        }
+    }
+
     public int getString() {
         return string;
     }
@@ -42,32 +124,12 @@ class Matrix {
         this.column = column;
     }
 
-    public Matrix(Matrix matrix) {
-        this.matrix = matrix;
-    }
-
-    public Matrix getMatrix() {
-        return matrix;
-    }
-
-    public void setMatrix(Matrix matrix) {
-        this.matrix = matrix;
-    }
-
-    public Matrix(double[][] array) {
-        this.array = array;
-    }
-
     public double[][] getArray() {
         return array;
     }
 
     public void setArray(double[][] array) {
         this.array = array;
-    }
-
-    public Matrix(Vector[] vector) {
-        this.vector = vector;
     }
 
     public Vector[] getVector() {
@@ -111,7 +173,17 @@ class Matrix {
         }
 
         if (newVector.getSize() < column) {
-            vector[index].setComponent(Arrays.copyOf(newVector.components, column));
+            vector[index] = new Vector(column, newVector.getComponents());
+            return;
+        }
+
+        if (newVector.getSize() > column) {
+            vector[index] = newVector;
+
+            for (int i = 0; i < string; ++i) {
+                vector[i] = new Vector(newVector.getSize(), vector[i].getComponents());
+            }
+
             return;
         }
 
@@ -135,14 +207,13 @@ class Matrix {
         double[] newArray = new double[string];
 
         for (int i = 0; i < string; ++i) {
-            newArray[i] = vector[i].getComponent()[index];
+            newArray[i] = vector[i].getComponents()[index];
         }
 
         return new Vector(newArray);
     }
 
     //d. Транспонирование матрицы
-
     public void transpose() {
         Vector[] newVector = new Vector[column];
 
@@ -156,23 +227,42 @@ class Matrix {
     // e. Умножение на скаляр
     public void multiplyByScalar(double scalar) {
         for (int i = 0; i < string; ++i) {
-            for (int j = 0; j < column; ++j) {
-                vector *= scalar;
-            }
+            vector[i].multiplyByScalar(scalar);
         }
     }
 
+    // g. toString определить так, чтобы результат получался в таком виде: {{1, 2}, {2, 3}}
     public String toString() {
         if (string < 0 || column < 0) {
             throw new IllegalArgumentException("Значение не может быть < 0");
         }
 
-        StringBuilder string = new StringBuilder();
+        StringBuilder string = new StringBuilder("{");
 
         for (Vector e : vector) {
-            string.append(Arrays.toString(e.getComponent())).append(System.lineSeparator());
+            string.append("{");
+
+            for (double f : e.getComponents()) {
+                string.append(f)
+                        .append(", ");
+            }
+
+            string.setCharAt(string.length() - 2, '}');
+            string.setCharAt(string.length() - 1, ',');
+            string.append(" ");
         }
+
+        string.setCharAt(string.length() - 2, '}');
 
         return string.toString();
     }
+
+    // h. умножение матрицы на вектор
+//    public void multiplyByVector(Vector multiVector) {
+//        for (int i = 0; i < column; ++i) {
+//            for (int j = 0; j < string; ++j) {
+//                vector[j].getComponents()[j] *= multiVector.getComponents()[i];
+//            }
+//        }
+//    }
 }

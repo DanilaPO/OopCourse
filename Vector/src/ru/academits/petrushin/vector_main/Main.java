@@ -23,10 +23,10 @@ public class Main {
         System.out.println("Скалярное произведение векторов нестатическим методом: " + vector1);
 
         // Инверсия вектора
-        vector1.revers();
+        vector1.reverse();
         System.out.println("Инверсия вектора 1: " + vector1);
 
-        vector2.revers();
+        vector2.reverse();
         System.out.println("Инверсия вектора 2: " + vector2);
 
         // Длина вектора

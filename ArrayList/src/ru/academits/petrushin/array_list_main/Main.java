@@ -2,8 +2,6 @@ package ru.academits.petrushin.array_list_main;
 
 import ru.academits.petrushin.array_list.ArrayList;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,13 +32,21 @@ public class Main {
         list.add(x9);
         list.add(x10);
 
+
+
         List<Integer> list2 = new LinkedList<>();
+        Integer y3 = 10;
+        Integer y4 = 12;
+        Integer y5 = 13;
+
         list2.add(x3);
         list2.add(x4);
-        list2.add(x5);
+        list2.add(x6);
+        list.indexOf(x4);
 
-        list.toArray(list.toArray());
 
-        System.out.println(Arrays.toString(list.toArray(list.toArray())));
+        list.removeAll(list2);
+
+        System.out.println(list.indexOf(x4));
     }
 }
