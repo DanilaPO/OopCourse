@@ -23,6 +23,7 @@ public class Main {
 
         System.out.print("Введите число: ");
         double number = scanner.nextDouble();
+
         System.out.println();
 
         // здесь два диапазона
@@ -58,8 +59,7 @@ public class Main {
         System.out.println();
 
         // получение объединения двух интервалов
-        System.out.print("Результат объединения двух интервалов: " + Arrays.toString(range1.getUnion(range2)));
-        System.out.println();
+        System.out.println("Результат объединения двух интервалов: " + Arrays.toString(range1.getUnion(range2)));
         System.out.println();
 
         // Получение разности двух интервалов
