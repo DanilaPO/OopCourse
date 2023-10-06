@@ -7,7 +7,7 @@ public class Vector {
 
     public Vector(int size) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Размерность вектора должна быть > 0. Вместо этого передано " + size);
+            throw new IllegalArgumentException("Размерность вектора должна быть > 0. Передано значение: " + size);
         }
 
         components = new double[size];
@@ -19,7 +19,7 @@ public class Vector {
 
     public Vector(double[] array) {
         if (array.length == 0) {
-            throw new IllegalArgumentException("Размерность вектора должна быть > 0. Вместо этого передано " + array.length);
+            throw new IllegalArgumentException("Размерность вектора должна быть > 0. Передано значение: " + array.length);
         }
 
         components = Arrays.copyOf(array, array.length);
@@ -27,14 +27,14 @@ public class Vector {
 
     public Vector(int size, double[] array) {
         if (size <= 0) {
-            throw new IllegalArgumentException("Размерность вектора должна быть > 0. Вместо этого передано " + size);
+            throw new IllegalArgumentException("Размерность вектора должна быть > 0. Передано значение: " + size);
         }
 
         components = Arrays.copyOf(array, size);
     }
 
     public double[] getComponents() {
-        return components;
+        return  components;
     }
 
     public void setComponents(double[] components) {
@@ -52,10 +52,12 @@ public class Vector {
         for (double component : components) {
             stringBuilder
                     .append(component)
-                    .append("; ");
+                    .append(", ");
         }
 
-        stringBuilder.setCharAt(stringBuilder.length() - 2, '}');
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length() - 1);
+
+        stringBuilder.setCharAt(stringBuilder.length() - 1, '}');
 
         return stringBuilder.toString();
     }
@@ -90,7 +92,7 @@ public class Vector {
     }
 
     // Разворот вектора (умножение всех компонент на -1)
-    public void revers() {
+    public void reverse() {
         multiplyByScalar(-1);
     }
 
@@ -98,8 +100,8 @@ public class Vector {
     public double getLength() {
         double sum = 0;
 
-        for (int i = 0; i < components.length; ++i) {
-            sum += components[i] * components[i];
+        for (double component : components) {
+            sum += component * component;
         }
 
         return Math.sqrt(sum);
@@ -108,11 +110,11 @@ public class Vector {
     // Получение и установка компоненты вектора по индексу
     public double getComponent(int index) {
         if (index < 0) {
-            throw new IndexOutOfBoundsException("Index должен быть >= 0.Вместо этого передано " + index);
+            throw new IndexOutOfBoundsException("Index должен быть >= 0. Передано значение: " + index);
         }
 
         if (index >= components.length) {
-            throw new IndexOutOfBoundsException("Index должен быть < " + components.length + ". Вместо этого передано " + index);
+            throw new IndexOutOfBoundsException("Index должен быть < " + components.length + ". Передано значение: " + index);
         }
 
         return components[index];
@@ -120,11 +122,11 @@ public class Vector {
 
     public void setComponent(int index, double component) {
         if (index < 0) {
-            throw new IndexOutOfBoundsException("Index должен быть >= 0. Вместо этого передано " + index);
+            throw new IndexOutOfBoundsException("Index должен быть >= 0. Передано значение: " + index);
         }
 
         if (index >= components.length) {
-            throw new IndexOutOfBoundsException("Index должен быть < " + components.length + ". Вместо этого передано " + index);
+            throw new IndexOutOfBoundsException("Index должен быть < " + components.length + ". Передано значение: " + index);
         }
 
         components[index] = component;
@@ -153,18 +155,18 @@ public class Vector {
 
     // Сложение двух векторов – должен создаваться новый вектор
     public static Vector getSum(Vector vector1, Vector vector2) {
-        Vector newVector = new Vector(vector1);
-        newVector.add(vector2);
+        Vector resultVector = new Vector(vector1);
+        resultVector.add(vector2);
 
-        return new Vector(vector1);
+        return resultVector;
     }
 
     // Вычитание векторов – должен создаваться новый вектор
     public static Vector getDifference(Vector vector1, Vector vector2) {
-        Vector newVector = new Vector(vector1);
-        newVector.subtract(vector2);
+        Vector resultVector = new Vector(vector1);
+        resultVector.subtract(vector2);
 
-        return new Vector(newVector);
+        return resultVector;
     }
 
     // Скалярное произведение векторов

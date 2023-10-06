@@ -3,7 +3,7 @@ package ru.academits.petrushin.array_list;
 import java.util.*;
 import java.util.ListIterator;
 
-public class ArrayList<T> {
+public class ArrayList<T> implements List<T>{
     private T[] list;
     private int size;
     private final int DEFAULT_CAPACITY = 10;
@@ -37,62 +37,24 @@ public class ArrayList<T> {
         return size == 0;
     }
 
-    public boolean contains(Object o) {
-        for (int i = size - 1; i >= 0; --i) {
-            if (list[i].equals(o)) {
-                return true;
-            }
+    @Override
+    public boolean add(T element) {
+        if (size == list.length - 1) {
+            increaseCapacity();
+            list[size] = element;
         }
 
-        return false;
+        list[size] = element;
+        size++;
+        ++modCount;
+
+        return true;
     }
 
-    private class MyListIterator implements Iterator<T> {
-        private int currentIndex = -1;
-        private int currentModCount;
-
-        public MyListIterator(int currentModCount) {
-            this.currentModCount = currentModCount;
-        }
-
-        public boolean hasNext() {
-            return currentIndex + 1 < size;
-        }
-
-        public T next() {
-            if (currentIndex >= size) {
-                throw new NoSuchElementException("Коллекция кончилась");
-            }
-
-//            if (currentModCount != modCount) {
-//                throw new ConcurrentModificationException("в коллекции добавились/удалились элементы за время обхода");
-//            }
-
-            ++currentIndex;
-            return list[currentIndex];
-        }
-    }
-
-    public Iterator<T> iterator() {
-        int currentModCount = modCount;
-        return new MyListIterator(currentModCount);
-    }
-
-    public Object[] toArray() {
-        return list;
-    }
-
-    public <T> T[] toArray(T[] a) {
-        trimToSize();
-
-        Object[] list2 = new Object[size()];
-        list2 = list;
-
-        return (T[]) list;
-    }
-
-    public void remove(Object o) {
+    @Override
+    public boolean remove(Object o) {
         int index;
+        boolean isContains = false;
 
         for (Iterator<?> i = iterator(); i.hasNext(); ) {
             Object element1 = i.next();
@@ -105,11 +67,16 @@ public class ArrayList<T> {
                 list[size - 1] = null;
                 --size;
 
-                --modCount;
+                ++modCount;
+
+                isContains = true;
             }
         }
+
+        return isContains;
     }
 
+    @Override
     public boolean containsAll(Collection<?> c) {
         boolean isContains = true;
 
@@ -135,15 +102,21 @@ public class ArrayList<T> {
         return true;
     }
 
-    public void addAll(Collection<? extends T> c) {
+    @Override
+    public boolean addAll(Collection<? extends T> c) {
         for (Iterator<?> i = c.iterator(); i.hasNext(); ) {
             Object element = i.next();
             add((T) element);
             ++modCount;
         }
+
+        return true;
     }
 
-    public void addAll(int index, Collection<T> c) {
+    @Override
+    public boolean addAll(int index, Collection<? extends T> c) {
+        boolean isAdd = false;
+
         if (index > size) {
             throw new IndexOutOfBoundsException("Выход за пределы size");
         }
@@ -162,8 +135,15 @@ public class ArrayList<T> {
 
                 add((T) element);
                 index++;
+
+                isAdd = true;
             }
-            return;
+
+            if (isAdd == true) {
+                ++modCount;
+            }
+
+            return isAdd;
         }
 
         for (Iterator<?> i = c.iterator(); i.hasNext(); ) {
@@ -171,11 +151,21 @@ public class ArrayList<T> {
 
             add(index, (T) element);
             index++;
+
+            isAdd = true;
         }
 
+        if (isAdd == true) {
+            ++modCount;
+        }
+
+        return isAdd;
     }
 
-    public void removeAll(Collection<?> c) {
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean isRemove = false;
+
         for (Iterator<?> i = iterator(); i.hasNext(); ) {
             Object element1 = i.next();
 
@@ -187,12 +177,17 @@ public class ArrayList<T> {
                     list[size - 1] = null;
                     --size;
                     ++modCount;
+
+                    isRemove = true;
                 }
             }
         }
+
+        return isRemove;
     }
 
-    public T[] retainAll(Collection<?> c) {
+    @Override
+    public boolean retainAll(Collection<?> c) {
         int count = 0;
 
         for (Iterator<?> i = c.iterator(); i.hasNext(); ) {
@@ -205,6 +200,10 @@ public class ArrayList<T> {
                     ++count;
                 }
             }
+        }
+
+        if (count == size - 1) {
+            return false;
         }
 
         T[] newList = (T[]) new Object[count];
@@ -224,9 +223,12 @@ public class ArrayList<T> {
             }
         }
 
-        return newList;
+        ++modCount;
+
+        return true;
     }
 
+    @Override
     public void clear() {
         for (int i = 0; i <= size; ++i) {
             list[i] = null;
@@ -239,6 +241,7 @@ public class ArrayList<T> {
         ++modCount;
     }
 
+    @Override
     public T get(int index) {
         if (index > size) {
             throw new IndexOutOfBoundsException("Выход за пределы size");
@@ -251,6 +254,7 @@ public class ArrayList<T> {
         return list[index];
     }
 
+    @Override
     public T set(int index, T element) {
         if (index > size) {
             throw new IndexOutOfBoundsException("Выход за пределы size");
@@ -271,6 +275,7 @@ public class ArrayList<T> {
         return element;
     }
 
+    @Override
     public void add(int index, T element) {
         if (index > size) {
             throw new IndexOutOfBoundsException("Выход за пределы size");
@@ -300,17 +305,28 @@ public class ArrayList<T> {
         ++modCount;
     }
 
-    public void add(T element) {
-        if (size == list.length - 1) {
-            increaseCapacity();
-            list[size] = element;
+    @Override
+    public T remove(int index) {
+        if (index > size) {
+            throw new IndexOutOfBoundsException("Выход за пределы size");
         }
 
-        list[size] = element;
-        size++;
+        if (index < 0) {
+            throw new IllegalArgumentException("Индекс не может быть отрицательным");
+        }
+
+        T removeElement = list[index];
+
+        System.arraycopy(list, index + 1, list, index, size - index - 1);
+
+        list[size - 1] = null;
+        --size;
         ++modCount;
+
+        return removeElement;
     }
 
+    @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; ++i) {
             if (list[i].equals(o)) {
@@ -321,6 +337,7 @@ public class ArrayList<T> {
         return -1;
     }
 
+    @Override
     public int lastIndexOf(Object o) {
         for (int i = size - 1; i >= 0; --i) {
             if (list[i].equals(o)) {
@@ -329,6 +346,60 @@ public class ArrayList<T> {
         }
 
         return -1;
+    }
+
+    public boolean contains(Object o) {
+        for (int i = size - 1; i >= 0; --i) {
+            if (list[i].equals(o)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private class MyListIterator implements Iterator<T> {
+        private int currentIndex = -1;
+        private int currentModCount;
+
+        public MyListIterator(int currentModCount) {
+            this.currentModCount = currentModCount;
+        }
+
+        public boolean hasNext() {
+            return currentIndex + 1 < size;
+        }
+
+        public T next() {
+            if (currentIndex >= size) {
+                throw new NoSuchElementException("Коллекция кончилась");
+            }
+
+            if (currentModCount != modCount) {
+                throw new ConcurrentModificationException("в коллекции добавились/удалились элементы за время обхода");
+            }
+
+            ++currentIndex;
+            return list[currentIndex];
+        }
+    }
+
+    public Iterator<T> iterator() {
+        int currentModCount = modCount;
+        return new MyListIterator(currentModCount);
+    }
+
+    public Object[] toArray() {
+        return list;
+    }
+
+    public <T> T[] toArray(T[] a) {
+        trimToSize();
+
+        Object[] list2 = new Object[size()];
+        list2 = list;
+
+        return (T[]) list;
     }
 
     // В Java методы sublist и listIterator реализовывать не нужно

@@ -43,10 +43,8 @@ public class Main {
         list2.add(x4);
         list2.add(x6);
         list.indexOf(x4);
+        
 
-
-        list.removeAll(list2);
-
-        System.out.println(list.indexOf(x4));
+        System.out.println();
     }
 }
