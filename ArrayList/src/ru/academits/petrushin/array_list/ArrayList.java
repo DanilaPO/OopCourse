@@ -3,18 +3,13 @@ package ru.academits.petrushin.array_list;
 import java.util.*;
 import java.util.ListIterator;
 
-public class ArrayList<T> implements List<T>{
+public class ArrayList<T> implements List<T> {
     private T[] list;
     private int size;
     private final int DEFAULT_CAPACITY = 10;
 
     int n = 0;
 
-    //  В список надо добавить поле modCount – число изменений,
-    //и менять его во всех методах удаления и добавления
-    //• При создании объекта итератора запоминать в поле
-    //значение modCount из списка на тот момент, а потом
-    //сравнивать с ним текущее значение
     private int modCount;
 
     public ArrayList() {
@@ -139,7 +134,7 @@ public class ArrayList<T> implements List<T>{
                 isAdd = true;
             }
 
-            if (isAdd == true) {
+            if (isAdd) {
                 ++modCount;
             }
 
@@ -155,7 +150,7 @@ public class ArrayList<T> implements List<T>{
             isAdd = true;
         }
 
-        if (isAdd == true) {
+        if (isAdd) {
             ++modCount;
         }
 
@@ -176,12 +171,13 @@ public class ArrayList<T> implements List<T>{
                     System.arraycopy(list, indexOf(element1) + 1, list, indexOf(element1), size - indexOf(element1) - 1);
                     list[size - 1] = null;
                     --size;
-                    ++modCount;
 
                     isRemove = true;
                 }
             }
         }
+
+        ++modCount;
 
         return isRemove;
     }
@@ -348,6 +344,7 @@ public class ArrayList<T> implements List<T>{
         return -1;
     }
 
+    @Override
     public boolean contains(Object o) {
         for (int i = size - 1; i >= 0; --i) {
             if (list[i].equals(o)) {
