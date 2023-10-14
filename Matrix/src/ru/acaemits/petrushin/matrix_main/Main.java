@@ -1,7 +1,7 @@
 package ru.acaemits.petrushin.matrix_main;
 
 import ru.acaemits.petrushin.matrix.Matrix;
-import ru.acaemits.petrushin.matrix_vector.Vector;
+import ru.academits.petrushin.vector.Vector;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,15 +22,15 @@ public class Main {
         Matrix matrix2 = new Matrix(vectorsArray2);
 
         // Получение размеров матрицы
-        System.out.println("Размер матрицы: " + matrix1.getSize());
+        System.out.println("Размер матрицы: строки " + matrix1.getRowsCount() + ", столбцы " + matrix1.getColumnsCount());
         System.out.println();
 
         // Получение вектора-строки по индексу
-        System.out.println("Получение вектора-строки по индексу: " + matrix1.getStringVector(0));
+        System.out.println("Получение вектора-строки по индексу: " + matrix1.getString(0));
         System.out.println();
 
         // Задание вектора-строки по индексу
-        matrix1.setStringVector(0, vector4);
+        matrix1.setString(0, vector4);
         System.out.println("Результат задания вектора-строки по индексу: " + matrix1);
         System.out.println();
 
@@ -76,6 +76,6 @@ public class Main {
         System.out.println();
 
         // c. Умножение матриц - статический метод
-        System.out.println("Умножение матриц - статический метод: " + Matrix.getMultiply(matrix1, matrix2));
+        System.out.println("Умножение матриц - статический метод: " + Matrix.getComposition(matrix1, matrix2));
     }
 }
