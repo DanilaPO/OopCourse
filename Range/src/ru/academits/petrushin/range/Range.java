@@ -55,7 +55,7 @@ public class Range {
     }
 
     public Range[] getDifference(Range range) {
-        if (getIntersection(range) == null) {
+        if ( range.from >= to || from >= range.to) {
             return new Range[]{new Range(from, to)};
         }
 
@@ -65,10 +65,6 @@ public class Range {
             }
 
             return new Range[]{new Range(from, range.from), new Range(range.to, to)};
-        }
-
-        if ((from > range.from && range.to < from) || (from < range.from && to < range.from)) {
-            return new Range[]{new Range(from, to)};
         }
 
         if (range.to < to) {
