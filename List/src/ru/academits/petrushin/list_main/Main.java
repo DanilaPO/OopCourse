@@ -25,40 +25,37 @@ public class Main {
         System.out.println("Первый элемент списка: " + list.getFirstItem());
 
         // получение значения по указанному индексу
-        System.out.println("Значение элемента: " + list.getItem(4));
+        System.out.println("Получение значения элемента по индексу: " + list.getItem(1));
 
         // изменение значения по указанному индексу - пусть выдает старое значение
-        System.out.println("Прежнее значение замененного элемента: " + list.setItem(0, 9));
+        System.out.println("Прежнее значение замененного элемента: " + list.setItem(2, 2));
+        System.out.println(list);
 
         // удаление элемента по индексу, пусть выдает значение элемента
-        System.out.println("Прежнее значение удаленного элемента: " + list.remove(0));
+        System.out.println("Прежнее значение удаленного элемента: " + list.remove(3));
+        System.out.println(list);
 
         // вставка элемента в начало
         list.add(8);
-        System.out.print("Список с первым вставленным элементом: ");
-        list.print();
+        System.out.println("Список с первым вставленным элементом: " + list);
 
         // вставка элемента по индексу
-        list.add(1, 6);
-        System.out.print("Список с первым вставленным элементом: ");
-        list.print();
+        list.add(4, 6);
+        System.out.println("Список со вставленным элементом: " + list);
 
         // удаление узла по значению, пусть выдает true, если элемент был удален
-        list.remove(x3);
-        System.out.print("Список с удаленным элементом: ");
-        list.print();
+        list.remove(x4);
+        System.out.println("Список с удаленным элементом: " + list);
 
         // удаление первого элемента, пусть выдает значение элемента
         System.out.println("Удаленный первый элемен: " + list.remove());
 
         // разворот списка за линейное время
         list.reverse();
-        System.out.print("Развернутый список: ");
-        list.print();
+        System.out.println("Развернутый список: " + list);
 
         // копирование списка
         SinglyLinkedList<Integer> copyList = new SinglyLinkedList<>(list);
-        System.out.print("Копированный список: ");
-        copyList.print();
+        System.out.print("Копированный список: " + copyList);
     }
 }

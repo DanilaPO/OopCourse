@@ -36,11 +36,11 @@ public class SinglyLinkedList<T> {
     // получение значения по указанному индексу
     public T getItem(int index) {
         if (index > size - 1) {
-            throw new IndexOutOfBoundsException("Выход за пределы size");
+            throw new IndexOutOfBoundsException("Выход за пределы size. Передано " + index);
         }
 
         if (index < 0) {
-            throw new IllegalArgumentException("Индекс не может быть отрицательным");
+            throw new IllegalArgumentException("Индекс не может быть отрицательным. Передано " + index);
         }
 
         ListItem<T> item = head;
@@ -55,11 +55,11 @@ public class SinglyLinkedList<T> {
     // изменение значения по указанному индексу - пусть выдает старое значение
     public T setItem(int index, T data) {
         if (index > size - 1) {
-            throw new RuntimeException("Выход за пределы списка");
+            throw new RuntimeException("Выход за пределы списка. Передано " + index);
         }
 
         if (index < 0) {
-            throw new RuntimeException("Индекс не может быть меньше 0");
+            throw new RuntimeException("Индекс не может быть меньше 0. Передано " + index);
         }
 
         ListItem<T> item = head;
@@ -81,7 +81,7 @@ public class SinglyLinkedList<T> {
     // удаление элемента по индексу, пусть выдает значение элемента
     public T remove(int index) {
         if (index > size - 1) {
-            throw new IndexOutOfBoundsException("Выход за пределы size");
+            throw new IndexOutOfBoundsException("Выход за пределы списка. Передано " + index);
         }
 
         if (index < 0) {
@@ -96,20 +96,20 @@ public class SinglyLinkedList<T> {
             return item;
         }
 
-        ListItem<T> item = head;
-        ListItem<T> previousItem = null;
+        T itemData = null;
+        int count = 0;
 
-        T itemData = item.getData();
-
-        for (int i = 1; i < size; ++i) {
-            if (i == index) {
-                item = item.getNext();
-                previousItem.setNext(item);
+        for (ListItem<T> item = head, previousItem = null; item != null; previousItem = item, item = item.getNext()) {
+            if (index == count) {
+                itemData = item.getData();
+                previousItem.setNext(item.getNext());
 
                 --size;
 
                 break;
             }
+
+            ++count;
         }
 
         return itemData;
@@ -125,8 +125,8 @@ public class SinglyLinkedList<T> {
 
     // вставка элемента по индексу
     public void add(int index, T data) {
-        if (index > size - 1) {
-            throw new RuntimeException("Выход за пределы списка");
+        if (index >= size) {
+            throw new RuntimeException("Выход за пределы списка. Передано " + index);
         }
 
         if (index < 0) {
@@ -135,6 +135,7 @@ public class SinglyLinkedList<T> {
 
         if (index == 0) {
             add(data);
+
             return;
         }
 
@@ -146,6 +147,7 @@ public class SinglyLinkedList<T> {
             if (i == index) {
                 previousItem.setNext(newItem);
                 newItem.setNext(item);
+                break;
             }
 
             previousItem = item;
@@ -179,6 +181,10 @@ public class SinglyLinkedList<T> {
 
     // удаление первого элемента, пусть выдает значение элемента
     public T remove() {
+        if (size == 0) {
+            throw new NullPointerException("Список пуст");
+        }
+
         head = head.getNext();
 
         --size;
@@ -188,6 +194,10 @@ public class SinglyLinkedList<T> {
 
     // разворот списка за линейное время
     public void reverse() {
+        if (size == 0) {
+            throw new NullPointerException("Список пуст");
+        }
+
         SinglyLinkedList<T> list = new SinglyLinkedList<T>();
 
         for (ListItem<T> item = head, previousItem = null; item != null; previousItem = item, item = item.getNext()) {
@@ -203,11 +213,19 @@ public class SinglyLinkedList<T> {
         this.size = list.getSize();
     }
 
-    public void print() {
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("[");
+
         for (ListItem<T> item = head; item != null; item = item.getNext()) {
-            System.out.print(item.getData() + " ");
+            stringBuilder.append(item.getData())
+                    .append(", ");
         }
 
-        System.out.println();
+        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+
+        stringBuilder.append("]");
+
+        return stringBuilder.toString();
     }
 }
