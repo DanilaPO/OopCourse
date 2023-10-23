@@ -26,19 +26,19 @@ public class Main {
         System.out.println();
 
         // Получение вектора-строки по индексу
-        System.out.println("Получение вектора-строки по индексу: " + matrix1.getString(0));
+        System.out.println("Получение вектора-строки по индексу: " + matrix1.getRow(0));
         System.out.println();
 
         // Задание вектора-строки по индексу
-        matrix1.setString(0, vector4);
+        matrix1.setRow(0, vector4);
         System.out.println("Результат задания вектора-строки по индексу: " + matrix1);
         System.out.println();
 
         // c. Получение вектора-столбца по индексу
-        System.out.println("Получение вектора-столбца по индексу: " + matrix1.getColumnVector(0));
+        System.out.println("Получение вектора-столбца по индексу: " + matrix1.getColumn(0));
         System.out.println();
 
-        //d. Транспонирование матрицы
+        // d. Транспонирование матрицы
         matrix1.transpose();
         System.out.println("Транспонирование матрицы: " + matrix1);
         System.out.println();
@@ -76,6 +76,6 @@ public class Main {
         System.out.println();
 
         // c. Умножение матриц - статический метод
-        System.out.println("Умножение матриц - статический метод: " + Matrix.getComposition(matrix1, matrix2));
+        System.out.println("Умножение матриц - статический метод: " + Matrix.getProduct(matrix1, matrix2));
     }
 }
