@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Integer> list =  new ArrayList<>();
+        ArrayList<Integer> list = new ArrayList<>();
         Integer x = 0;
         Integer x1 = 1;
         Integer x2 = 2;
@@ -34,25 +34,26 @@ public class Main {
 
         List<Integer> list2 = new LinkedList<>();
         Integer y3 = 11;
-        Integer y4 = 2;
-        Integer y5 = 3;
+        Integer y4 = 20;
+        Integer y5 = 47;
 
         list2.add(y3);
         list2.add(y4);
         list2.add(y5);
+        list2.add(x5);
 
         // Удаление элемента remove
         System.out.println("Удаление элемента по индексу. Удален элемент: " + list.remove(10));
 
-        // Метод containsAll (проверка наличия эелементов коллекций)
+        // Метод containsAll (проверка наличия элелементов коллекций)
         System.out.println("Список содржит элементы другой коллекции: " + list.containsAll(list2));
 
         // Метод добавления всех элементов коллекции в список - addAll
-        list.addAll(list2);
+        System.out.println(list.addAll(list2));
         System.out.println("Результат добавления всех элементов коллекции в список: " + list);
 
         // Метод добавления всех элементов коллекции в список по индексу - addAll
-        list.addAll(12, list2);
+        list.addAll(0, list2);
         System.out.println("Результат добавления всех элементов коллекции в список: " + list);
 
         // Метод удаления всех элементов этой коллекции, которые также содержатся в указанной коллекции - removeAll
@@ -71,7 +72,7 @@ public class Main {
         System.out.println("Результат получения элемента по индексу: " + list.get(0));
 
         // Замена элемента списка по индексу - set
-        list.set(11, 99);
+        list.set(10, 99);
         System.out.println("Результат замены элемента по индексу: " + list);
 
         // Метод вставляет указанный элемент в указанную позицию в этом списке - add(int index, T element)
@@ -89,6 +90,6 @@ public class Main {
         System.out.println("Индекс последнего вхождения указанного элемента: " + list.lastIndexOf(10));
 
         // Метод contains(Object o) возвращает true, если этот набор содержит элемент
-        System.out.println("Нахождение элемента в списке: " + list.contains(1));
+        System.out.println("Нахождение элемента в списке: " + list.contains(11));
     }
 }

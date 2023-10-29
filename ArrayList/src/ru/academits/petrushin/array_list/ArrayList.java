@@ -6,22 +6,21 @@ import java.util.ListIterator;
 public class ArrayList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 10;
 
-    private E[] itemsArray;
+    private E[] items;
     private int size;
-
     private int modCount;
 
     public ArrayList() {
         //noinspection unchecked
-        itemsArray = (E[]) new Object[DEFAULT_CAPACITY];
+        items = (E[]) new Object[DEFAULT_CAPACITY];
     }
 
     public ArrayList(int capacity) {
-        if (capacity < 0) {
-            throw new IllegalArgumentException("Capacity < 0. Передано " + capacity);
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("Capacity <= 0. Передано " + capacity);
         } else {
             //noinspection unchecked
-            itemsArray = (E[]) new Object[capacity];
+            items = (E[]) new Object[capacity];
         }
     }
 
@@ -33,17 +32,21 @@ public class ArrayList<E> implements List<E> {
         return size == 0;
     }
 
-    @Override
-    public boolean add(E element) {
-        add(size, element);
-
-        ++size;
-
-        if (size == itemsArray.length - 1) {
-            increaseCapacity();
+    public boolean checkIndex(int index) {
+        if (index > size) {
+            throw new IndexOutOfBoundsException("Выход за пределы size. Допустимый диапазон от 0 до " + size + ". Указан индекс " + index);
         }
 
-        ++modCount;
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("Выход за пределы size. Допустимый диапазон от 0 до " + size + ". Указан индекс " + index);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean add(E item) {
+        add(size, item);
 
         return true;
     }
@@ -63,13 +66,12 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        if (c == null) {
-            return false;
+        if (c.isEmpty()) {
+            throw new IllegalStateException("Передана пустая коллекция");
         }
 
-        for (int i = 0; i < size; ++i) {
-
-            if (!c.contains(get(i))) {
+        for (Object e : c) {
+            if (!contains(e)) {
                 return false;
             }
         }
@@ -86,25 +88,26 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        if (index > size) {
+        if (index > size || index < 0) {
             throw new IndexOutOfBoundsException("Выход за пределы size. Допустимый диапазон от 0 до " + size + ". Указан индекс " + index);
         }
 
-        if (index < 0) {
-            throw new IndexOutOfBoundsException("Выход за пределы size. Допустимый диапазон от 0 до " + size + ". Указан индекс " + index);
+        if (c.isEmpty()) {
+            return false;
         }
 
-        if (c.size() == 0) {
-            throw new NullPointerException("Передана пустая коллекция");
+        if (size == items.length || items.length <= size + c.size()) {
+            items = Arrays.copyOf(items, size + c.size());
         }
 
-        if (size == itemsArray.length - 1 || size <= itemsArray.length - 1 + c.size() - 1) {
-            increaseCapacity();
-        }
+        for (Object e : c) {
+            //noinspection CastCanBeRemovedNarrowingVariableType
+            add(index, (E) e);
 
-        System.arraycopy(itemsArray, index, itemsArray, index + c.size(), size());
-        //noinspection SuspiciousSystemArraycopy
-        System.arraycopy(c.toArray(), 0, itemsArray, index, c.size());
+            ++index;
+
+            ++size;
+        }
 
         ++modCount;
 
@@ -113,26 +116,15 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        if (c.size() == 0) {
-            throw new NullPointerException("Передана пустая коллекция");
-        }
-
-        //noinspection SlowListContainsAll
-        if (containsAll(c)) {
-            clear();
-
-            return true;
+        if (c.isEmpty()) {
+            throw new IllegalStateException("Передана пустая коллекция");
         }
 
         boolean isRemoved = false;
 
-        for (int i = 0; i < size; ++i) {
-            if (c.contains(itemsArray[i])) {
+        for (int i = size - 1; i >= 0; --i) {
+            if (c.contains(items[i])) {
                 remove(i);
-
-                --i;
-
-                ++modCount;
 
                 isRemoved = true;
             }
@@ -143,17 +135,11 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        if (c.size() == 0) {
-            throw new NullPointerException("Передана пустая коллекция");
-        }
-
         boolean isRemoved = false;
 
-        for (int i = 0; i < size; ++i) {
-            if (!c.contains(itemsArray[i])) {
+        for (int i = size - 1; i >= 0; --i) {
+            if (!c.contains(items[i])) {
                 remove(i);
-
-                --i;
 
                 isRemoved = true;
             }
@@ -164,11 +150,7 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void clear() {
-        if (itemsArray == null) {
-            return;
-        }
-
-        Arrays.fill(itemsArray, null);
+        Arrays.fill(items, null);
 
         size = 0;
 
@@ -177,49 +159,41 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public E get(int index) {
-        if (index >= size) {
+        if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException("Выход за пределы массива длинной " + (size - 1) + ". Передано " + index);
         }
 
-        if (index < 0) {
-            throw new IllegalArgumentException("Индекс не может быть отрицательным");
-        }
-
-        return itemsArray[index];
+        return items[index];
     }
 
     @Override
-    public E set(int index, E element) {
-        if (index >= size) {
-            throw new IndexOutOfBoundsException("Выход за пределы массива");
+    public E set(int index, E item) {
+        if (index >= size || index < 0) {
+            throw new IndexOutOfBoundsException("Выход за пределы массива длинной " + (size - 1) + ". Передано " + index);
         }
 
-        if (index < 0) {
-            throw new IllegalArgumentException("Индекс не может быть отрицательным");
-        }
+        E oldItem = items[index];
 
-        itemsArray[index] = element;
+        items[index] = item;
 
-        return element;
+        return oldItem;
     }
 
     @Override
-    public void add(int index, E element) {
-        if (index > size) {
-            throw new IndexOutOfBoundsException("Выход за пределы size");
+    public void add(int index, E item) {
+        if (index > size || index < 0) {
+            throw new IndexOutOfBoundsException("Выход за пределы списка с диапозоном от 0 до " + size + ". Передан индекс " + index);
         }
 
-        if (index < 0) {
-            throw new IllegalArgumentException("Индекс не может быть отрицательным");
-        }
-
-        if (size == itemsArray.length - 1) {
+        if (size == items.length) {
             increaseCapacity();
         }
 
-        System.arraycopy(itemsArray, index, itemsArray, index + 1, size - index);
+        System.arraycopy(items, index, items, index + 1, size - index);
 
-        itemsArray[index] = element;
+        items[index] = item;
+
+        ++size;
 
         ++modCount;
     }
@@ -227,28 +201,32 @@ public class ArrayList<E> implements List<E> {
     @Override
     public E remove(int index) {
         if (index >= size) {
-            throw new ArrayIndexOutOfBoundsException("Выход за пределы массива, заполнеенная длина которого = " + (size - 1) + ". Передан индекс " + index);
+            throw new ArrayIndexOutOfBoundsException("Выход за пределы массива, заполненная длина которого = " + (size - 1) + ". Передан индекс " + index);
         }
 
         if (index < 0) {
             throw new IllegalArgumentException("Индекс не может быть отрицательным. Передан индекс " + index);
         }
 
-        E removedElement = itemsArray[index];
+        E removedItem = items[index];
 
-        System.arraycopy(itemsArray, index + 1, itemsArray, index, size - index - 1);
+        System.arraycopy(items, index + 1, items, index, size - index - 1);
 
-        itemsArray[size - 1] = null;
+        items[size - 1] = null;
         --size;
         ++modCount;
 
-        return removedElement;
+        return removedItem;
     }
 
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; ++i) {
-            if (itemsArray[i].equals(o)) {
+            if (items[i] == null) {
+                continue;
+            }
+
+            if (items[i].equals(o)) {
                 return i;
             }
         }
@@ -259,7 +237,11 @@ public class ArrayList<E> implements List<E> {
     @Override
     public int lastIndexOf(Object o) {
         for (int i = size - 1; i >= 0; --i) {
-            if (itemsArray[i].equals(o)) {
+            if (items[i] == null) {
+                continue;
+            }
+
+            if (items[i].equals(o)) {
                 return i;
             }
         }
@@ -269,58 +251,55 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean contains(Object o) {
-        if (indexOf(o) != -1) {
-            return true;
-        }
-
-        return false;
+        return indexOf(o) != -1;
     }
 
-    private class ThisListIterator implements Iterator<E> {
+    private class ArrayListIterator implements Iterator<E> {
         private int currentIndex = -1;
-        private final int elementaryModCount = modCount;
-
-        public ThisListIterator() {
-        }
+        private final int initialModCount = modCount;
 
         public boolean hasNext() {
-            if (currentIndex >= size) {
-                throw new NoSuchElementException("Коллекция кончилась");
-            }
-
-            if (elementaryModCount != modCount) {
-                throw new ConcurrentModificationException("в коллекции добавились/удалились элементы за время обхода");
-            }
-
             return currentIndex + 1 < size;
         }
 
         public E next() {
-            return null;
+            if (currentIndex >= size) {
+                throw new NoSuchElementException("Коллекция кончилась");
+            }
+
+            if (initialModCount != modCount) {
+                throw new ConcurrentModificationException("в коллекции добавились/удалились элементы за время обхода");
+            }
+
+            ++currentIndex;
+
+            return items[currentIndex];
         }
     }
 
     public Iterator<E> iterator() {
-        return new ThisListIterator();
+        return new ArrayListIterator();
     }
 
+    @Override
     public Object[] toArray() {
-        Object[] array = new Object[0];
-
-        //noinspection unchecked
-        return (E[]) toArray(array);
+        return toArray(items);
     }
 
-    public <E> E[] toArray(E[] array) {
-        if (size <= array.length) {
-            System.arraycopy(this.itemsArray, 0, array, 0, size);
-        }
-
+    @Override
+    public <T> T[] toArray(T[] array) {
         if (size > array.length) {
-            array = Arrays.copyOf(array, size);
-
-            System.arraycopy(this.itemsArray, 0, array, 0, size);
+            //noinspection unchecked
+            array = (T[]) Arrays.copyOf(items, size);
         }
+
+        if (array[size] != null) {
+            for (int i = size; i < array.length; ++i) {
+                array[i] = null;
+            }
+        }
+
+        System.arraycopy(items, 0, array, 0, size);
 
         return array;
     }
@@ -340,19 +319,16 @@ public class ArrayList<E> implements List<E> {
         return null;
     }
 
+    @Override
     public String toString() {
-        if (size == 0) {
-            return "Массив пуст";
+        if (isEmpty()) {
+            return "[]";
         }
 
         StringBuilder stringBuilder = new StringBuilder("[");
-        for (E e : itemsArray) {
+        for (E e : items) {
             if (e == null) {
-                stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
-
-                stringBuilder.append("]");
-
-                return stringBuilder.toString();
+                continue;
             }
 
             stringBuilder.append(e)
@@ -367,25 +343,26 @@ public class ArrayList<E> implements List<E> {
     }
 
     public void trimToSize() {
-        if (size <= itemsArray.length) {
-            return;
+        if (size > items.length) {
+            items = Arrays.copyOf(items, size);
         }
-
-        itemsArray = Arrays.copyOf(itemsArray, size());
     }
 
     public void ensureCapacity(int capacity) {
-        if (capacity > itemsArray.length) {
-            itemsArray = Arrays.copyOf(itemsArray, capacity);
+        if (capacity > items.length) {
+            items = Arrays.copyOf(items, capacity);
         }
     }
 
     private void increaseCapacity() {
-        if (itemsArray.length == 0) {
-            itemsArray = Arrays.copyOf(itemsArray, 2);
+        if (items.length == 0) {
+            //noinspection unchecked
+            items = (E[]) new Object[DEFAULT_CAPACITY];
+
+            return;
         }
 
-        itemsArray = Arrays.copyOf(itemsArray, itemsArray.length * 2);
+        items = Arrays.copyOf(items, items.length * 2);
     }
 
     @Override
@@ -401,17 +378,38 @@ public class ArrayList<E> implements List<E> {
         //noinspection unchecked
         ArrayList<E> arrayList = (ArrayList<E>) o;
 
-        return itemsArray == arrayList.itemsArray && size == arrayList.size && modCount == arrayList.modCount;
+        if (size == arrayList.size) {
+            for (int i = 0; i < size; ++i) {
+                if (items[i] != arrayList.items[i]) {
+                    return false;
+                }
+            }
+        }
+
+        return items != arrayList.items && size == arrayList.size;
     }
 
+    @Override
     public int hashCode() {
         final int prime = 37;
         int hash = 1;
 
-        hash = prime * hash + DEFAULT_CAPACITY;
-        hash = prime * hash + Arrays.hashCode(itemsArray);
+
+        //noinspection unchecked
+        E[] array = (E[]) new Object[items.length];
+
+        int index = 0;
+
+        for (E e : items) {
+            if (e != null) {
+                array[index] = e;
+
+                ++index;
+            }
+        }
+
+        hash = prime * hash + Arrays.hashCode(array);
         hash = prime * hash + size;
-        hash = prime * hash + modCount;
 
         return hash;
     }
