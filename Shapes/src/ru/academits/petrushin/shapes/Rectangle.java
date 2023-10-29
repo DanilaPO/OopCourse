@@ -31,7 +31,7 @@ public class Rectangle implements Shape {
 
     @Override
     public String toString() {
-        return "Прямоугольник с длиной сторон: ширина 1 = " + width +
+        return "Прямоугольник с длиной сторон: ширина = " + width +
                 ", высота = " + height +
                 "; Площадь фигуры: " + getArea() +
                 "; Периметр фигуры: " + getPerimeter();

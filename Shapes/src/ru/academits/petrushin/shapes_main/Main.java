@@ -1,7 +1,7 @@
 package ru.academits.petrushin.shapes_main;
 
-import ru.academits.petrushin.sort_by_perimeter.SortByPerimeter;
-import ru.academits.petrushin.sort_by_area.SortByArea;
+import ru.academits.petrushin.shapes_comporators.PerimeterComparator;
+import ru.academits.petrushin.shapes_comporators.AreaComparator;
 import ru.academits.petrushin.shapes.*;
 
 import java.util.Arrays;
@@ -17,12 +17,12 @@ public class Main {
         };
 
         // распечатка информации о фигуре с наибольшей площадью
-        Arrays.sort(shapesArray, new SortByArea());
+        Arrays.sort(shapesArray, new AreaComparator());
 
         System.out.println("Фигура с наибольшей площадью: " + shapesArray[0] + System.lineSeparator());
 
         // распечатка информации о фигуре со вторым по величине периметром
-        Arrays.sort(shapesArray, new SortByPerimeter());
+        Arrays.sort(shapesArray, new PerimeterComparator());
 
         System.out.println("Фигура вторая по величине периметра: " + shapesArray[1]);
     }
