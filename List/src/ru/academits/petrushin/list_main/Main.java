@@ -27,11 +27,11 @@ public class Main {
         System.out.println("Получение значения элемента по индексу: " + list.get(1));
 
         // изменение значения по указанному индексу - пусть выдает старое значение
-        System.out.println("Прежнее значение замененного элемента: " + list.set(2, 99));
+        System.out.println("Прежнее значение замененного элемента: " + list.set(0, 99));
         System.out.println(list);
 
         // удаление элемента по индексу, пусть выдает значение элемента
-        System.out.println("Прежнее значение удаленного элемента: " + list.deleteByIndex(4));
+        System.out.println("Прежнее значение удаленного элемента: " + list.removeByIndex(0));
         System.out.println(list);
 
         // вставка элемента в начало
@@ -39,11 +39,11 @@ public class Main {
         System.out.println("Список с первым вставленным элементом: " + list);
 
         // вставка элемента по индексу
-        list.add(0, 6);
+        list.add(7, 6);
         System.out.println("Список со вставленным элементом: " + list);
 
         // удаление узла по значению, пусть выдает true, если элемент был удален
-        list.deleteByValue(x4);
+        list.removeByValue(x4);
         System.out.println("Список с удаленным элементом: " + list);
 
         // удаление первого элемента, пусть выдает значение элемента

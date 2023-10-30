@@ -1,5 +1,7 @@
 package ru.academits.petrushin.list;
 
+import java.util.NoSuchElementException;
+
 public class SinglyLinkedList<E> {
     private ListItem<E> head;
     private int size;
@@ -13,20 +15,9 @@ public class SinglyLinkedList<E> {
             throw new NullPointerException("Для копирования передан пустой список");
         }
 
-        head = new ListItem<>(list.getHead());
-        size = list.getSize();
-
-        for (int i = 1; i < list.getSize(); ++i) {
-            add(i, new ListItem<>(list.get(i)).getData());
+        for (int i = list.getSize() - 1; i >= 0; --i) {
+            addFirst(list.get(i));
         }
-    }
-
-    public E getHead() {
-        return head.getData();
-    }
-
-    public void setHead(ListItem<E> head) {
-        this.head.setData(head.getData());
     }
 
     // получение размера списка
@@ -41,22 +32,16 @@ public class SinglyLinkedList<E> {
     // получение значение первого элемента
     public E getFirst() {
         if (isEmpty()) {
-            throw new NullPointerException("Список пуст");
+            throw new NoSuchElementException("Список пуст");
         }
 
         return head.getData();
     }
 
-    boolean checkIndex(int index) {
-        if (index >= size) {
+    private void checkIndex(int index) {
+        if (index >= size || index < 0) {
             throw new IndexOutOfBoundsException("Выход за пределы списка с диапазоном от 0 до " + (size - 1) + ". Передано " + index);
         }
-
-        if (index < 0) {
-            throw new IllegalArgumentException("Индекс не может быть отрицательным. Передано " + index);
-        }
-
-        return true;
     }
 
     // получение значения по указанному индексу
@@ -79,7 +64,7 @@ public class SinglyLinkedList<E> {
         ListItem<E> item = head;
         E oldData = null;
 
-        for (int i = 0; i < size; ++i) {
+        for (int i = 0; i <= index; ++i) {
             if (i == index) {
                 oldData = item.getData();
                 item.setData(data);
@@ -94,34 +79,30 @@ public class SinglyLinkedList<E> {
     }
 
     // удаление элемента по индексу, пусть выдает значение элемента
-    public E deleteByIndex(int index) {
+    public E removeByIndex(int index) {
         checkIndex(index);
 
+        --size;
+
         if (index == 0) {
-            E deletedData = head.getData();
-
-            removeFirst();
-
-            return deletedData;
+            return removeFirst();
         }
 
-        E deletedData = null;
-        int count = 0;
+        int i = 0;
 
-        for (ListItem<E> currentNode = head, previousNode = null; currentNode != null; previousNode = currentNode, currentNode = currentNode.getNext()) {
-            if (index == count) {
-                deletedData = currentNode.getData();
-                previousNode.setNext(currentNode.getNext());
+        ListItem<E> item = head;
+        ListItem<E> previousItem = null;
 
-                --size;
+        while (index != i) {
+            previousItem = item;
+            item = item.getNext();
 
-                break;
-            }
-
-            ++count;
+            ++i;
         }
 
-        return deletedData;
+        previousItem.setNext(item.getNext());
+
+        return item.getData();
     }
 
     // вставка элемента в начало
@@ -133,12 +114,8 @@ public class SinglyLinkedList<E> {
 
     // вставка элемента по индексу
     public void add(int index, E data) {
-        if (index > size) {
-            throw new IndexOutOfBoundsException("Выход за пределы списка с диапазоном от 0 до " + (size) + ". Передано " + index);
-        }
-
-        if (index < 0) {
-            throw new IllegalArgumentException("Индекс не может быть отрицательным. Передано " + index);
+        if (index > size + 1 || index < 0) {
+            throw new IndexOutOfBoundsException("Выход за пределы списка с диапазоном от 0 до " + (size + 1) + ". Передано " + index);
         }
 
         if (index == 0) {
@@ -147,25 +124,30 @@ public class SinglyLinkedList<E> {
             return;
         }
 
-        ListItem<E> currentNode = head;
-        ListItem<E> previousNode = null;
+        ListItem<E> item = head;
+        ListItem<E> previousItem = null;
 
-        for (int i = 0; i <= size; ++i) {
-            if (i == index) {
-                previousNode.setNext(new ListItem<>(data, currentNode));
-                break;
-            }
+        int i = 1;
 
-            previousNode = currentNode;
-            currentNode = currentNode.getNext();
+        while (index != i) {
+            previousItem = item;
+            item = item.getNext();
+
+            ++i;
         }
 
         ++size;
+
+        previousItem.setNext(new ListItem<>(data, item));
     }
 
     // удаление узла по значению, пусть выдает true, если элемент был удален
     @SuppressWarnings("UnusedReturnValue")
-    public boolean deleteByValue(E data) {
+    public boolean removeByValue(E data) {
+        if (data == null) {
+            return false;
+        }
+
         for (ListItem<E> item = head, previousItem = null; item != null; previousItem = item, item = item.getNext()) {
             if (item.getData().equals(data)) {
                 if (previousItem == null) {
@@ -174,9 +156,9 @@ public class SinglyLinkedList<E> {
                     return true;
                 }
 
-                previousItem.setNext(item.getNext());
-
                 --size;
+
+                previousItem.setNext(item.getNext());
 
                 return true;
             }
@@ -188,31 +170,44 @@ public class SinglyLinkedList<E> {
     // удаление первого элемента, пусть выдает значение элемента
     public E removeFirst() {
         if (isEmpty()) {
-            throw new NullPointerException("Список пуст");
+            throw new NoSuchElementException("Список пуст");
         }
 
-        E removedItem = getFirst();
+        E removedData = head.getData();
 
         head = head.getNext();
 
         --size;
 
-        return removedItem;
+        return removedData;
     }
 
     // разворот списка за линейное время
     public void reverse() {
         if (isEmpty()) {
-            throw new NullPointerException("Список пуст");
+            return;
         }
 
-        for (int i = 0; i < size; ++i) {
-            add((size - 1 - i), removeFirst());
+        ListItem<E> last = null;
+
+
+        for (ListItem<E> item = head, previous = null; item != null; previous = item, item = item.getNext()) {
+            addFirst(item.getData());
+
+            if (previous == null) {
+                last = head;
+            }
         }
+
+        last.setNext(null);
     }
 
     @Override
     public String toString() {
+        if (isEmpty()) {
+            return "[]";
+        }
+
         StringBuilder stringBuilder = new StringBuilder("[");
 
         for (ListItem<E> item = head; item != null; item = item.getNext()) {
