@@ -5,17 +5,17 @@ import ru.academits.petrushin.vector.Vector;
 
 public class Main {
     public static void main(String[] args) {
-        double[] array1 = {3, 0, 4, 1};
-        double[] array2 = {3, 5, 9, 2};
-        double[] array3 = {6, 4, 7, 2};
-        double[] array4 = {9, 7, 1, 9};
+        double[] array1 = {2, 4, 0};
+        double[] array2 = {-2, 1, 3};
+        double[] array3 = {-1, 0, 1};
+        double[] array4 = {1, 2, -1};
 
         Vector vector1 = new Vector(array1);
         Vector vector2 = new Vector(array2);
         Vector vector3 = new Vector(array3);
         Vector vector4 = new Vector(array4);
 
-        Vector[] vectorsArray = {vector1, vector2, vector3, vector4};
+        Vector[] vectorsArray = {vector1, vector2, vector3};
         Vector[] vectorsArray2 = {vector3, vector4};
 
         Matrix matrix1 = new Matrix(vectorsArray);
@@ -53,8 +53,11 @@ public class Main {
         System.out.println();
 
         // h. умножение матрицы на вектор
-        matrix1.multiplyByVector(vector2);
-        System.out.println("Умножение матрицы на вектор: " + matrix1);
+        System.out.println("Умножение матрицы на вектор: " + matrix1.multiplyByColumnVector(vector4));
+        System.out.println();
+
+        // h. умножение матрицы-строки на вектор
+        System.out.println("Умножение матрицы-строки на вектор: " + matrix1.multiplyByStringVector(vector4));
         System.out.println();
 
         // i. Сложение матриц
