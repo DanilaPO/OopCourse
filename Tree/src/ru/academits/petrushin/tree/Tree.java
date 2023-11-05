@@ -1,9 +1,15 @@
 package ru.academits.petrushin.tree;
 
-import ru.academits.petrushin.tree_node.TreeNode;
 import ru.academits.petrushin.tree_comparator.TreeComparator;
+import ru.academits.petrushin.tree_node.TreeNode;
+
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 public class Tree<E> {
-    TreeNode root;
+    TreeNode<E> root;
 
     int size;
 
@@ -12,7 +18,7 @@ public class Tree<E> {
         ++size;
 
         if (root == null) {
-            root = new TreeNode(data);
+            root = new TreeNode<>(data);
             return;
         }
 
@@ -23,7 +29,7 @@ public class Tree<E> {
         while (true) {
             if (comparator.compare(data, currentNode.getData()) > 0) {
                 if (currentNode.getRight() == null) {
-                    currentNode.setRight(new TreeNode(data));
+                    currentNode.setRight(new TreeNode<>(data));
 
                     currentNode = currentNode.getRight();
 
@@ -35,7 +41,7 @@ public class Tree<E> {
 
             if (comparator.compare(data, currentNode.getData()) < 0) {
                 if (currentNode.getLeft() == null) {
-                    currentNode.setLeft(new TreeNode(data));
+                    currentNode.setLeft(new TreeNode<>(data));
 
                     currentNode = currentNode.getLeft();
 
@@ -81,6 +87,7 @@ public class Tree<E> {
         return false;
     }
 
+    // удаление первого вхождения
     public boolean removeFirst() {
         --size;
 
@@ -216,43 +223,87 @@ public class Tree<E> {
         return size;
     }
 
-//    // обход в ширину
-//    public void  breadthFirst() {
-//        Queue queue = new LikedList();
-//    }
+    // обход в ширину
+    public void breadthFirst() {
+        List<TreeNode<E>> list = new LinkedList<>();
 
+        Queue<TreeNode<E>> queue = new LinkedList<>();
 
-    public void print() {
-        TreeNode currentNode = root;
+        queue.add(root);
 
-        System.out.print(currentNode.getData() + " ");
+        while (!queue.isEmpty()) {
+            TreeNode<E> currentNode = queue.poll();
 
-        currentNode = currentNode.getLeft();
-        System.out.print(currentNode.getData() + " ");
+            list.add(currentNode);
 
-        currentNode = currentNode.getLeft();
-        System.out.print(currentNode.getData() + " ");
+            if (currentNode.getLeft() != null) {
+                queue.add(currentNode.getLeft());
+            }
 
-//        currentNode = currentNode.getLeft();
-//        System.out.print(currentNode.getData() + " ");
-//
-//        currentNode = currentNode.getLeft();
-//        System.out.print(currentNode.getData() + " ");
+            if (currentNode.getRight() != null) {
+                queue.add(currentNode.getRight());
+            }
+        }
 
-        // while (currentNode != null) {
-        //     System.out.print(currentNode.getData() + " ");
+        for (TreeNode<E> node : list) {
+            System.out.print(node.getData() + ", ");
+        }
+    }
 
-        //     currentNode = currentNode.getLeft();
-        // }
+    // обход в глубину без рекурсии
+    public void depthFirst() {
+        List<TreeNode<E>> list = new LinkedList<>();
 
-        // System.out.println();
+        Deque<TreeNode<E>> stack = new LinkedList<>();
 
-        // currentNode = root;
+        while (root != null) {
+            stack.push(root);
 
-        // while (currentNode != null) {
-        //     System.out.print(currentNode.getData() + " ");
+            while (!stack.isEmpty()) {
+                TreeNode<E> currentNode = stack.pop();
 
-        //     currentNode = currentNode.getRight();
-        // }
+                list.add(currentNode);
+
+                if (currentNode.getLeft() != null) {
+                    stack.addFirst(currentNode.getLeft());
+
+                    if (currentNode.getLeft().getRight() != null) {
+                        stack.add(currentNode.getLeft().getRight());
+                    }
+                }
+            }
+
+            root = root.getRight();
+        }
+
+        int i = 0;
+
+        for (TreeNode<E> node : list) {
+            if (i == size - 1) {
+                System.out.print(node.getData());
+
+                return;
+            }
+
+            System.out.print(node.getData() + ", ");
+            ++i;
+        }
+    }
+
+    // рекурсивный обход в глубину
+    public void recursionDepthFirst() {
+        visit(root);
+    }
+
+    public void visit(TreeNode<E> node) {
+        if (node == null) {
+            return;
+        }
+
+        System.out.print(node.getData() + " ");
+
+        visit(node.getLeft());
+
+        visit(node.getRight());
     }
 }
