@@ -1,4 +1,4 @@
-package ru.academits.petrushin.shapes_comporators;
+package ru.academits.petrushin.shapes_comparators;
 
 import ru.academits.petrushin.shapes.Shape;
 
