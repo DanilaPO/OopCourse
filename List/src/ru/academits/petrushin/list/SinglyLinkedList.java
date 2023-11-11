@@ -11,12 +11,22 @@ public class SinglyLinkedList<E> {
 
     // копирование списка
     public SinglyLinkedList(SinglyLinkedList<E> list) {
-        if (list == null) {
+        if (list.getSize() == 0) {
             throw new NullPointerException("Для копирования передан пустой список");
         }
 
-        for (int i = list.getSize() - 1; i >= 0; --i) {
-            addFirst(list.get(i));
+        addFirst(list.removeFirst());
+
+        ListItem<E> curretnItem = head;
+
+        int i = list.getSize();
+
+        while (i > 0) {
+            curretnItem.setNext(new ListItem<E>(list.removeFirst()));
+
+            curretnItem = curretnItem.getNext();
+
+            --i;
         }
     }
 
@@ -39,8 +49,8 @@ public class SinglyLinkedList<E> {
     }
 
     private void checkIndex(int index) {
-        if (index >= size || index < 0) {
-            throw new IndexOutOfBoundsException("Выход за пределы списка с диапазоном от 0 до " + (size - 1) + ". Передано " + index);
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Выход за пределы списка с диапазоном от 0 до " + (size - 1) + ". Передано индекс: " + index);
         }
     }
 
@@ -82,11 +92,11 @@ public class SinglyLinkedList<E> {
     public E removeByIndex(int index) {
         checkIndex(index);
 
-        --size;
-
         if (index == 0) {
             return removeFirst();
         }
+
+        --size;
 
         int i = 0;
 
@@ -114,8 +124,8 @@ public class SinglyLinkedList<E> {
 
     // вставка элемента по индексу
     public void add(int index, E data) {
-        if (index > size + 1 || index < 0) {
-            throw new IndexOutOfBoundsException("Выход за пределы списка с диапазоном от 0 до " + (size + 1) + ". Передано " + index);
+        if (index < 0 || index > size + 1) {
+            throw new IndexOutOfBoundsException("Выход за допустимые пределы списка с диапазоном от 0 до " + (size + 1) + ". Передано " + index);
         }
 
         if (index == 0) {
@@ -144,12 +154,8 @@ public class SinglyLinkedList<E> {
     // удаление узла по значению, пусть выдает true, если элемент был удален
     @SuppressWarnings("UnusedReturnValue")
     public boolean removeByValue(E data) {
-        if (data == null) {
-            return false;
-        }
-
         for (ListItem<E> item = head, previousItem = null; item != null; previousItem = item, item = item.getNext()) {
-            if (item.getData().equals(data)) {
+            if ((data == null && item.getData() == null) || item.getData().equals(data)) {
                 if (previousItem == null) {
                     removeFirst();
 
@@ -184,22 +190,22 @@ public class SinglyLinkedList<E> {
 
     // разворот списка за линейное время
     public void reverse() {
-        if (isEmpty()) {
+        if (isEmpty() || size == 1) {
             return;
         }
 
-        ListItem<E> last = null;
+        ListItem<E> current = head;
+        ListItem<E> previous = null;
+        ListItem<E> next = null;
 
-
-        for (ListItem<E> item = head, previous = null; item != null; previous = item, item = item.getNext()) {
-            addFirst(item.getData());
-
-            if (previous == null) {
-                last = head;
-            }
+        while (current != null) {
+            next = current.getNext();
+            current.setNext(previous);
+            previous = current;
+            current = next;
         }
 
-        last.setNext(null);
+        head = previous;
     }
 
     @Override
