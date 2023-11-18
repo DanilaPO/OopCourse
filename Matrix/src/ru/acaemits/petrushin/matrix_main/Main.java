@@ -5,9 +5,9 @@ import ru.academits.petrushin.vector.Vector;
 
 public class Main {
     public static void main(String[] args) {
-        double[] array1 = {2, 4, 0};
+        double[] array1 = {2, 4, 3};
         double[] array2 = {-2, 1, 3};
-        double[] array3 = {-1, 0, 1};
+        double[] array3 = {-1, 0, 2};
         double[] array4 = {1, 2, -1};
 
         Vector vector1 = new Vector(array1);
@@ -15,10 +15,10 @@ public class Main {
         Vector vector3 = new Vector(array3);
         Vector vector4 = new Vector(array4);
 
-        Vector[] vectorsArray = {vector1, vector2, vector3};
+        Vector[] vectorsArray1 = {vector1, vector2, vector3};
         Vector[] vectorsArray2 = {vector3, vector4};
 
-        Matrix matrix1 = new Matrix(vectorsArray);
+        Matrix matrix1 = new Matrix(vectorsArray1);
         Matrix matrix2 = new Matrix(vectorsArray2);
 
         // Получение размеров матрицы
@@ -26,7 +26,7 @@ public class Main {
         System.out.println();
 
         // Получение вектора-строки по индексу
-        System.out.println("Получение вектора-строки по индексу: " + matrix1.getRow(0));
+        System.out.println("Получение вектора-строки по индексу: " + matrix1.getRow(2));
         System.out.println();
 
         // Задание вектора-строки по индексу
@@ -35,7 +35,7 @@ public class Main {
         System.out.println();
 
         // c. Получение вектора-столбца по индексу
-        System.out.println("Получение вектора-столбца по индексу: " + matrix1.getColumn(0));
+        System.out.println("Получение вектора-столбца по индексу: " + matrix1.getColumn(3));
         System.out.println();
 
         // d. Транспонирование матрицы
@@ -50,14 +50,10 @@ public class Main {
 
         // f. Вычисление определителя матрицы
         System.out.println("Вычисление определителя матрицы: " + matrix1.getDeterminant());
-        System.out.println();
+        System.out.println(matrix1);
 
         // h. умножение матрицы на вектор
-        System.out.println("Умножение матрицы на вектор: " + matrix1.multiplyByColumnVector(vector4));
-        System.out.println();
-
-        // h. умножение матрицы-строки на вектор
-        System.out.println("Умножение матрицы-строки на вектор: " + matrix1.multiplyByStringVector(vector4));
+        System.out.println("Умножение матрицы на вектор: " + matrix1.multiplyByVector(vector4));
         System.out.println();
 
         // i. Сложение матриц
