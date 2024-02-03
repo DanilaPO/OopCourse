@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Integer> list = new ArrayList<>();
+        ArrayList<Integer> list = new ArrayList<>(0);
         Integer x = 0;
         Integer x1 = 1;
         Integer x2 = 2;
@@ -40,10 +40,9 @@ public class Main {
         list2.add(y3);
         list2.add(y4);
         list2.add(y5);
-        list2.add(x5);
 
         // Удаление элемента remove
-        System.out.println("Удаление элемента по индексу. Удален элемент: " + list.remove(10));
+        System.out.println("Удаление элемента по индексу. Удален элемент: " + list.remove(0));
 
         // Метод containsAll (проверка наличия элелементов коллекций)
         System.out.println("Список содржит элементы другой коллекции: " + list.containsAll(list2));
@@ -53,7 +52,7 @@ public class Main {
         System.out.println("Результат добавления всех элементов коллекции в список: " + list);
 
         // Метод добавления всех элементов коллекции в список по индексу - addAll
-        list.addAll(0, list2);
+        list.addAll(1, list2);
         System.out.println("Результат добавления всех элементов коллекции в список: " + list);
 
         // Метод удаления всех элементов этой коллекции, которые также содержатся в указанной коллекции - removeAll

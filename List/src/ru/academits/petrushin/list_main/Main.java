@@ -39,11 +39,11 @@ public class Main {
         System.out.println("Список с первым вставленным элементом: " + list);
 
         // вставка элемента по индексу
-        list.add(7, 6);
+        list.add(6, 6);
         System.out.println("Список со вставленным элементом: " + list);
 
         // удаление узла по значению, пусть выдает true, если элемент был удален
-        list.removeByValue(x4);
+        list.removeByValue(null);
         System.out.println("Список с удаленным элементом: " + list);
 
         // удаление первого элемента, пусть выдает значение элемента
