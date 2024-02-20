@@ -5,7 +5,7 @@ import ru.academits.petrushin.vector.Vector;
 
 public class Main {
     public static void main(String[] args) {
-        double[] array1 = {2, 4};
+        double[] array1 = {2, 5};
         double[] array2 = {-2, 1};
         double[] array3 = {-1, 0, 2};
         double[] array4 = {1, 2, -1};
