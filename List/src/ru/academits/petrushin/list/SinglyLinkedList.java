@@ -1,6 +1,7 @@
 package ru.academits.petrushin.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class SinglyLinkedList<E> {
     private ListItem<E> head;
@@ -12,21 +13,15 @@ public class SinglyLinkedList<E> {
     // копирование списка
     public SinglyLinkedList(SinglyLinkedList<E> list) {
         if (list.getSize() == 0) {
-            throw new NullPointerException("Для копирования передан пустой список");
+            this.head = null;
         }
 
-        addFirst(list.removeFirst());
+        String listString = list.toString();
+        Object[] listItemsStrings = listString.substring(1, listString.length() - 1).split(", ");
 
-        ListItem<E> curretnItem = head;
-
-        int i = list.getSize();
-
-        while (i > 0) {
-            curretnItem.setNext(new ListItem<E>(list.removeFirst()));
-
-            curretnItem = curretnItem.getNext();
-
-            --i;
+        for (int i = listItemsStrings.length - 1; i >= 0; --i) {
+            //noinspection unchecked
+            addFirst((E) listItemsStrings[i]);
         }
     }
 
@@ -50,7 +45,7 @@ public class SinglyLinkedList<E> {
 
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Выход за пределы списка с диапазоном от 0 до " + (size - 1) + ". Передано индекс: " + index);
+            throw new IndexOutOfBoundsException("Выход за за диапазон доустимых значений индексов списка от 0 до " + (size - 1) + ". Передан индекс: " + index);
         }
     }
 
@@ -58,32 +53,17 @@ public class SinglyLinkedList<E> {
     public E get(int index) {
         checkIndex(index);
 
-        ListItem<E> item = head;
-
-        for (int i = 0; i < index; ++i) {
-            item = item.getNext();
-        }
-
-        return item.getData();
+        return getNode(index).getData();
     }
 
     // изменение значения по указанному индексу - пусть выдает старое значение
     public E set(int index, E data) {
         checkIndex(index);
 
-        ListItem<E> item = head;
-        E oldData = null;
+        ListItem<E> currentItem = getNode(index);
 
-        for (int i = 0; i <= index; ++i) {
-            if (i == index) {
-                oldData = item.getData();
-                item.setData(data);
-
-                break;
-            }
-
-            item = item.getNext();
-        }
+        E oldData = currentItem.getData();
+        currentItem.setData(data);
 
         return oldData;
     }
@@ -98,21 +78,12 @@ public class SinglyLinkedList<E> {
 
         --size;
 
-        int i = 0;
+        ListItem<E> previousItem = getNode(index - 1);
+        ListItem<E> currentItem = previousItem.getNext();
 
-        ListItem<E> item = head;
-        ListItem<E> previousItem = null;
+        previousItem.setNext(currentItem.getNext());
 
-        while (index != i) {
-            previousItem = item;
-            item = item.getNext();
-
-            ++i;
-        }
-
-        previousItem.setNext(item.getNext());
-
-        return item.getData();
+        return currentItem.getData();
     }
 
     // вставка элемента в начало
@@ -124,8 +95,8 @@ public class SinglyLinkedList<E> {
 
     // вставка элемента по индексу
     public void add(int index, E data) {
-        if (index < 0 || index > size + 1) {
-            throw new IndexOutOfBoundsException("Выход за допустимые пределы списка с диапазоном от 0 до " + (size + 1) + ". Передано " + index);
+        if (index < 0 || index >= size + 1) {
+            throw new IndexOutOfBoundsException("Выход за за диапазон доустимых значений индексов списка от 0 до " + (size + 1) + ". Передан " + index);
         }
 
         if (index == 0) {
@@ -134,37 +105,27 @@ public class SinglyLinkedList<E> {
             return;
         }
 
-        ListItem<E> item = head;
-        ListItem<E> previousItem = null;
-
-        int i = 1;
-
-        while (index != i) {
-            previousItem = item;
-            item = item.getNext();
-
-            ++i;
-        }
+        ListItem<E> previousItem = getNode(index - 1);
+        ListItem<E> currentItem = previousItem.getNext();
 
         ++size;
 
-        previousItem.setNext(new ListItem<>(data, item));
+        previousItem.setNext(new ListItem<>(data, currentItem));
     }
 
     // удаление узла по значению, пусть выдает true, если элемент был удален
     @SuppressWarnings("UnusedReturnValue")
     public boolean removeByValue(E data) {
-        for (ListItem<E> item = head, previousItem = null; item != null; previousItem = item, item = item.getNext()) {
-            if ((data == null && item.getData() == null) || item.getData().equals(data)) {
+        for (ListItem<E> currentItem = head, previousItem = null; currentItem != null; previousItem = currentItem, currentItem = currentItem.getNext()) {
+            if ((data == null && currentItem.getData() == null) || Objects.equals(currentItem.getData(), (data))) {
                 if (previousItem == null) {
                     removeFirst();
-
                     return true;
                 }
 
                 --size;
 
-                previousItem.setNext(item.getNext());
+                previousItem.setNext(currentItem.getNext());
 
                 return true;
             }
@@ -190,22 +151,21 @@ public class SinglyLinkedList<E> {
 
     // разворот списка за линейное время
     public void reverse() {
-        if (isEmpty() || size == 1) {
+        if (size <= 1) {
             return;
         }
 
-        ListItem<E> current = head;
-        ListItem<E> previous = null;
-        ListItem<E> next = null;
+        ListItem<E> currentItem = head;
+        ListItem<E> previousItem = null;
 
-        while (current != null) {
-            next = current.getNext();
-            current.setNext(previous);
-            previous = current;
-            current = next;
+        while (currentItem != null) {
+            ListItem<E> next = currentItem.getNext();
+            currentItem.setNext(previousItem);
+            previousItem = currentItem;
+            currentItem = next;
         }
 
-        head = previous;
+        head = previousItem;
     }
 
     @Override
@@ -226,5 +186,21 @@ public class SinglyLinkedList<E> {
         stringBuilder.append(']');
 
         return stringBuilder.toString();
+    }
+
+    // вспомогательный метод итерирования до узла
+    private ListItem<E> getNode(int index) {
+        int i = 0;
+
+        ListItem<E> node = null;
+
+        for (ListItem<E> currentItem = head; currentItem != null; currentItem = currentItem.getNext(), ++i) {
+            if (i == index) {
+                node = currentItem;
+                break;
+            }
+        }
+
+        return node;
     }
 }
