@@ -1,13 +1,13 @@
 package ru.academits.petrushin.array_list_main;
 
-import ru.academits.petrushin.array_list.ArrayList;
+import ru.academits.petrushin.ArrayList;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Integer> list = new ArrayList<>(0);
+        ArrayList<Integer> list = new ArrayList<>();
         Integer x = 0;
         Integer x1 = 1;
         Integer x2 = 2;
@@ -44,15 +44,15 @@ public class Main {
         // Удаление элемента remove
         System.out.println("Удаление элемента по индексу. Удален элемент: " + list.remove(0));
 
-        // Метод containsAll (проверка наличия элелементов коллекций)
-        System.out.println("Список содржит элементы другой коллекции: " + list.containsAll(list2));
+        // Метод containsAll (проверка наличия элементов коллекций)
+        System.out.println("Список содержит элементы другой коллекции: " + list.containsAll(list2));
 
         // Метод добавления всех элементов коллекции в список - addAll
         System.out.println(list.addAll(list2));
         System.out.println("Результат добавления всех элементов коллекции в список: " + list);
 
         // Метод добавления всех элементов коллекции в список по индексу - addAll
-        list.addAll(1, list2);
+        list.addAll(10, list2);
         System.out.println("Результат добавления всех элементов коллекции в список: " + list);
 
         // Метод удаления всех элементов этой коллекции, которые также содержатся в указанной коллекции - removeAll
@@ -68,25 +68,25 @@ public class Main {
         System.out.println("Результат очистки списка: " + list);
 
         // Метод получения элемента списка по индексу - get
-        System.out.println("Результат получения элемента по индексу: " + list.get(0));
+        System.out.println("Результат получения элемента по индексу: " + list2.get(0));
 
         // Замена элемента списка по индексу - set
-        list.set(10, 99);
-        System.out.println("Результат замены элемента по индексу: " + list);
+        list2.set(2, 99);
+        System.out.println("Результат замены элемента по индексу: " + list2);
 
         // Метод вставляет указанный элемент в указанную позицию в этом списке - add(int index, T element)
-        list.add(11, 99);
-        System.out.println("Результат вставки элемента по индексу: " + list);
+        list2.add(2, 99);
+        System.out.println("Результат вставки элемента по индексу: " + list2);
 
         // Удаление элемента по индексу - remove
-        list.remove(11);
-        System.out.println("Результат удаления элемента по индексу: " + list);
+        list2.remove(1);
+        System.out.println("Результат удаления элемента по индексу: " + list2);
 
         // Метод возвращает индекс первого вхождения указанного элемента в этом списке - indexOf
-        System.out.println("Индекс первого вхождения указанного элемента: " + list.indexOf(10));
+        System.out.println("Индекс первого вхождения указанного элемента: " + list.indexOf(null));
 
         // Метод возвращает индекс последнего вхождения указанного элемента в этом векторе - lastIndexOf()
-        System.out.println("Индекс последнего вхождения указанного элемента: " + list.lastIndexOf(10));
+        System.out.println("Индекс последнего вхождения указанного элемента: " + list.lastIndexOf(null));
 
         // Метод contains(Object o) возвращает true, если этот набор содержит элемент
         System.out.println("Нахождение элемента в списке: " + list.contains(11));
