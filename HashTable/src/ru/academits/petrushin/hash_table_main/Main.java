@@ -27,26 +27,26 @@ public class Main {
         table2.add(x5);
 
         // метод size()
-        System.out.println("Количество элементов хэш-блицы: " + table1.size());
+        System.out.println("Количество элементов хэш-таблицы: " + table1.size());
         System.out.println();
 
         // метод isEmpty()
-        System.out.println("Хэш-блица пуста: " + table1.isEmpty());
+        System.out.println("Хэш-таблица пуста: " + table1.isEmpty());
         System.out.println();
 
         // метод boolean contains(Object o)
-        System.out.println("Наличие элемента в хэш-табице: " + table1.contains(null));
+        System.out.println("Наличие элемента в хэш-таблице: " + table1.contains(1));
         System.out.println();
 
         // метод remove(Object o)
         table1.remove(x5);
-        System.out.println("Хэш-табица с удленным элементом:");
+        System.out.println("Хэш-таблица с удаленным элементом:");
         System.out.println(table1);
         System.out.println();
 
         // метод clear()
         table1.clear();
-        System.out.println("Хэш-табица со всеми удленными элементами:");
+        System.out.println("Хэш-таблица со всеми удленными элементами:");
         System.out.println(table1);
         System.out.println();
 
@@ -54,8 +54,8 @@ public class Main {
         System.out.println("Преобразование хэш-таблицы в массив: " + Arrays.toString(table1.toArray()));
         System.out.println();
 
-        // метод toArray(E[] a)
-        Integer[] array = new Integer[0];
+        // метод toArray(T[] a)
+        Integer[] array = new Integer[6];
         System.out.println("Заполнение массива данными хэш-таблицы: " + Arrays.toString(table1.toArray(array)));
         System.out.println();
 
@@ -76,7 +76,7 @@ public class Main {
 
         // метод retainAll(Collection<?> c)
         table1.retainAll(table2);
-        System.out.println("Хэш-блица без элементов, отсутсвующих в переданной коллекции:");
+        System.out.println("Хэш-таблица без элементов, отсутсвующих в переданной коллекции:");
         System.out.println(table1);
     }
 }
