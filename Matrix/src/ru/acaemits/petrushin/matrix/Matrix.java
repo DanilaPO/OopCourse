@@ -23,7 +23,7 @@ public class Matrix {
 
     public Matrix(double[][] array) {
         if (array == null) {
-            throw new IllegalArgumentException("Передан null");
+            throw new NullPointerException("Передан null");
         }
 
         if (array.length == 0) {
@@ -51,7 +51,7 @@ public class Matrix {
 
     public Matrix(Vector[] vectors) {
         if (vectors == null) {
-            throw new IllegalArgumentException("Передан null");
+            throw new NullPointerException("Передан null");
         }
 
         if (vectors.length == 0) {
@@ -80,9 +80,9 @@ public class Matrix {
     }
 
     public Matrix(Matrix matrix) {
-        rows = new Vector[matrix.getRowsCount()];
+        rows = new Vector[matrix.rows.length];
 
-        for (int i = 0; i < matrix.getRowsCount(); ++i) {
+        for (int i = 0; i < matrix.rows.length; ++i) {
             rows[i] = new Vector(matrix.rows[i]);
         }
     }
@@ -166,9 +166,9 @@ public class Matrix {
             return rows[0].getComponent(0);
         }
 
-        Vector[] rowsCopy = new Vector[getRowsCount()];
+        Vector[] rowsCopy = new Vector[rows.length];
 
-        for (int i = 0; i < getRowsCount(); ++i) {
+        for (int i = 0; i < rows.length; ++i) {
             rowsCopy[i] = new Vector(rows[i]);
         }
 
@@ -189,11 +189,12 @@ public class Matrix {
 
                 currentRow.multiplyByScalar(multiplier);
 
-                rowsCopy[j] = Vector.getSum(rowsCopy[j], currentRow);
+                rowsCopy[j].add(currentRow);
             }
 
             if (i == rowsCopy.length - 1) {
-                return determinant * (rowsCopy[i].getComponent(i) - (rowsCopy[i - 1].getComponent(i) * multiplier));
+               determinant *= (rowsCopy[i].getComponent(i) - (rowsCopy[i - 1].getComponent(i) * multiplier));
+               break;
             }
 
             determinant *= rowsCopy[i].getComponent(i);
@@ -217,7 +218,7 @@ public class Matrix {
         return stringBuilder.toString();
     }
 
-    // h. умножение матрицы на вектор
+    // h. Умножение матрицы на вектор
     public Vector multiplyByVector(Vector vector) {
         if (getColumnsCount() != vector.getSize()) {
             throw new IllegalArgumentException("Некорректный размер переданного вектора. Должно быть " + getColumnsCount() +
@@ -235,7 +236,7 @@ public class Matrix {
 
     // i. Сложение матриц
     public void add(Matrix matrix) {
-        checkMatricesSizesEquality(new Matrix(rows), matrix);
+        checkMatricesSizesEquality(this, matrix);
 
         for (int i = 0; i < rows.length; ++i) {
             rows[i].add(matrix.rows[i]);
@@ -244,7 +245,7 @@ public class Matrix {
 
     // j. Вычитание матриц
     public void subtract(Matrix matrix) {
-        checkMatricesSizesEquality(new Matrix(rows), matrix);
+        checkMatricesSizesEquality(this, matrix);
 
         for (int i = 0; i < rows.length; ++i) {
             rows[i].subtract(matrix.rows[i]);
@@ -281,17 +282,17 @@ public class Matrix {
         int resultMatrixRowsCount = matrix1.getRowsCount();
         int resultMatrixColumnsCount = matrix2.getColumnsCount();
 
-        Vector[] rows = new Vector[resultMatrixRowsCount];
+        Vector[] vectorsArray = new Vector[resultMatrixRowsCount];
 
-        for (int i = 0; i < rows.length; ++i) {
-            rows[i] = new Vector(resultMatrixColumnsCount);
-            // Не понятно как выполнить, не используя getRow(i)
+        for (int i = 0; i < vectorsArray.length; ++i) {
+            vectorsArray[i] = new Vector(resultMatrixColumnsCount);
+
             for (int j = 0; j < resultMatrixColumnsCount; ++j) {
-                rows[i].setComponent(j, Vector.getScalarProduct(matrix1.getRow(i), matrix2.getColumn(j)));
+                vectorsArray[i].setComponent(j, Vector.getScalarProduct(matrix1.rows[i], matrix2.getColumn(j)));
             }
         }
 
-        return new Matrix(rows);
+        return new Matrix(vectorsArray);
     }
 
     private static void checkMatricesSizesEquality(Matrix matrix1, Matrix matrix2) {
