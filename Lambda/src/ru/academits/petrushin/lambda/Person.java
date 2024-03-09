@@ -1,8 +1,8 @@
 package ru.academits.petrushin.lambda;
 
-public class Person {
-    final private String name;
-    final private int age;
+class Person {
+    private final String name;
+    private final int age;
 
     public Person(String name, int age) {
         this.name = name;
