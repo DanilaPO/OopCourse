@@ -12,16 +12,25 @@ public class SinglyLinkedList<E> {
 
     // копирование списка
     public SinglyLinkedList(SinglyLinkedList<E> list) {
-        if (list.getSize() == 0) {
-            this.head = null;
+        if (list.size == 0) {
+            return;
         }
 
-        String listString = list.toString();
-        Object[] listItemsStrings = listString.substring(1, listString.length() - 1).split(", ");
+        ListItem<E> nextItem = null;
 
-        for (int i = listItemsStrings.length - 1; i >= 0; --i) {
-            //noinspection unchecked
-            addFirst((E) listItemsStrings[i]);
+        for (ListItem<E> currentItem = list.head; currentItem != null; currentItem = currentItem.getNext()) {
+            ListItem<E> item = new ListItem<E>(currentItem.getData());
+
+            if (head == null) {
+                head = item;
+                nextItem = head;
+
+                continue;
+            }
+
+            nextItem.setNext(item);
+
+            nextItem = nextItem.getNext();
         }
     }
 
@@ -45,7 +54,7 @@ public class SinglyLinkedList<E> {
 
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Выход за за диапазон доустимых значений индексов списка от 0 до " + (size - 1) + ". Передан индекс: " + index);
+            throw new IndexOutOfBoundsException("Выход за за диапазон допустимых значений индексов списка от 0 до " + (size - 1) + ". Передан индекс: " + index);
         }
     }
 
@@ -53,14 +62,14 @@ public class SinglyLinkedList<E> {
     public E get(int index) {
         checkIndex(index);
 
-        return getNode(index).getData();
+        return getItem(index).getData();
     }
 
     // изменение значения по указанному индексу - пусть выдает старое значение
     public E set(int index, E data) {
         checkIndex(index);
 
-        ListItem<E> currentItem = getNode(index);
+        ListItem<E> currentItem = getItem(index);
 
         E oldData = currentItem.getData();
         currentItem.setData(data);
@@ -78,7 +87,7 @@ public class SinglyLinkedList<E> {
 
         --size;
 
-        ListItem<E> previousItem = getNode(index - 1);
+        ListItem<E> previousItem = getItem(index - 1);
         ListItem<E> currentItem = previousItem.getNext();
 
         previousItem.setNext(currentItem.getNext());
@@ -95,8 +104,8 @@ public class SinglyLinkedList<E> {
 
     // вставка элемента по индексу
     public void add(int index, E data) {
-        if (index < 0 || index >= size + 1) {
-            throw new IndexOutOfBoundsException("Выход за за диапазон доустимых значений индексов списка от 0 до " + (size + 1) + ". Передан " + index);
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Выход за за диапазон допустимых значений индексов списка от 0 до " + size + ". Передан " + index);
         }
 
         if (index == 0) {
@@ -105,7 +114,7 @@ public class SinglyLinkedList<E> {
             return;
         }
 
-        ListItem<E> previousItem = getNode(index - 1);
+        ListItem<E> previousItem = getItem(index - 1);
         ListItem<E> currentItem = previousItem.getNext();
 
         ++size;
@@ -117,7 +126,7 @@ public class SinglyLinkedList<E> {
     @SuppressWarnings("UnusedReturnValue")
     public boolean removeByValue(E data) {
         for (ListItem<E> currentItem = head, previousItem = null; currentItem != null; previousItem = currentItem, currentItem = currentItem.getNext()) {
-            if ((data == null && currentItem.getData() == null) || Objects.equals(currentItem.getData(), (data))) {
+            if (Objects.equals(currentItem.getData(), data)) {
                 if (previousItem == null) {
                     removeFirst();
                     return true;
@@ -189,18 +198,15 @@ public class SinglyLinkedList<E> {
     }
 
     // вспомогательный метод итерирования до узла
-    private ListItem<E> getNode(int index) {
-        int i = 0;
+    private ListItem<E> getItem(int index) {
+        ListItem<E> currentItem = head;
 
-        ListItem<E> node = null;
+        ListItem<E> item = currentItem;
 
-        for (ListItem<E> currentItem = head; currentItem != null; currentItem = currentItem.getNext(), ++i) {
-            if (i == index) {
-                node = currentItem;
-                break;
-            }
+        for (int i = 0; i <= index; ++i) {
+            currentItem = currentItem.getNext();
         }
 
-        return node;
+        return item;
     }
 }
