@@ -46,7 +46,7 @@ public class Main {
 
         // метод clear()
         table1.clear();
-        System.out.println("Хэш-таблица со всеми удленными элементами:");
+        System.out.println("Хэш-таблица со всеми удаленными элементами:");
         System.out.println(table1);
         System.out.println();
 
@@ -55,7 +55,7 @@ public class Main {
         System.out.println();
 
         // метод toArray(T[] a)
-        Integer[] array = new Integer[6];
+        Integer[] array = new Integer[5];
         System.out.println("Заполнение массива данными хэш-таблицы: " + Arrays.toString(table1.toArray(array)));
         System.out.println();
 
@@ -76,7 +76,7 @@ public class Main {
 
         // метод retainAll(Collection<?> c)
         table1.retainAll(table2);
-        System.out.println("Хэш-таблица без элементов, отсутсвующих в переданной коллекции:");
+        System.out.println("Хэш-таблица без элементов, отсутствующих в переданной коллекции:");
         System.out.println(table1);
     }
 }
