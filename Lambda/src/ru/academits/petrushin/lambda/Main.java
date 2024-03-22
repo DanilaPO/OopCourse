@@ -23,9 +23,9 @@ public class Main {
         System.out.println("a) Список уникальных имен: " + uniqueNamesList);
 
         // Б) вывести список уникальных имен в формате:"Имена: Иван, Сергей, Петр."
-        String uniqueNamesString = uniqueNamesList.stream()
+        String uniqueNamesLine = uniqueNamesList.stream()
                 .collect(Collectors.joining(", ", "б) Имена: ", "."));
-        System.out.println(uniqueNamesString);
+        System.out.println(uniqueNamesLine);
 
         // В) получить список людей младше 18, посчитать для них средний возраст
         List<Person> personsUnder18YearsList = personsList.stream()
@@ -33,15 +33,15 @@ public class Main {
                 .toList();
         System.out.print("в) Список людей младше 18: " + personsUnder18YearsList.stream()
                 .map(Person::getName)
-                .collect(Collectors.joining(", ")) + "- ");
+                .collect(Collectors.joining(", ")) + " - ");
 
-        try {
+        if (personsUnder18YearsList.size() == 0) {
+            System.out.println("Передан пустой список");
+        } else {
             System.out.println("их средний возраст равен " + personsUnder18YearsList.stream()
                     .mapToInt(Person::getAge)
                     .average()
                     .orElseThrow());
-        } catch (NoSuchElementException e) {
-            System.out.println("Передан пустой список");
         }
 
         // Г) при помощи группировки получить Map, в котором ключи – имена, а значения – средний возраст
@@ -64,20 +64,19 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Введите сколько элементов потока корней чисел нужно вычислить: ");
-        int sequenceElementsCount = scanner.nextInt();
-
+        int rootsSequenceElementsCount = scanner.nextInt();
         DoubleStream roots = DoubleStream.iterate(0, x -> x + 1)
                 .map(Math::sqrt)
-                .limit(sequenceElementsCount);
+                .limit(rootsSequenceElementsCount);
         roots.forEach(System.out::println);
 
         // *Попробовать реализовать бесконечный поток чисел Фибоначчи
         System.out.print("Введите сколько элементов из последовательности чисел Фибоначчи хотите получить: ");
-        int fibonacciNumbersNumber = scanner.nextInt();
+        int fibonacciNumbersCount = scanner.nextInt();
 
         Stream.iterate(new int[]{0, 1}, x -> new int[]{x[1], x[0] + x[1]})
                 .map(x -> x[0])
-                .limit(fibonacciNumbersNumber)
+                .limit(fibonacciNumbersCount)
                 .forEach(System.out::println);
     }
 }
