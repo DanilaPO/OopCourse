@@ -124,7 +124,7 @@ public class Matrix {
     // c. Получение вектора-столбца по индексу
     public Vector getColumn(int index) {
         if (index < 0 || index >= getColumnsCount()) {
-            throw new IllegalArgumentException("Заданый индекс вне диапазона (0, " + (rows.length - 1) + "). Передан индекс: " + index);
+            throw new IndexOutOfBoundsException("Выход индекса за пределы диапазона (0, " + (getColumnsCount() - 1) + "). Передан индекс: " + index);
         }
 
         double[] vectorComponents = new double[rows.length];
@@ -193,7 +193,7 @@ public class Matrix {
             }
 
             if (i == rowsCopy.length - 1) {
-                determinant *= rowsCopy[i].getComponent(i) - (rowsCopy[i - 1].getComponent(i) * multiplier);
+                determinant *= rowsCopy[i].getComponent(i) - rowsCopy[i - 1].getComponent(i) * multiplier;
                 break;
             }
 
@@ -282,17 +282,17 @@ public class Matrix {
         int resultMatrixRowsCount = matrix1.getRowsCount();
         int resultMatrixColumnsCount = matrix2.getColumnsCount();
 
-        Vector[] resultingMatrixLines = new Vector[resultMatrixRowsCount];
+        Vector[] resultMatrixRow = new Vector[resultMatrixRowsCount];
 
-        for (int i = 0; i < resultingMatrixLines.length; ++i) {
-            resultingMatrixLines[i] = new Vector(resultMatrixColumnsCount);
+        for (int i = 0; i < resultMatrixRow.length; ++i) {
+            resultMatrixRow[i] = new Vector(resultMatrixColumnsCount);
 
             for (int j = 0; j < resultMatrixColumnsCount; ++j) {
-                resultingMatrixLines[i].setComponent(j, Vector.getScalarProduct(matrix1.rows[i], matrix2.getColumn(j)));
+                resultMatrixRow[i].setComponent(j, Vector.getScalarProduct(matrix1.rows[i], matrix2.getColumn(j)));
             }
         }
 
-        return new Matrix(resultingMatrixLines);
+        return new Matrix(resultMatrixRow);
     }
 
     private static void checkMatricesSizesEquality(Matrix matrix1, Matrix matrix2) {
