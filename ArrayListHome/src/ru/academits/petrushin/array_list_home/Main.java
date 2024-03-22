@@ -1,6 +1,7 @@
 package ru.academits.petrushin.array_list_home;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,22 +14,21 @@ public class Main {
             String filePath = "File.txt";
             System.out.println("Список строк: " + getFileLines(filePath));
             System.out.println();
-        } catch (RuntimeException e) {
+        } catch (FileNotFoundException e) {
             System.out.print("Файл не найден!");
         }
 
         // Удаление из списка всех целых чисел
         ArrayList<Integer> numbers1 = new ArrayList<>(Arrays.asList(2, 1, 2, 7, 4, 8));
-        System.out.println("Исходный список чисел, в том числе целых чисел: " + numbers1);
+        System.out.println("Исходный список чисел: " + numbers1);
         removeEvenNumbers(numbers1);
         System.out.println("Список без целых чисел: " + numbers1);
         System.out.println();
 
         // Создание нового списка без повторяющихся чисел
         ArrayList<Integer> numbers2 = new ArrayList<>(Arrays.asList(1, 5, 2, 1, 3, 5, 1));
-        System.out.println("Исходный список чисел, в том числе повторяющихся чисел: " + numbers2);
+        System.out.println("Исходный список чисел: " + numbers2);
         System.out.println("Список без повторений: " + getNonRepeatingNumbers(numbers2));
-
     }
 
     public static ArrayList<String> getFileLines(String filePath) throws IOException {
@@ -55,14 +55,14 @@ public class Main {
     }
 
     public static ArrayList<Integer> getNonRepeatingNumbers(ArrayList<Integer> numbers) {
-        ArrayList<Integer> nonRepeatingNumbersList = new ArrayList<>(numbers.size());
+        ArrayList<Integer> nonRepeatingNumbers = new ArrayList<>(numbers.size());
 
         for (Integer integer : numbers) {
-            if (!nonRepeatingNumbersList.contains(integer)) {
-                nonRepeatingNumbersList.add(integer);
+            if (!nonRepeatingNumbers.contains(integer)) {
+                nonRepeatingNumbers.add(integer);
             }
         }
 
-        return nonRepeatingNumbersList;
+        return nonRepeatingNumbers;
     }
 }
