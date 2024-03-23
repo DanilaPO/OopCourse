@@ -43,8 +43,7 @@ public class Main {
         System.out.println("Список со вставленным элементом: " + list);
 
         // удаление узла по значению, пусть выдает true, если элемент был удален
-        list.removeByValue(null);
-        System.out.println("Список с удаленным элементом: " + list);
+        System.out.println("Список с удаленным элементом: " + list.removeByValue(x1) + " " + list);
 
         // удаление первого элемента, пусть выдает значение элемента
         System.out.println("Удаленный первый элемент: " + list.removeFirst());
@@ -56,5 +55,7 @@ public class Main {
         // копирование списка
         SinglyLinkedList<Integer> copyList = new SinglyLinkedList<>(list);
         System.out.print("Копированный список: " + copyList);
+
+        System.out.print(list.getItem(4));
     }
 }

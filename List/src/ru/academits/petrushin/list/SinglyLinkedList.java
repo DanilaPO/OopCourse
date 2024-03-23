@@ -12,25 +12,20 @@ public class SinglyLinkedList<E> {
 
     // копирование списка
     public SinglyLinkedList(SinglyLinkedList<E> list) {
+        this.size = list.size;
+
         if (list.size == 0) {
             return;
         }
 
-        ListItem<E> nextItem = null;
+        ListItem<E> item = new ListItem<>(list.head.getData());
+        head = item;
+        ListItem<E> newListItem = head;
 
-        for (ListItem<E> currentItem = list.head; currentItem != null; currentItem = currentItem.getNext()) {
-            ListItem<E> item = new ListItem<E>(currentItem.getData());
-
-            if (head == null) {
-                head = item;
-                nextItem = head;
-
-                continue;
-            }
-
-            nextItem.setNext(item);
-
-            nextItem = nextItem.getNext();
+        for (ListItem<E> originalListItem = list.head.getNext(); originalListItem != null; originalListItem = originalListItem.getNext()) {
+            item = new ListItem<>(originalListItem.getData());
+            newListItem.setNext(item);
+            newListItem = newListItem.getNext();
         }
     }
 
@@ -110,20 +105,17 @@ public class SinglyLinkedList<E> {
 
         if (index == 0) {
             addFirst(data);
-
             return;
         }
 
         ListItem<E> previousItem = getItem(index - 1);
-        ListItem<E> currentItem = previousItem.getNext();
+
+        previousItem.setNext(new ListItem<>(data, previousItem.getNext()));
 
         ++size;
-
-        previousItem.setNext(new ListItem<>(data, currentItem));
     }
 
     // удаление узла по значению, пусть выдает true, если элемент был удален
-    @SuppressWarnings("UnusedReturnValue")
     public boolean removeByValue(E data) {
         for (ListItem<E> currentItem = head, previousItem = null; currentItem != null; previousItem = currentItem, currentItem = currentItem.getNext()) {
             if (Objects.equals(currentItem.getData(), data)) {
@@ -168,10 +160,10 @@ public class SinglyLinkedList<E> {
         ListItem<E> previousItem = null;
 
         while (currentItem != null) {
-            ListItem<E> next = currentItem.getNext();
+            ListItem<E> nextItem = currentItem.getNext();
             currentItem.setNext(previousItem);
             previousItem = currentItem;
-            currentItem = next;
+            currentItem = nextItem;
         }
 
         head = previousItem;
@@ -198,15 +190,14 @@ public class SinglyLinkedList<E> {
     }
 
     // вспомогательный метод итерирования до узла
-    private ListItem<E> getItem(int index) {
+    public ListItem<E> getItem(int index) {
         ListItem<E> currentItem = head;
 
-        ListItem<E> item = currentItem;
-
-        for (int i = 0; i <= index; ++i) {
+        for (int i = 1; i <= index; ++i) {
             currentItem = currentItem.getNext();
+
         }
 
-        return item;
+        return currentItem;
     }
 }
