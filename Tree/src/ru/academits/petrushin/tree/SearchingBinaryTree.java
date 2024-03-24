@@ -7,11 +7,11 @@ import java.util.Queue;
 import java.util.function.Consumer;
 
 public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
-    private ru.academits.petrushin.tree.TreeNode<E> root;
-    private Comparator<ru.academits.petrushin.tree.TreeNode<E>> comparator;
+    private TreeNode<E> root;
+    private Comparator<TreeNode<E>> comparator;
     int size;
 
-    public SearchingBinaryTree(Comparator<ru.academits.petrushin.tree.TreeNode<E>> comparator) {
+    public SearchingBinaryTree(Comparator<TreeNode<E>> comparator) {
         this.comparator = comparator;
     }
 
@@ -23,12 +23,12 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
         ++size;
 
         if (root == null) {
-            root = new ru.academits.petrushin.tree.TreeNode<>(data);
+            root = new TreeNode<>(data);
             return;
         }
 
-        ru.academits.petrushin.tree.TreeNode<E> currentNode = root;
-        ru.academits.petrushin.tree.TreeNode<E> newNode = new ru.academits.petrushin.tree.TreeNode<>(data);
+        TreeNode<E> currentNode = root;
+        TreeNode<E> newNode = new TreeNode<>(data);
         int comparisonResult;
 
         while (true) {
@@ -60,12 +60,12 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
             return false;
         }
 
-        if (compare(root, new ru.academits.petrushin.tree.TreeNode<>(data)) == 0) {
+        if (compare(root, new TreeNode<>(data)) == 0) {
             return true;
         }
 
-        ru.academits.petrushin.tree.TreeNode<E> currentNode = root;
-        ru.academits.petrushin.tree.TreeNode<E> newNode = new ru.academits.petrushin.tree.TreeNode<>(data);
+        TreeNode<E> currentNode = root;
+        TreeNode<E> newNode = new TreeNode<>(data);
         int comparisonResult;
 
         while (currentNode != null) {
@@ -99,9 +99,9 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
             return false;
         }
 
-        ru.academits.petrushin.tree.TreeNode<E> nodeBeingDeleted = root;
-        ru.academits.petrushin.tree.TreeNode<E> nodeBeingDeletedParent = null;
-        ru.academits.petrushin.tree.TreeNode<E> newNode = new ru.academits.petrushin.tree.TreeNode<>(data);
+        TreeNode<E> nodeBeingDeleted = root;
+        TreeNode<E> nodeBeingDeletedParent = null;
+        TreeNode<E> newNode = new TreeNode<>(data);
         int comparisonResult;
 
         while (true) {
@@ -162,10 +162,10 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
             return true;
         }
 
-        ru.academits.petrushin.tree.TreeNode<E> parentBeingDeletedNode = nodeBeingDeletedParent;
+        TreeNode<E> parentBeingDeletedNode = nodeBeingDeletedParent;
 
-        ru.academits.petrushin.tree.TreeNode<E> previousNode = nodeBeingDeleted;
-        ru.academits.petrushin.tree.TreeNode<E> currentNode = nodeBeingDeleted.getRight();
+        TreeNode<E> previousNode = nodeBeingDeleted;
+        TreeNode<E> currentNode = nodeBeingDeleted.getRight();
 
         if (currentNode.getLeft() == null) {
             if (parentBeingDeletedNode == null) {
@@ -217,12 +217,12 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
             throw new NullPointerException("Пустое дерево");
         }
 
-        Queue<ru.academits.petrushin.tree.TreeNode<E>> queue = new LinkedList<>();
+        Queue<TreeNode<E>> queue = new LinkedList<>();
 
         queue.add(root);
 
         while (!queue.isEmpty()) {
-            ru.academits.petrushin.tree.TreeNode<E> currentNode = queue.poll();
+           TreeNode<E> currentNode = queue.poll();
 
             consumer.accept(currentNode.getData());
 
@@ -242,11 +242,11 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
             throw new NullPointerException("Пустое дерево");
         }
 
-        Deque<ru.academits.petrushin.tree.TreeNode<E>> stack = new LinkedList<>();
+        Deque<TreeNode<E>> stack = new LinkedList<>();
         stack.push(root);
 
         while (!stack.isEmpty()) {
-            ru.academits.petrushin.tree.TreeNode<E> stackCurrentNode = stack.pollFirst();
+            TreeNode<E> stackCurrentNode = stack.pollFirst();
 
             consumer.accept(stackCurrentNode.getData());
 
@@ -269,7 +269,7 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
         visit(root, consumer);
     }
 
-    public void visit(ru.academits.petrushin.tree.TreeNode<E> node, Consumer<E> consumer) {
+    public void visit(TreeNode<E> node, Consumer<E> consumer) {
         if (node == null) {
             return;
         }
@@ -282,7 +282,7 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
     }
 
     @Override
-    public int compare(ru.academits.petrushin.tree.TreeNode<E> node1, ru.academits.petrushin.tree.TreeNode<E> node2) {
+    public int compare(TreeNode<E> node1, TreeNode<E> node2) {
         if (comparator == null) {
             //noinspection unchecked
             Comparable<E> givenTypeNode1 = (Comparable<E>) node1.getData();
