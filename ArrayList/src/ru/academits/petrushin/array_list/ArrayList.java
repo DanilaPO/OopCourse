@@ -33,15 +33,15 @@ public class ArrayList<E> implements List<E> {
         return size == 0;
     }
 
-    private void checkBounds(int index) {
+    private void checkIndexForAccess(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Выход за пределы size. Допустимый диапазон от 0 до " + (size - 1) + ". Указан индекс " + index);
+            throw new IndexOutOfBoundsException("Индекс вышел за пределы допустимого диапазона значений от 0 до " + (size - 1) + ". Передан индекс " + index);
         }
     }
 
-    private void checkElementIndex(int index, Object element) {
+    private void checkIndexToInsert(int index) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Выход за пределы size. Допустимый диапазон от 0 до " + size + ". Указан индекс " + index);
+            throw new IndexOutOfBoundsException("Индекс вышел за пределы допустимого диапазона значений от 0 до " + size + ". Передан индекс " + index);
         }
     }
 
@@ -87,21 +87,22 @@ public class ArrayList<E> implements List<E> {
     // Метод добавления всех элементов коллекции в список по индексу - addAll
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        checkElementIndex(index, c);
+        checkIndexToInsert(index);
 
         if (c.isEmpty()) {
             return false;
         }
 
-        ensureCapacity(size + c.size() + index);
+        ensureCapacity(size + c.size());
 
-        size += index + c.size();
+        System.arraycopy(items, index, items, index + c.size(), size - c.size());
 
-        System.arraycopy(items, index, items, index + c.size(), size - index - c.size());
+        for (E element : c) {
+            set(index, element);
+            ++index;
+        }
 
-        size -= index;
-
-        System.arraycopy(c.toArray(), 0, items, index, c.size());
+        size += c.size();
 
         ++modCount;
 
@@ -160,7 +161,7 @@ public class ArrayList<E> implements List<E> {
     // Метод получения элемента списка по индексу - get
     @Override
     public E get(int index) {
-        checkBounds(index);
+        checkIndexForAccess(index);
 
         return items[index];
     }
@@ -168,7 +169,7 @@ public class ArrayList<E> implements List<E> {
     // Замена элемента списка по индексу - set
     @Override
     public E set(int index, E item) {
-        checkBounds(index);
+        checkIndexForAccess(index);
 
         E oldItem = items[index];
 
@@ -180,7 +181,7 @@ public class ArrayList<E> implements List<E> {
     // Метод вставляет указанный элемент в указанную позицию в этом списке - add(int index, T element)
     @Override
     public void add(int index, E item) {
-        checkElementIndex(index, item);
+        checkIndexToInsert(index);
 
         if (size == items.length) {
             increaseCapacity();
@@ -196,7 +197,7 @@ public class ArrayList<E> implements List<E> {
     // Удаление элемента по индексу - remove
     @Override
     public E remove(int index) {
-        checkBounds(index);
+        checkIndexForAccess(index);
 
         E removedItem = items[index];
 
@@ -213,7 +214,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     public int indexOf(Object o) {
         for (int i = 0; i < size; ++i) {
-            if (Objects.equals(items[i], o) || items[i] == null && o == null) {
+            if (Objects.equals(items[i], o)) {
                 return i;
             }
         }
@@ -225,7 +226,7 @@ public class ArrayList<E> implements List<E> {
     @Override
     public int lastIndexOf(Object o) {
         for (int i = size - 1; i >= 0; --i) {
-            if (Objects.equals(items[i], o) || items[i] == null && o == null) {
+            if (Objects.equals(items[i], o)) {
                 return i;
             }
         }
@@ -252,8 +253,8 @@ public class ArrayList<E> implements List<E> {
                 throw new ConcurrentModificationException("В коллекции добавились/удалились элементы за время обхода");
             }
 
-            if (currentIndex == size) {
-                throw new NoSuchElementException ("Коллекция кончилась");
+            if (!hasNext()) {
+                throw new NoSuchElementException("Коллекция кончилась");
             }
 
             ++currentIndex;
@@ -276,7 +277,7 @@ public class ArrayList<E> implements List<E> {
     public <T> T[] toArray(T[] array) {
         if (size > array.length) {
             //noinspection unchecked
-            return (T[]) Arrays.copyOf(items, size, items.getClass());
+            return Arrays.copyOf(items, size, (Class<? extends T[]>) items.getClass());
         }
 
         //noinspection SuspiciousSystemArraycopy
@@ -312,12 +313,9 @@ public class ArrayList<E> implements List<E> {
 
         StringBuilder stringBuilder = new StringBuilder("[");
 
-
-
         for (int i = 0; i < size; ++i) {
-            stringBuilder.append(get(i))
+            stringBuilder.append(items[i])
                     .append(", ");
-
         }
 
         stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
@@ -381,7 +379,7 @@ public class ArrayList<E> implements List<E> {
         final int prime = 37;
         int hash = 1;
 
-        hash = prime * hash + Arrays.hashCode(Arrays.copyOf(items, size));
+        hash = prime * hash + Arrays.hashCode(toArray());
 
         return hash;
     }

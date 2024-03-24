@@ -1,6 +1,7 @@
 package ru.academits.petrushin.array_list_main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class Main {
 
         // Метод добавления всех элементов коллекции в список по индексу - addAll
         System.out.println("Список до добавления всех элементов коллекции в список по индексу: " + list);
-        list.addAll(5, list2);
+        list.addAll(11, list2);
         System.out.println("Результат добавления всех элементов коллекции в список: " + list);
         System.out.println();
 
@@ -111,5 +112,9 @@ public class Main {
 
         // Метод contains(Object o) возвращает true, если этот набор содержит элемент
         System.out.println("Нахождение элемента в списке: " + list.contains(11));
+
+        Integer[] arr = new Integer[2];
+        Integer[] arr2 = list.toArray(arr);
+        System.out.print(Arrays.toString(arr2));
     }
 }
