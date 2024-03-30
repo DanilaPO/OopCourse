@@ -55,7 +55,5 @@ public class Main {
         // копирование списка
         SinglyLinkedList<Integer> copyList = new SinglyLinkedList<>(list);
         System.out.print("Копированный список: " + copyList);
-
-        System.out.print(list.getItem(4));
     }
 }

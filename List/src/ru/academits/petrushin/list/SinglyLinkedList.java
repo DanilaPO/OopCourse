@@ -12,19 +12,17 @@ public class SinglyLinkedList<E> {
 
     // копирование списка
     public SinglyLinkedList(SinglyLinkedList<E> list) {
-        this.size = list.size;
-
         if (list.size == 0) {
             return;
         }
 
-        ListItem<E> item = new ListItem<>(list.head.getData());
-        head = item;
+        size = list.size;
+
+        head = new ListItem<>(list.head.getData());
         ListItem<E> newListItem = head;
 
         for (ListItem<E> originalListItem = list.head.getNext(); originalListItem != null; originalListItem = originalListItem.getNext()) {
-            item = new ListItem<>(originalListItem.getData());
-            newListItem.setNext(item);
+            newListItem.setNext(new ListItem<>(originalListItem.getData()));
             newListItem = newListItem.getNext();
         }
     }
@@ -49,7 +47,7 @@ public class SinglyLinkedList<E> {
 
     private void checkIndex(int index) {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Выход за за диапазон допустимых значений индексов списка от 0 до " + (size - 1) + ". Передан индекс: " + index);
+            throw new IndexOutOfBoundsException("Выход за диапазон допустимых значений индексов списка от 0 до " + (size - 1) + ". Передан индекс: " + index);
         }
     }
 
@@ -100,7 +98,7 @@ public class SinglyLinkedList<E> {
     // вставка элемента по индексу
     public void add(int index, E data) {
         if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Выход за за диапазон допустимых значений индексов списка от 0 до " + size + ". Передан " + index);
+            throw new IndexOutOfBoundsException("Выход за за диапазон допустимых значений индексов списка от 0 до " + size + ". Передан индекс: " + index);
         }
 
         if (index == 0) {
@@ -190,7 +188,7 @@ public class SinglyLinkedList<E> {
     }
 
     // вспомогательный метод итерирования до узла
-    public ListItem<E> getItem(int index) {
+    private ListItem<E> getItem(int index) {
         ListItem<E> currentItem = head;
 
         for (int i = 1; i <= index; ++i) {
