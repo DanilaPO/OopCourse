@@ -1,4 +1,4 @@
-package ru.acaemits.petrushin.matrix;
+package ru.academits.petrushin.matrix;
 
 import ru.academits.petrushin.vector.Vector;
 
@@ -159,7 +159,7 @@ public class Matrix {
     public double getDeterminant() {
         if (rows.length != getColumnsCount()) {
             throw new UnsupportedOperationException("Матрица не квадратная (не n x n) - у нее нет определителя. Число строк: " +
-                    rows.length + ". Число столбцов: " + getColumnsCount());
+                    rows.length + ". Количество столбцов: " + getColumnsCount());
         }
 
         if (rows.length == 1) {
@@ -275,30 +275,30 @@ public class Matrix {
     // c. Умножение матриц - статический метод
     public static Matrix getProduct(Matrix matrix1, Matrix matrix2) {
         if (matrix1.getColumnsCount() != matrix2.rows.length) {
-            throw new IllegalArgumentException("Число столбцов первой матрицы не равно числу строк второй матрицы. Число столбцов первой матрицы: " +
+            throw new IllegalArgumentException("Количество столбцов первой матрицы не равно числу строк второй матрицы. Количество столбцов первой матрицы: " +
                     matrix1.getColumnsCount() + ". Число строк второй матрицы: " + matrix2.rows.length);
         }
 
         int resultMatrixRowsCount = matrix1.getRowsCount();
         int resultMatrixColumnsCount = matrix2.getColumnsCount();
 
-        Vector[] resultMatrixRow = new Vector[resultMatrixRowsCount];
+        Vector[] resultMatrixRows = new Vector[resultMatrixRowsCount];
 
-        for (int i = 0; i < resultMatrixRow.length; ++i) {
-            resultMatrixRow[i] = new Vector(resultMatrixColumnsCount);
+        for (int i = 0; i < resultMatrixRows.length; ++i) {
+            resultMatrixRows[i] = new Vector(resultMatrixColumnsCount);
 
             for (int j = 0; j < resultMatrixColumnsCount; ++j) {
-                resultMatrixRow[i].setComponent(j, Vector.getScalarProduct(matrix1.rows[i], matrix2.getColumn(j)));
+                resultMatrixRows[i].setComponent(j, Vector.getScalarProduct(matrix1.rows[i], matrix2.getColumn(j)));
             }
         }
 
-        return new Matrix(resultMatrixRow);
+        return new Matrix(resultMatrixRows);
     }
 
     private static void checkMatricesSizesEquality(Matrix matrix1, Matrix matrix2) {
-        if (matrix1.getRowsCount() != matrix2.getRowsCount()) {
+        if (matrix1.rows.length != matrix2.rows.length) {
             throw new IllegalArgumentException("У матриц разное количество строк: количество строк одной матрицы - " +
-                    matrix1.getRowsCount() + ", количество строк второй матрицы - " + matrix2.getRowsCount());
+                    matrix1.rows.length + ", количество строк второй матрицы - " + matrix2.rows.length);
         }
 
         if (matrix1.getColumnsCount() != matrix2.getColumnsCount()) {

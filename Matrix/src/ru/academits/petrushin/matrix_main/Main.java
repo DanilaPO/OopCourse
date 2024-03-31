@@ -1,6 +1,6 @@
-package ru.acaemits.petrushin.matrix_main;
+package ru.academits.petrushin.matrix_main;
 
-import ru.acaemits.petrushin.matrix.Matrix;
+import ru.academits.petrushin.matrix.Matrix;
 import ru.academits.petrushin.vector.Vector;
 
 public class Main {
@@ -52,7 +52,7 @@ public class Main {
         System.out.println("Вычисление определителя матрицы: " + matrix1.getDeterminant());
         System.out.println(matrix1);
 
-        // h. умножение матрицы на вектор
+        // h. Умножение матрицы на вектор
         System.out.println("Умножение матрицы на вектор: " + matrix1.multiplyByVector(vector1));
         System.out.println();
 
