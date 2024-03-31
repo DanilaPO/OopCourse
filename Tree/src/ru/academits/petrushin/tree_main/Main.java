@@ -33,17 +33,17 @@ public class Main {
         System.out.println();
 
         // обход в ширину
-        System.out.print("Результат обхода в ширину: ");
+        System.out.print("Результат обхода дерева в ширину: ");
         tree.goAroundInWidth(val -> System.out.print(val + ", "));
         System.out.println();
 
         // обход в глубину без рекурсии
-        System.out.print("Результат обхода в глубину без рекурсии: ");
+        System.out.print("Результат обхода дерева в глубину без рекурсии: ");
         tree.goDepthFirst(val -> System.out.print(val + ", "));
         System.out.println();
 
         // рекурсивный обход в глубину
-        System.out.print("Результат рекурсивного обхода в глубину: ");
+        System.out.print("Результат рекурсивного обхода дерева в глубину: ");
         tree.goDepthFirstRecursion(val -> System.out.print(val + ", "));
     }
 }

@@ -29,6 +29,7 @@ public class SearchingBinaryTree<E> implements Comparator<TreeNode<E>> {
 
         TreeNode<E> currentNode = root;
         TreeNode<E> newNode = new TreeNode<>(data);
+
         int comparisonResult;
 
         while (true) {

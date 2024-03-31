@@ -1,5 +1,6 @@
 package ru.academits.petrushin.tree;
 
+// Узел дерева
 class TreeNode<E> {
     private E data;
     private TreeNode<E> left;
