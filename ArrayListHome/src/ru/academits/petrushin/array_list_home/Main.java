@@ -15,7 +15,7 @@ public class Main {
             System.out.println("Список строк: " + getFileLines(filePath));
             System.out.println();
         } catch (FileNotFoundException e) {
-            System.out.print("Файл не найден!");
+            System.out.print("Файл  не найден!");
         }
 
         // Удаление из списка всех целых чисел
