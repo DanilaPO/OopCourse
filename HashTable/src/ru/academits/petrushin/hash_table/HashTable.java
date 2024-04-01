@@ -17,7 +17,7 @@ public class HashTable<E> implements Collection<E> {
 
     public HashTable(int length) {
         if (length <= 0) {
-            throw new IllegalArgumentException("Передано некорректное значение длины: " + length);
+            throw new IllegalArgumentException("Значение длины должно быть > 0. Передано значение длины: " + length);
         }
 
         //noinspection unchecked
@@ -38,19 +38,23 @@ public class HashTable<E> implements Collection<E> {
     public boolean contains(Object o) {
         int index = getIndex(o);
 
-        return lists[index].contains(o);
+        try {
+            return lists[index].contains(o);
+        } catch (NullPointerException e) {
+            return false;
+        }
     }
 
     private class HashTableListIterator implements Iterator<E> {
-        private int arrayIndex;
+        private int listIndex;
         private int elementIndex = -1;
-        private int visitedItemsCount;
+        private int visitedElementsCount;
 
         private final int originalModCount = modCount;
 
 
         public boolean hasNext() {
-            return visitedItemsCount < size;
+            return visitedElementsCount < size;
         }
 
         public E next() {
@@ -62,16 +66,16 @@ public class HashTable<E> implements Collection<E> {
                 throw new ConcurrentModificationException("В коллекции добавились/удалились элементы за время обхода");
             }
 
-            ++visitedItemsCount;
+            ++visitedElementsCount;
 
             ++elementIndex;
 
-            while (lists[arrayIndex] == null || elementIndex >= lists[arrayIndex].size()) {
-                ++arrayIndex;
+            while (lists[listIndex] == null || elementIndex >= lists[listIndex].size()) {
+                ++listIndex;
                 elementIndex = 0;
             }
 
-            return lists[arrayIndex].get(elementIndex);
+            return lists[listIndex].get(elementIndex);
         }
     }
 
@@ -102,10 +106,13 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        if (a.length < size) {
+        if (a.length <= size) {
             //noinspection unchecked
-            return Arrays.copyOf(toArray(), size, (Class<? extends T[]>) lists.getClass());
+            return Arrays.copyOf(toArray(), size, (Class<? extends T[]>) a.getClass());
         }
+
+        //noinspection unchecked
+        a = Arrays.copyOf(toArray(), a.length, (Class<? extends T[]>) a.getClass());
 
         a[size] = null;
 
@@ -156,6 +163,7 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
+        // У меня нет здесь ворнингов
         if (c.size() == 0) {
             return false;
         }
@@ -169,7 +177,33 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
+       // У меня нет здесь ворнингов
         if (c.size() == 0 || size == 0) {
+            return false;
+        }
+
+        boolean isRemoved = false;
+
+        for (ArrayList<E> list : lists) {
+            if (list == null) {
+                continue;
+            }
+
+            int initial = list.size();
+
+            if (list.removeAll(c)) {
+                isRemoved = true;
+                size -= initial - list.size();
+                ++modCount;
+            }
+        }
+
+        return isRemoved;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        if (size == 0) {
             return false;
         }
 
@@ -182,7 +216,7 @@ public class HashTable<E> implements Collection<E> {
 
             int originalListSize = list.size();
 
-            if (list.removeAll(c)) {
+            if (list.retainAll(c)) {
                 isRemoved = true;
                 size -= originalListSize - list.size();
             }
@@ -191,32 +225,6 @@ public class HashTable<E> implements Collection<E> {
         ++modCount;
 
         return isRemoved;
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        if (size == 0) {
-            return false;
-        }
-
-        boolean isRetained = false;
-
-        for (ArrayList<E> list : lists) {
-            if (list == null) {
-                continue;
-            }
-
-            int originalListSize = list.size();
-
-            if (list.retainAll(c)) {
-                isRetained = true;
-                size -= originalListSize - list.size();
-            }
-        }
-
-        ++modCount;
-
-        return isRetained;
     }
 
     @Override
