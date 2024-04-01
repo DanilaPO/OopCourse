@@ -93,23 +93,22 @@ public class ArrayList<E> implements List<E> {
             return false;
         }
 
-        ensureCapacity(size + c.size());
+        ensureCapacity(size + c.size() + index);
 
-        System.arraycopy(items, index, items, index + c.size(), size - c.size());
+        System.arraycopy(items, index, items, index + c.size(), size);
 
-        for (E element : c) {
-            set(index, element);
+        for (E item : c) {
+            items[index] = item;
             ++index;
         }
 
         size += c.size();
-
         ++modCount;
 
         return true;
     }
 
-    // Метод удаления всех элементов этой коллекции, которые также содержатся в указанной коллекции - removeAll
+    // Метод удаления всех элементов этой коллекции, которые также содержатся в переданной коллекции - removeAll
     @Override
     public boolean removeAll(Collection<?> c) {
         if (c.isEmpty()) {
@@ -129,7 +128,7 @@ public class ArrayList<E> implements List<E> {
         return isRemoved;
     }
 
-    // Метод сохранения в этой коллекции только тех элементов, которые содержатся в указанной коллекции - retainAll
+    // Метод сохранения в этой коллекции только тех элементов, которые содержатся в переданной коллекции - retainAll
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean isRemoved = false;
@@ -277,7 +276,7 @@ public class ArrayList<E> implements List<E> {
     public <T> T[] toArray(T[] array) {
         if (size > array.length) {
             //noinspection unchecked
-            return Arrays.copyOf(items, size, (Class<? extends T[]>) items.getClass());
+            return Arrays.copyOf(items, size, (Class<? extends T[]>) array.getClass());
         }
 
         //noinspection SuspiciousSystemArraycopy
@@ -318,7 +317,7 @@ public class ArrayList<E> implements List<E> {
                     .append(", ");
         }
 
-        stringBuilder.delete(stringBuilder.length() - 1, stringBuilder.length());
+        stringBuilder.deleteCharAt(stringBuilder.length() - 2);
 
         stringBuilder.setCharAt(stringBuilder.length() - 1, ']');
 
@@ -379,7 +378,7 @@ public class ArrayList<E> implements List<E> {
         final int prime = 37;
         int hash = 1;
 
-        hash = prime * hash + Arrays.hashCode(toArray());
+        hash = prime * hash + Arrays.hashCode(items);
 
         return hash;
     }

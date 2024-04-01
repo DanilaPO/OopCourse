@@ -1,6 +1,7 @@
 package ru.academits.petrushin.array_list_main;
 
-import java.util.ArrayList;
+import ru.academits.petrushin.array_list.ArrayList;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class Main {
 
         // Метод добавления всех элементов коллекции в список по индексу - addAll
         System.out.println("Список до добавления всех элементов коллекции в список по индексу: " + list);
-        list.addAll(11, list2);
+        list.addAll(0, list2);
         System.out.println("Результат добавления всех элементов коллекции в список: " + list);
         System.out.println();
 
