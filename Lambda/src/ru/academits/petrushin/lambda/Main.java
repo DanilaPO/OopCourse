@@ -15,19 +15,19 @@ public class Main {
                 new Person("Иван", 18),
                 new Person("Андрей", 50));
 
-        // А) получить список уникальных имен
+        // А) Получить список уникальных имен
         List<String> uniqueNamesList = personsList.stream()
                 .map(Person::getName)
                 .distinct()
                 .toList();
         System.out.println("a) Список уникальных имен: " + uniqueNamesList);
 
-        // Б) вывести список уникальных имен в формате:"Имена: Иван, Сергей, Петр."
+        // Б) Вывести список уникальных имен в формате:"Имена: Иван, Сергей, Петр."
         String uniqueNamesString = uniqueNamesList.stream()
                 .collect(Collectors.joining(", ", "б) Имена: ", "."));
         System.out.println(uniqueNamesString);
 
-        // В) получить список людей младше 18, посчитать для них средний возраст
+        // В) Получить список людей младше 18, посчитать для них средний возраст
         List<Person> personsUnder18YearsList = personsList.stream()
                 .filter(p -> p.getAge() < 18)
                 .toList();
@@ -38,22 +38,21 @@ public class Main {
         personsUnder18YearsList.stream()
                 .mapToInt(Person::getAge)
                 .average()
-                .ifPresentOrElse(x -> System.out.println("их средний возраст равен: " + x), () -> System.out.println("Передан пустой список"));
+                .ifPresentOrElse(x -> System.out.println("их средний возраст равен: " + x), () -> System.out.println("Нет людей младше 18"));
 
-
-        // Г) при помощи группировки получить Map, в котором ключи – имена, а значения – средний возраст
+        // Г) При помощи группировки получить Map, в котором ключи – имена, а значения – средний возраст
         System.out.println("г) Map, в котором ключи – имена, а значения – средний возраст:");
         Map<String, Double> averageAgesByNames = personsList.stream()
                 .collect(Collectors.groupingBy(Person::getName, Collectors.averagingInt(Person::getAge)));
         System.out.println(averageAgesByNames);
 
-        // Д) получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
+        // Д) Получить людей, возраст которых от 20 до 45, вывести в консоль их имена в порядке убывания возраста
         String certainAgePersonsString = personsList.stream()
                 .filter(p -> p.getAge() >= 20 && p.getAge() <= 45)
-                .sorted((p1, p2) -> p1.getAge() - p2.getAge())
+                .sorted((p1, p2) -> p2.getAge() - p1.getAge())
                 .map(Person::getName)
                 .collect(Collectors.joining(", "));
-        System.out.println("д) список людей возраста от 20 до 45 в порядке убывания возраста: " + certainAgePersonsString);
+        System.out.println("д) Список людей возраста от 20 до 45 в порядке убывания возраста: " + certainAgePersonsString);
 
         // Создать бесконечный поток корней чисел. С консоли прочитать число – сколько элементов нужно вычислить,
         // затем – распечатать эти элементы
@@ -61,11 +60,11 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Введите сколько элементов потока корней чисел нужно вычислить: ");
-        int rootsSequenceElementsCount = scanner.nextInt();
+        int rootsCount = scanner.nextInt();
 
         DoubleStream roots = DoubleStream.iterate(0, x -> x + 1)
                 .map(Math::sqrt)
-                .limit(rootsSequenceElementsCount);
+                .limit(rootsCount);
         roots.forEach(System.out::println);
 
         // *Попробовать реализовать бесконечный поток чисел Фибоначчи
