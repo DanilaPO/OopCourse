@@ -193,7 +193,6 @@ public class SinglyLinkedList<E> {
 
         for (int i = 1; i <= index; ++i) {
             currentItem = currentItem.getNext();
-
         }
 
         return currentItem;
