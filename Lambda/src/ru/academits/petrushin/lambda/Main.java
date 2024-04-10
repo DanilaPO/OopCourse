@@ -31,14 +31,13 @@ public class Main {
         List<Person> personsUnder18YearsList = personsList.stream()
                 .filter(p -> p.getAge() < 18)
                 .toList();
-        System.out.print("в) Список людей младше 18: " + personsUnder18YearsList.stream()
-                .map(Person::getName)
-                .collect(Collectors.joining(", ")) + " - ");
 
         personsUnder18YearsList.stream()
                 .mapToInt(Person::getAge)
                 .average()
-                .ifPresentOrElse(x -> System.out.println("их средний возраст равен: " + x), () -> System.out.println("Нет людей младше 18"));
+                .ifPresentOrElse(averageAge -> System.out.println(personsUnder18YearsList.stream()
+                        .map(Person::getName)
+                        .collect(Collectors.joining(", ", "в) Список людей младше 18: ", " - их средний возраст равен: " + averageAge))), () -> System.out.println("в) Нет людей младше 18"));
 
         // Г) При помощи группировки получить Map, в котором ключи – имена, а значения – средний возраст
         System.out.println("г) Map, в котором ключи – имена, а значения – средний возраст:");
