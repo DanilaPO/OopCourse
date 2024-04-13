@@ -37,7 +37,8 @@ public class Main {
                 .average()
                 .ifPresentOrElse(averageAge -> System.out.println(personsUnder18YearsList.stream()
                         .map(Person::getName)
-                        .collect(Collectors.joining(", ", "в) Список людей младше 18: ", " - их средний возраст равен: " + averageAge))), () -> System.out.println("в) Нет людей младше 18"));
+                        .collect(Collectors.joining(", ", "в) Список людей младше 18: ",
+                                " - их средний возраст равен: " + averageAge))), () -> System.out.println("в) Нет людей младше 18"));
 
         // Г) При помощи группировки получить Map, в котором ключи – имена, а значения – средний возраст
         System.out.println("г) Map, в котором ключи – имена, а значения – средний возраст:");
