@@ -1,5 +1,7 @@
 package ru.academits.petrushin.hash_table;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class HashTable<E> implements Collection<E> {
@@ -221,7 +223,7 @@ public class HashTable<E> implements Collection<E> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(@NotNull Collection<?> c) {
         if (size == 0) {
             return false;
         }
