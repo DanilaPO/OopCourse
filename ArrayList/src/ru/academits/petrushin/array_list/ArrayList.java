@@ -39,7 +39,7 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
-    private void checkIndexToInsert(int index) {
+    private void checkIndexForAdding(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Индекс вышел за пределы допустимого диапазона значений от 0 до " + size + ". Передан индекс " + index);
         }
@@ -87,19 +87,21 @@ public class ArrayList<E> implements List<E> {
     // Метод добавления всех элементов коллекции в список по индексу - addAll
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        checkIndexToInsert(index);
+        checkIndexForAdding(index);
 
         if (c.isEmpty()) {
             return false;
         }
 
-        ensureCapacity(size + c.size() + index);
+        ensureCapacity(size + c.size());
 
-        System.arraycopy(items, index, items, index + c.size(), size);
+        System.arraycopy(items, index, items, index + c.size(), size - index);
+
+        int i = index;
 
         for (E item : c) {
-            items[index] = item;
-            ++index;
+            items[i] = item;
+            ++i;
         }
 
         size += c.size();
@@ -180,7 +182,7 @@ public class ArrayList<E> implements List<E> {
     // Метод вставляет указанный элемент в указанную позицию в этом списке - add(int index, T element)
     @Override
     public void add(int index, E item) {
-        checkIndexToInsert(index);
+        checkIndexForAdding(index);
 
         if (size == items.length) {
             increaseCapacity();
@@ -378,7 +380,9 @@ public class ArrayList<E> implements List<E> {
         final int prime = 37;
         int hash = 1;
 
-        hash = prime * hash + Arrays.hashCode(items);
+        for(int i = 0; i < size; ++i) {
+            hash = prime * hash + (items[i] != null ? items[i].hashCode() : 0);
+        }
 
         return hash;
     }
