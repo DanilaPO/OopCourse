@@ -11,7 +11,7 @@ public class Main {
 
         Integer x1 = 1;
         Integer x2 = 2;
-        Integer x3 = null;
+        Integer x3 = 3;
         Integer x4 = 9999;
         Integer x5 = 999;
 
