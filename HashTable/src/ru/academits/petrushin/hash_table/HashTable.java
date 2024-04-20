@@ -1,19 +1,16 @@
 package ru.academits.petrushin.hash_table;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 public class HashTable<E> implements Collection<E> {
     private static final int DEFAULT_LENGTH = 10;
 
     private final ArrayList<E>[] lists;
-
     private int size;
     private int modCount;
 
     public HashTable() {
-        //noinspection unchecked
+        // noinspection unchecked
         lists = new ArrayList[DEFAULT_LENGTH];
     }
 
@@ -40,21 +37,11 @@ public class HashTable<E> implements Collection<E> {
     public boolean contains(Object o) {
         int index = getIndex(o);
 
-        if (o == null) {
-            if (lists[index] == null) {
-                return false;
-            }
-
-            for (E e : lists[index]) {
-                if (e == null) {
-                    return true;
-                }
-            }
-
+        try {
+            return lists[index].contains(o);
+        } catch (NullPointerException e) {
             return false;
         }
-
-        return lists[index].contains(o);
     }
 
     private class HashTableListIterator implements Iterator<E> {
@@ -122,17 +109,14 @@ public class HashTable<E> implements Collection<E> {
             return Arrays.copyOf(toArray(), size, (Class<? extends T[]>) a.getClass());
         }
 
-        //noinspection unchecked
-        T[] array = (T[]) toArray();
+        Object[] array = toArray();
 
-        for (int i = 0; i <= size; ++i) {
-            if (i == size) {
-                a[size] = null;
-                break;
-            }
-
-            a[i] = array[i];
+        for (int i = 0; i < size; ++i) {
+            //noinspection unchecked
+            a[i] = (T) array[i];
         }
+
+        a[size] = null;
 
         return a;
     }
@@ -182,7 +166,7 @@ public class HashTable<E> implements Collection<E> {
     @Override
     public boolean addAll(Collection<? extends E> c) {
         // У меня нет здесь ворнингов
-        if (c.size() == 0) {
+        if (c.isEmpty()) {
             return false;
         }
 
@@ -196,7 +180,7 @@ public class HashTable<E> implements Collection<E> {
     @Override
     public boolean removeAll(Collection<?> c) {
         // У меня нет здесь ворнингов
-        if (c.size() == 0 || size == 0) {
+        if (c.isEmpty() || size == 0) {
             return false;
         }
 
@@ -223,7 +207,7 @@ public class HashTable<E> implements Collection<E> {
     }
 
     @Override
-    public boolean retainAll(@NotNull Collection<?> c) {
+    public boolean retainAll(Collection<?> c) {
         if (size == 0) {
             return false;
         }
@@ -256,7 +240,11 @@ public class HashTable<E> implements Collection<E> {
             return;
         }
 
-        Arrays.fill(lists, null);
+        for(List list : lists) {
+            if(list != null) {
+                list.clear();
+            }
+        }
 
         size = 0;
         ++modCount;
