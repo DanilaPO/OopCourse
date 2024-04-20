@@ -10,7 +10,7 @@ public class HashTable<E> implements Collection<E> {
     private int modCount;
 
     public HashTable() {
-        // noinspection unchecked
+        //noinspection unchecked
         lists = new ArrayList[DEFAULT_LENGTH];
     }
 
