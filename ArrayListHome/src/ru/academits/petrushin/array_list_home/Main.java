@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         // Чтение в список всех строк из файла
         try {
             String filePath = "File.txt";
@@ -17,7 +17,7 @@ public class Main {
         } catch (FileNotFoundException e) {
             System.out.print("Файл не найден!");
         } catch (IOException e) {
-            throw e;
+            System.out.print("Ошибка!");
         }
 
         // Удаление из списка всех четных чисел
@@ -55,15 +55,15 @@ public class Main {
         }
     }
 
-    public static<E> ArrayList<E> getNonRepeatingElements(ArrayList<E> numbers) {
-        ArrayList<E> nonRepeatingNumbers = new ArrayList<>(numbers.size());
+    public static<E> ArrayList<E> getNonRepeatingElements(ArrayList<E> elements) {
+        ArrayList<E> nonRepeatingElements = new ArrayList<>(elements.size());
 
-        for (E number : numbers) {
-            if (!nonRepeatingNumbers.contains(number)) {
-                nonRepeatingNumbers.add(number);
+        for (E element : elements) {
+            if (!nonRepeatingElements.contains(element)) {
+                nonRepeatingElements.add(element);
             }
         }
 
-        return nonRepeatingNumbers;
+        return nonRepeatingElements;
     }
 }
