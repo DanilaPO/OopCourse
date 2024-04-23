@@ -37,11 +37,12 @@ public class HashTable<E> implements Collection<E> {
     public boolean contains(Object o) {
         int index = getIndex(o);
 
-        try {
-            return lists[index].contains(o);
-        } catch (NullPointerException e) {
+
+        if (lists[index] == null) {
             return false;
         }
+
+        return lists[index].contains(o);
     }
 
     private class HashTableListIterator implements Iterator<E> {
@@ -104,7 +105,7 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        if (a.length <= size) {
+        if (a.length < size) {
             //noinspection unchecked
             return Arrays.copyOf(toArray(), size, (Class<? extends T[]>) a.getClass());
         }
@@ -114,6 +115,10 @@ public class HashTable<E> implements Collection<E> {
         for (int i = 0; i < size; ++i) {
             //noinspection unchecked
             a[i] = (T) array[i];
+        }
+
+        if (a.length == size) {
+            return a;
         }
 
         a[size] = null;
@@ -165,7 +170,6 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        // У меня нет здесь ворнингов
         if (c.isEmpty()) {
             return false;
         }
@@ -240,8 +244,8 @@ public class HashTable<E> implements Collection<E> {
             return;
         }
 
-        for(List list : lists) {
-            if(list != null) {
+        for (List<E> list : lists) {
+            if (list != null) {
                 list.clear();
             }
         }

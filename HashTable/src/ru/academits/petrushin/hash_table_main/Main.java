@@ -55,7 +55,7 @@ public class Main {
         System.out.println();
 
         // метод toArray(T[] a)
-        Integer[] array = new Integer[10];
+        Integer[] array = new Integer[6];
         System.out.println("Заполнение массива данными хэш-таблицы: " + Arrays.toString(table1.toArray(array)));
         System.out.println();
 
