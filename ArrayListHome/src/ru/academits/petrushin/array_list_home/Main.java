@@ -10,14 +10,15 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         // Чтение в список всех строк из файла
+        String filePath = "File.txt";
+
         try {
-            String filePath = "File.txt";
             System.out.println("Список строк: " + getFileLines(filePath));
             System.out.println();
         } catch (FileNotFoundException e) {
-            System.out.print("Файл не найден!");
+            System.out.println("Файл " + filePath + " не найден!");
         } catch (IOException e) {
-            System.out.print("Ошибка!");
+            System.out.println(e.getMessage());
         }
 
         // Удаление из списка всех четных чисел
