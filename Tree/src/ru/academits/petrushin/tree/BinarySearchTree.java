@@ -1,40 +1,36 @@
 package ru.academits.petrushin.tree;
 
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class BinarySearchTree<E> {
     private TreeNode<E> root;
-    private Comparator<E> comparator;
+    private final Comparator<E> comparator;
     private int size;
 
-    private int compare(E nodeData1, E nodeData2) {
-        if (nodeData1 == null || nodeData2 == null) {
-            if (nodeData1 == null && nodeData2 == null) {
+    public BinarySearchTree(Comparator<E> comparator) {
+        this.comparator = comparator;
+    }
+
+    private int compare(E data1, E data2) {
+        if (comparator == null) {
+            //noinspection unchecked
+            return ((Comparable<E>) data1).compareTo(data2);
+        }
+
+        if (data1 == null || data2 == null) {
+            if (data1 != null) {
+                return 1;
+            }
+
+            if (data2 == null) {
                 return 0;
             }
 
             return -1;
         }
 
-        if (comparator == null) {
-            //noinspection unchecked
-            Comparable<E> givenTypeNode1 = (Comparable<E>) nodeData1;
-
-            return givenTypeNode1.compareTo(nodeData2);
-        }
-
-        return comparator.compare(nodeData1, nodeData2);
-    }
-
-    public BinarySearchTree(Comparator<E> comparator) {
-        this.comparator = comparator;
-    }
-
-    public BinarySearchTree() {
+        return comparator.compare(data1, data2);
     }
 
     // Вставка узла
@@ -47,14 +43,13 @@ public class BinarySearchTree<E> {
         }
 
         TreeNode<E> currentNode = root;
-        TreeNode<E> newNode = new TreeNode<>(data);
 
         while (true) {
-            int comparisonResult = compare(currentNode.getData(), newNode.getData());
+            int comparisonResult = compare(currentNode.getData(), data);
 
             if (comparisonResult <= 0) {
                 if (currentNode.getRight() == null) {
-                    currentNode.setRight(newNode);
+                    currentNode.setRight(new TreeNode<>(data));
 
                     return;
                 }
@@ -62,7 +57,7 @@ public class BinarySearchTree<E> {
                 currentNode = currentNode.getRight();
             } else {
                 if (currentNode.getLeft() == null) {
-                    currentNode.setLeft(newNode);
+                    currentNode.setLeft(new TreeNode<>(data));
 
                     return;
                 }
@@ -79,16 +74,15 @@ public class BinarySearchTree<E> {
         }
 
         TreeNode<E> currentNode = root;
-        TreeNode<E> newNode = new TreeNode<>(data);
 
         while (currentNode != null) {
-            int comparisonResult = compare(currentNode.getData(), newNode.getData());
+            int comparisonResult = compare(currentNode.getData(), data);
 
             if (comparisonResult == 0) {
                 return true;
             }
 
-            if (comparisonResult <= 0) {
+            if (comparisonResult < 0) {
                 if (currentNode.getRight() == null) {
                     return false;
                 }
@@ -112,103 +106,109 @@ public class BinarySearchTree<E> {
             return false;
         }
 
-        TreeNode<E> remoteNode = root;
-        TreeNode<E> remoteNodeParent = null;
-        TreeNode<E> newNode = new TreeNode<>(data);
+        TreeNode<E> removedNode = root;
+        TreeNode<E> removedNodeParent = null;
 
         while (true) {
-            int comparisonResult = compare(remoteNode.getData(), newNode.getData());
+            int comparisonResult = compare(removedNode.getData(), data);
 
             if (comparisonResult == 0) {
                 break;
             }
 
             if (comparisonResult < 0) {
-                if (remoteNode.getRight() == null) {
+                if (removedNode.getRight() == null) {
                     return false;
                 }
 
-                remoteNodeParent = remoteNode;
-                remoteNode = remoteNode.getRight();
+                removedNodeParent = removedNode;
+                removedNode = removedNode.getRight();
             } else {
-                if (remoteNode.getLeft() == null) {
+                if (removedNode.getLeft() == null) {
                     return false;
                 }
 
-                remoteNodeParent = remoteNode;
-                remoteNode = remoteNode.getLeft();
+                removedNodeParent = removedNode;
+                removedNode = removedNode.getLeft();
             }
         }
 
         --size;
 
-        if (remoteNode.getLeft() == null || remoteNode.getRight() == null) {
-            int comparisonResult = compare(remoteNode.getData(), remoteNodeParent.getData());
+        if (removedNode.getLeft() == null || removedNode.getRight() == null) {
+            int comparisonResult;
 
-            if (remoteNode.getLeft() == null && remoteNode.getRight() == null) {
-                if (remoteNodeParent == null) {
+            if (removedNodeParent != null) {
+                comparisonResult = compare(removedNode.getData(), removedNodeParent.getData());
+            } else {
+                comparisonResult = 1;
+            }
+
+            TreeNode<E> replacementNode;
+
+            if (removedNode.getLeft() == null && removedNode.getRight() == null) {
+                if (removedNodeParent == null) {
                     root = null;
                 } else if (comparisonResult < 0) {
-                    remoteNodeParent.setLeft(null);
+                    removedNodeParent.setLeft(null);
                 } else {
-                    remoteNodeParent.setRight(null);
+                    removedNodeParent.setRight(null);
                 }
-            } else if (remoteNode.getRight() == null) {
-                if (remoteNodeParent == null) {
-                    root = remoteNode.getLeft();
+            } else if (removedNode.getRight() == null) {
+                replacementNode = removedNode.getLeft();
+
+                if (removedNodeParent == null) {
+                    root = replacementNode;
                 } else if (comparisonResult < 0) {
-                    remoteNodeParent.setLeft(remoteNode.getLeft());
+                    removedNodeParent.setLeft(replacementNode);
                 } else {
-                    remoteNodeParent.setRight(remoteNode.getLeft());
+                    removedNodeParent.setRight(replacementNode);
                 }
             } else {
-                if (remoteNodeParent == null) {
-                    root = remoteNode.getRight();
+                replacementNode = removedNode.getRight();
+
+                if (removedNodeParent == null) {
+                    root = replacementNode;
                 } else if (comparisonResult < 0) {
-                    remoteNodeParent.setLeft(remoteNode.getRight());
+                    removedNodeParent.setLeft(replacementNode);
                 } else {
-                    remoteNodeParent.setRight(remoteNode.getRight());
+                    removedNodeParent.setRight(replacementNode);
                 }
             }
 
             return true;
         }
 
-        TreeNode<E> parent = remoteNode;
-        TreeNode<E> child = remoteNode.getRight();
-
-        if (child.getLeft() == null) {
-            if (remoteNodeParent == null) {
-                root = remoteNode;
-            } else if (compare(remoteNode.getRight().getData(), remoteNodeParent.getData()) >= 0) {
-                remoteNode.getRight().setLeft(remoteNodeParent.getRight().getLeft());
-                remoteNodeParent.setRight(remoteNode.getRight());
+        if (removedNode.getRight().getLeft() == null) {
+            if (removedNodeParent == null) {
+                root = null;
+            } else if (Objects.equals(removedNode, removedNodeParent.getRight())) {
+                removedNode.getRight().setLeft(removedNode.getLeft());
+                removedNodeParent.setRight(removedNode.getRight());
             } else {
-                remoteNode.getRight().setLeft(remoteNodeParent.getLeft().getLeft());
-                remoteNodeParent.setLeft(remoteNode.getRight());
+                removedNode.getRight().setLeft(removedNode.getLeft());
+                removedNodeParent.setLeft(removedNode.getRight());
             }
         } else {
-            while (child.getLeft() != null) {
-                parent = child;
-                child = child.getLeft();
+            TreeNode<E> parentNode = removedNode;
+            TreeNode<E> leftmostNode = removedNode.getRight();
+
+            while (leftmostNode.getLeft() != null) {
+                parentNode = leftmostNode;
+                leftmostNode = leftmostNode.getLeft();
             }
 
-            parent.setLeft(child.getRight());
+            parentNode.setLeft(leftmostNode.getRight());
 
-            if (remoteNodeParent == null) {
-                child.setLeft(root.getLeft());
-                child.setRight(root.getRight());
-                root = child;
-            } else if (compare(remoteNode.getRight().getData(), remoteNodeParent.getData()) >= 0) {
-                child.setLeft(remoteNodeParent.getRight().getLeft());
-                child.setRight(remoteNodeParent.getRight().getRight());
+            leftmostNode.setLeft(root.getLeft());
+            leftmostNode.setRight(root.getRight());
 
-                remoteNodeParent.setRight(child);
+            if (removedNodeParent == null) {
+                root = leftmostNode;
+            } else if (Objects.equals(removedNode, removedNodeParent.getRight())) {
+                removedNodeParent.setRight(leftmostNode);
             } else {
-                child.setLeft(remoteNodeParent.getLeft().getLeft());
-                child.setRight(remoteNodeParent.getLeft().getRight());
-
-                remoteNodeParent.setLeft(child);
+                removedNodeParent.setLeft(leftmostNode);
             }
         }
 
@@ -221,7 +221,7 @@ public class BinarySearchTree<E> {
     }
 
     // Обход в ширину
-    public void goInWidth(Consumer<E> consumer) {
+    public void visitInWidth(Consumer<E> consumer) {
         if (root == null) {
             return;
         }
@@ -246,7 +246,7 @@ public class BinarySearchTree<E> {
     }
 
     // Обход в глубину без рекурсии
-    public void goInDepth(Consumer<E> consumer) {
+    public void visitInDepth(Consumer<E> consumer) {
         if (root == null) {
             return;
         }
@@ -255,22 +255,22 @@ public class BinarySearchTree<E> {
         stack.push(root);
 
         while (!stack.isEmpty()) {
-            TreeNode<E> stackCurrentNode = stack.pollFirst();
+            TreeNode<E> currentNode = stack.pop();
 
-            consumer.accept(stackCurrentNode.getData());
+            consumer.accept(currentNode.getData());
 
-            if (stackCurrentNode.getRight() != null) {
-                stack.addFirst(stackCurrentNode.getRight());
+            if (currentNode.getRight() != null) {
+                stack.push(currentNode.getRight());
             }
 
-            if (stackCurrentNode.getLeft() != null) {
-                stack.addFirst(stackCurrentNode.getLeft());
+            if (currentNode.getLeft() != null) {
+                stack.push(currentNode.getLeft());
             }
         }
     }
 
     // Рекурсивный обход в глубину
-    public void goInDepthRecursively(Consumer<E> consumer) {
+    public void visitInDepthRecursively(Consumer<E> consumer) {
         if (root == null) {
             return;
         }
@@ -286,7 +286,6 @@ public class BinarySearchTree<E> {
         consumer.accept(node.getData());
 
         visit(node.getLeft(), consumer);
-
         visit(node.getRight(), consumer);
     }
 }

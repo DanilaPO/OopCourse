@@ -2,9 +2,11 @@ package ru.academits.petrushin.tree_main;
 
 import ru.academits.petrushin.tree.BinarySearchTree;
 
+import java.util.Comparator;
+
 public class Main {
     public static void main(String[] args) {
-        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>(Comparator.comparingInt(x -> x));
 
         tree.add(8);
         tree.add(5);
@@ -21,11 +23,11 @@ public class Main {
         tree.add(15);
 
         // поиск узла
-        System.out.print("Результат поиска узла: " + tree.contains(null));
+        System.out.print("Результат поиска узла: " + tree.contains(2));
         System.out.println();
 
         // удаление первого вхождения
-        System.out.print("Результат удаление первого вхождения: " + tree.remove(10));
+        System.out.print("Результат удаление первого вхождения: " + tree.remove(13));
         System.out.println();
 
         // получение числа элементов
@@ -34,16 +36,16 @@ public class Main {
 
         // обход в ширину
         System.out.print("Результат обхода дерева в ширину: ");
-        tree.goInWidth(e -> System.out.print(e + ", "));
+        tree.visitInWidth(e -> System.out.print(e + ", "));
         System.out.println();
 
         // обход в глубину без рекурсии
         System.out.print("Результат обхода дерева в глубину без рекурсии: ");
-        tree.goInDepth(e -> System.out.print(e + ", "));
+        tree.visitInDepth(e -> System.out.print(e + ", "));
         System.out.println();
 
         // рекурсивный обход в глубину
         System.out.print("Результат рекурсивного обхода дерева в глубину: ");
-        tree.goInDepthRecursively(e -> System.out.print(e + ", "));
+        tree.visitInDepthRecursively(e -> System.out.print(e + ", "));
     }
 }
