@@ -10,7 +10,6 @@ public class HashTable<E> implements Collection<E> {
     private int modCount;
 
     public HashTable() {
-        // noinspection unchecked
         lists = new ArrayList[DEFAULT_LENGTH];
     }
 
@@ -19,7 +18,6 @@ public class HashTable<E> implements Collection<E> {
             throw new IllegalArgumentException("Значение длины должно быть > 0. Передано значение длины: " + length);
         }
 
-        //noinspection unchecked
         lists = new ArrayList[length];
     }
 
@@ -37,12 +35,7 @@ public class HashTable<E> implements Collection<E> {
     public boolean contains(Object o) {
         int index = getIndex(o);
 
-
-        if (lists[index] == null) {
-            return false;
-        }
-
-        return lists[index].contains(o);
+        return lists[index] != null && lists[index].contains(o);
     }
 
     private class HashTableListIterator implements Iterator<E> {
@@ -110,18 +103,12 @@ public class HashTable<E> implements Collection<E> {
             return Arrays.copyOf(toArray(), size, (Class<? extends T[]>) a.getClass());
         }
 
-        Object[] array = toArray();
+        //noinspection unchecked
+        a = (T[]) Arrays.copyOf(toArray(), a.length);
 
-        for (int i = 0; i < size; ++i) {
-            //noinspection unchecked
-            a[i] = (T) array[i];
+        if (a.length > size) {
+            a[size] = null;
         }
-
-        if (a.length == size) {
-            return a;
-        }
-
-        a[size] = null;
 
         return a;
     }
