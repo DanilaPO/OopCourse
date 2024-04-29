@@ -18,7 +18,7 @@ public class Main {
         } catch (FileNotFoundException e) {
             System.out.println("Файл " + filePath + " не найден!");
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Ошибка при чтении файла: " + e.getMessage());
         }
 
         // Удаление из списка всех четных чисел
