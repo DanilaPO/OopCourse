@@ -1,7 +1,11 @@
 package model;
 
 public interface Model {
-    public double getCelsius(double temperature);
+    public double getCelsiusFromFahrenheit(double temperature);
 
-    public double getFahrenheit(double temperature);
+    public double getCelsiusFromKelvin(double temperature);
+
+    public double getFahrenheitFormCelsius(double temperature);
+
+    public double getKelvinFormCelsius(double temperature);
 }

@@ -1,22 +1,16 @@
 package controller;
 
-import model.Model;
-import view.View;
+public interface Controller {
 
-public class Controller {
-    private Model converter;
-    private View view;
+    void putCelsiusTemperature(double temperature);
 
-    public Controller(Model converter, View view) {
-        this.view = view;
-        this.converter = converter;
-    }
+    void putFahrenheitTemperature(double temperature);
 
-    public void convertToFahrenheit(double celsiusTemperature) {
-        view.show(converter.getFahrenheit(celsiusTemperature));
-    }
+    void putKelvinTemperature(double temperature);
 
-    public void convertToCelsius(double fahrenheitTemperature) {
-        view.show(converter.getCelsius(fahrenheitTemperature));
-    }
+    void convertToCelsiusTemperature();
+
+    void convertToFahrenheitTemperature();
+
+    void convertToKelvinTemperature();
 }
