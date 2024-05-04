@@ -10,6 +10,7 @@ public class HashTable<E> implements Collection<E> {
     private int modCount;
 
     public HashTable() {
+        //noinspection unchecked
         lists = new ArrayList[DEFAULT_LENGTH];
     }
 
@@ -18,6 +19,7 @@ public class HashTable<E> implements Collection<E> {
             throw new IllegalArgumentException("Значение длины должно быть > 0. Передано значение длины: " + length);
         }
 
+        //noinspection unchecked
         lists = new ArrayList[length];
     }
 
@@ -103,8 +105,8 @@ public class HashTable<E> implements Collection<E> {
             return Arrays.copyOf(toArray(), size, (Class<? extends T[]>) a.getClass());
         }
 
-        //noinspection unchecked
-        a = (T[]) Arrays.copyOf(toArray(), a.length);
+        //noinspection SuspiciousSystemArraycopy
+        System.arraycopy(toArray(), 0, a, 0, toArray().length);
 
         if (a.length > size) {
             a[size] = null;
@@ -170,7 +172,6 @@ public class HashTable<E> implements Collection<E> {
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        // У меня нет здесь ворнингов
         if (c.isEmpty() || size == 0) {
             return false;
         }
