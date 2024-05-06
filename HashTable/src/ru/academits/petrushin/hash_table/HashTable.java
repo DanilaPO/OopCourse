@@ -106,7 +106,7 @@ public class HashTable<E> implements Collection<E> {
         }
 
         //noinspection SuspiciousSystemArraycopy
-        System.arraycopy(toArray(), 0, a, 0, toArray().length);
+        System.arraycopy(toArray(), 0, a, 0, size);
 
         if (a.length > size) {
             a[size] = null;
