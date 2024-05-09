@@ -12,22 +12,26 @@ public class BinarySearchTree<E> {
         this.comparator = comparator;
     }
 
+    public BinarySearchTree() {
+        comparator = null;
+    }
+
     private int compare(E data1, E data2) {
         if (comparator == null) {
+            if (data1 == null || data2 == null) {
+                if (data1 != null) {
+                    return 1;
+                }
+
+                if (data2 == null) {
+                    return 0;
+                }
+
+                return -1;
+            }
+
             //noinspection unchecked
             return ((Comparable<E>) data1).compareTo(data2);
-        }
-
-        if (data1 == null || data2 == null) {
-            if (data1 != null) {
-                return 1;
-            }
-
-            if (data2 == null) {
-                return 0;
-            }
-
-            return -1;
         }
 
         return comparator.compare(data1, data2);
@@ -108,27 +112,32 @@ public class BinarySearchTree<E> {
 
         TreeNode<E> removedNode = root;
         TreeNode<E> removedNodeParent = null;
+        boolean isLeftNode;
 
         while (true) {
-            int comparisonResult = compare(removedNode.getData(), data);
-
-            if (comparisonResult == 0) {
+            if (compare(removedNode.getData(), data) == 0) {
                 break;
             }
 
-            if (comparisonResult < 0) {
+            isLeftNode = true;
+
+            if (compare(removedNode.getData(), data) < 0) {
+                isLeftNode = false;
+            }
+
+            removedNodeParent = removedNode;
+
+            if (!isLeftNode) {
                 if (removedNode.getRight() == null) {
                     return false;
                 }
 
-                removedNodeParent = removedNode;
                 removedNode = removedNode.getRight();
             } else {
                 if (removedNode.getLeft() == null) {
                     return false;
                 }
 
-                removedNodeParent = removedNode;
                 removedNode = removedNode.getLeft();
             }
         }
@@ -136,80 +145,70 @@ public class BinarySearchTree<E> {
         --size;
 
         if (removedNode.getLeft() == null || removedNode.getRight() == null) {
-            int comparisonResult;
-
             if (removedNodeParent != null) {
-                comparisonResult = compare(removedNode.getData(), removedNodeParent.getData());
+                if (compare(removedNode.getData(), removedNodeParent.getData()) < 0) {
+                    isLeftNode = true;
+                } else {
+                    isLeftNode = false;
+                }
             } else {
-                comparisonResult = 1;
+                isLeftNode = false;
             }
 
             TreeNode<E> replacementNode;
 
             if (removedNode.getLeft() == null && removedNode.getRight() == null) {
-                if (removedNodeParent == null) {
-                    root = null;
-                } else if (comparisonResult < 0) {
-                    removedNodeParent.setLeft(null);
-                } else {
-                    removedNodeParent.setRight(null);
-                }
+                replacementNode = null;
             } else if (removedNode.getRight() == null) {
                 replacementNode = removedNode.getLeft();
-
-                if (removedNodeParent == null) {
-                    root = replacementNode;
-                } else if (comparisonResult < 0) {
-                    removedNodeParent.setLeft(replacementNode);
-                } else {
-                    removedNodeParent.setRight(replacementNode);
-                }
             } else {
                 replacementNode = removedNode.getRight();
+            }
 
-                if (removedNodeParent == null) {
-                    root = replacementNode;
-                } else if (comparisonResult < 0) {
-                    removedNodeParent.setLeft(replacementNode);
-                } else {
-                    removedNodeParent.setRight(replacementNode);
-                }
+            if (removedNodeParent == null) {
+                root = replacementNode;
+            } else if (isLeftNode) {
+                removedNodeParent.setLeft(replacementNode);
+            } else {
+                removedNodeParent.setRight(replacementNode);
             }
 
             return true;
         }
 
-        if (removedNode.getRight().getLeft() == null) {
-            if (removedNodeParent == null) {
-                root = null;
-            } else if (Objects.equals(removedNode, removedNodeParent.getRight())) {
-                removedNode.getRight().setLeft(removedNode.getLeft());
+        if (removedNodeParent != null && removedNode.getRight().getLeft() == null) {
+            removedNode.getRight().setLeft(removedNode.getLeft());
+
+            if (removedNode == removedNodeParent.getRight()) {
                 removedNodeParent.setRight(removedNode.getRight());
-            } else {
-                removedNode.getRight().setLeft(removedNode.getLeft());
+            }
+
+            if (removedNode == removedNodeParent.getLeft()) {
                 removedNodeParent.setLeft(removedNode.getRight());
             }
+
+            return true;
+        }
+
+        TreeNode<E> parentNode = removedNode;
+        TreeNode<E> leftmostNode = removedNode.getRight();
+
+        while (leftmostNode.getLeft() != null) {
+            parentNode = leftmostNode;
+            leftmostNode = leftmostNode.getLeft();
+        }
+
+        parentNode.setLeft(leftmostNode.getRight());
+
+        leftmostNode.setLeft(removedNode.getLeft());
+        leftmostNode.setRight(removedNode.getRight());
+
+        if (removedNodeParent == null) {
+            root = leftmostNode;
+        } else if (removedNode == removedNodeParent.getRight()) {
+            removedNodeParent.setRight(leftmostNode);
         } else {
-            TreeNode<E> parentNode = removedNode;
-            TreeNode<E> leftmostNode = removedNode.getRight();
-
-            while (leftmostNode.getLeft() != null) {
-                parentNode = leftmostNode;
-                leftmostNode = leftmostNode.getLeft();
-            }
-
-            parentNode.setLeft(leftmostNode.getRight());
-
-            leftmostNode.setLeft(root.getLeft());
-            leftmostNode.setRight(root.getRight());
-
-            if (removedNodeParent == null) {
-                root = leftmostNode;
-            } else if (Objects.equals(removedNode, removedNodeParent.getRight())) {
-                removedNodeParent.setRight(leftmostNode);
-            } else {
-                removedNodeParent.setLeft(leftmostNode);
-            }
+            removedNodeParent.setLeft(leftmostNode);
         }
 
         return true;
