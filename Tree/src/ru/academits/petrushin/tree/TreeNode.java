@@ -3,26 +3,26 @@ package ru.academits.petrushin.tree;
 // Узел дерева
 class TreeNode<E> {
     private E data;
-    private TreeNode<E> left;
-    private TreeNode<E> right;
+    private ru.academits.petrushin.tree.TreeNode<E> left;
+    private ru.academits.petrushin.tree.TreeNode<E> right;
 
     public TreeNode(E data) {
         this.data = data;
     }
 
-    public TreeNode<E> getLeft() {
+    public ru.academits.petrushin.tree.TreeNode<E> getLeft() {
         return left;
     }
 
-    public void setLeft(TreeNode<E> left) {
+    public void setLeft(ru.academits.petrushin.tree.TreeNode<E> left) {
         this.left = left;
     }
 
-    public TreeNode<E> getRight() {
+    public ru.academits.petrushin.tree.TreeNode<E> getRight() {
         return right;
     }
 
-    public void setRight(TreeNode<E> right) {
+    public void setRight(ru.academits.petrushin.tree.TreeNode<E> right) {
         this.right = right;
     }
 
