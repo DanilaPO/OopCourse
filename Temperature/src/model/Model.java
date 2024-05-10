@@ -1,11 +1,9 @@
 package model;
 
 public interface Model {
-    public double getCelsiusFromFahrenheit(double temperature);
+    void setTemperatureForConvertToCelsius(double temperature, String temperatureName);
 
-    public double getCelsiusFromKelvin(double temperature);
+    double getConvertedTemperature(String temperatureName);
 
-    public double getFahrenheitFormCelsius(double temperature);
-
-    public double getKelvinFormCelsius(double temperature);
+    String[] getTemperatureScale();
 }

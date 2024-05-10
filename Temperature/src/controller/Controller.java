@@ -1,16 +1,9 @@
 package controller;
 
 public interface Controller {
+    void putTemperatureForConvertToCelsius(double temperature, String temperatureName);
 
-    void putCelsiusTemperature(double temperature);
+    void convertTemperature(String temperatureName);
 
-    void putFahrenheitTemperature(double temperature);
-
-    void putKelvinTemperature(double temperature);
-
-    void convertToCelsiusTemperature();
-
-    void convertToFahrenheitTemperature();
-
-    void convertToKelvinTemperature();
+    String[] getTemperatureScale();
 }

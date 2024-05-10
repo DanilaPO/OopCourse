@@ -4,11 +4,8 @@ import model.Model;
 import view.View;
 
 public class TemperatureController implements Controller {
-    private Model converter;
-    private View view;
-
-    private double celsiusTemperature;
-    private double convertedTemperature;
+    private final Model converter;
+    private final View view;
 
     public TemperatureController(Model converter, View view) {
         this.view = view;
@@ -18,35 +15,17 @@ public class TemperatureController implements Controller {
     }
 
     @Override
-    public void putCelsiusTemperature(double temperature) {
-        celsiusTemperature = temperature;
+    public void putTemperatureForConvertToCelsius(double temperature, String temperatureName) {
+        converter.setTemperatureForConvertToCelsius(temperature, temperatureName);
     }
 
     @Override
-    public void putFahrenheitTemperature(double temperature) {
-        celsiusTemperature = converter.getCelsiusFromFahrenheit(temperature);
+    public void convertTemperature(String temperatureName) {
+        view.showConvertationResult(converter.getConvertedTemperature(temperatureName));
     }
 
     @Override
-    public void putKelvinTemperature(double temperature) {
-        celsiusTemperature = converter.getCelsiusFromKelvin(temperature);
-    }
-
-    @Override
-    public void convertToCelsiusTemperature() {
-        convertedTemperature = celsiusTemperature;
-        view.showConvertationResult(convertedTemperature);
-    }
-
-    @Override
-    public void convertToFahrenheitTemperature() {
-        convertedTemperature = converter.getFahrenheitFormCelsius(celsiusTemperature);
-        view.showConvertationResult(convertedTemperature);
-    }
-
-    @Override
-    public void convertToKelvinTemperature() {
-        convertedTemperature = converter.getKelvinFormCelsius(celsiusTemperature);
-        view.showConvertationResult(convertedTemperature);
+    public String[] getTemperatureScale() {
+        return converter.getTemperatureScale();
     }
 }
