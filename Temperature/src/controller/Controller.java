@@ -1,9 +1,9 @@
 package controller;
 
+import java.io.IOException;
+
 public interface Controller {
-    void putTemperatureForConvertToCelsius(double temperature, String temperatureName);
+    void setTemperatureForConversion(double enteringTemperatureData, String enteringTemperatureName, String outputTemperatureName) throws IOException;
 
-    void convertTemperature(String temperatureName);
-
-    String[] getTemperatureScale();
+    String[] getTemperatureScales();
 }

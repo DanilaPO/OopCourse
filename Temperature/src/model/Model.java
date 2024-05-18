@@ -1,9 +1,9 @@
 package model;
 
+import java.io.IOException;
+
 public interface Model {
-    void setTemperatureForConvertToCelsius(double temperature, String temperatureName);
+    double getTemperature(double enteringTemperatureData, String enteringScaleName, String outputScaleName) throws IOException;
 
-    double getConvertedTemperature(String temperatureName);
-
-    String[] getTemperatureScale();
+    String[] getTemperatureScales();
 }

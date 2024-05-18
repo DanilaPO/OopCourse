@@ -3,6 +3,8 @@ package controller;
 import model.Model;
 import view.View;
 
+import java.io.IOException;
+
 public class TemperatureController implements Controller {
     private final Model converter;
     private final View view;
@@ -15,17 +17,12 @@ public class TemperatureController implements Controller {
     }
 
     @Override
-    public void putTemperatureForConvertToCelsius(double temperature, String temperatureName) {
-        converter.setTemperatureForConvertToCelsius(temperature, temperatureName);
+    public void setTemperatureForConversion(double enteringTemperatureData, String enteringScaleName, String outputScaleName) throws IOException {
+        view.showConversionResult(converter.getTemperature(enteringTemperatureData, enteringScaleName, outputScaleName));
     }
 
     @Override
-    public void convertTemperature(String temperatureName) {
-        view.showConvertationResult(converter.getConvertedTemperature(temperatureName));
-    }
-
-    @Override
-    public String[] getTemperatureScale() {
-        return converter.getTemperatureScale();
+    public String[] getTemperatureScales() {
+        return converter.getTemperatureScales();
     }
 }
