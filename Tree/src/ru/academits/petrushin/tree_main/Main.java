@@ -27,7 +27,7 @@ public class Main {
         System.out.println();
 
         // удаление первого вхождения
-        System.out.print("Результат удаление первого вхождения: " + tree.remove(13));
+        System.out.print("Результат удаление первого вхождения: " + tree.remove(8));
         System.out.println();
 
         // получение числа элементов

@@ -4,8 +4,8 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class BinarySearchTree<E> {
-    private TreeNode<E> root;
     private final Comparator<E> comparator;
+    private TreeNode<E> root;
     private int size;
 
     public BinarySearchTree(Comparator<E> comparator) {
@@ -18,15 +18,15 @@ public class BinarySearchTree<E> {
 
     private int compare(E data1, E data2) {
         if (comparator == null) {
-            if (data1 == null || data2 == null) {
-                if (data1 != null) {
-                    return 1;
-                }
+            if (data2 == null && data1 != null) {
+                return 1;
+            }
 
-                if (data2 == null) {
-                    return 0;
-                }
+            if (data1 == null && data2 == null) {
+                return 0;
+            }
 
+            if (data1 == null) {
                 return -1;
             }
 
@@ -112,16 +112,17 @@ public class BinarySearchTree<E> {
 
         TreeNode<E> removedNode = root;
         TreeNode<E> removedNodeParent = null;
-        boolean isLeftNode;
+        int comparingResult;
+        boolean isLeftNode = true;
 
         while (true) {
-            if (compare(removedNode.getData(), data) == 0) {
+            comparingResult = compare(removedNode.getData(), data);
+
+            if (comparingResult == 0) {
                 break;
             }
 
-            isLeftNode = true;
-
-            if (compare(removedNode.getData(), data) < 0) {
+            if (comparingResult < 0) {
                 isLeftNode = false;
             }
 
@@ -140,15 +141,15 @@ public class BinarySearchTree<E> {
 
                 removedNode = removedNode.getLeft();
             }
+
+            isLeftNode = true;
         }
 
         --size;
 
         if (removedNode.getLeft() == null || removedNode.getRight() == null) {
             if (removedNodeParent != null) {
-                if (compare(removedNode.getData(), removedNodeParent.getData()) < 0) {
-                    isLeftNode = true;
-                } else {
+                if (compare(removedNode.getData(), removedNodeParent.getData()) >= 0) {
                     isLeftNode = false;
                 }
             } else {
@@ -176,15 +177,24 @@ public class BinarySearchTree<E> {
             return true;
         }
 
-        if (removedNodeParent != null && removedNode.getRight().getLeft() == null) {
+        if (removedNodeParent != null) {
+            if (removedNode == removedNodeParent.getRight()) {
+                isLeftNode = false;
+            }
+        }
+
+        if (removedNode.getRight().getLeft() == null) {
             removedNode.getRight().setLeft(removedNode.getLeft());
 
-            if (removedNode == removedNodeParent.getRight()) {
-                removedNodeParent.setRight(removedNode.getRight());
-            }
+            if (removedNodeParent != null) {
+                if (!isLeftNode) {
+                    removedNodeParent.setRight(removedNode.getRight());
+                } else {
+                    removedNodeParent.setLeft(removedNode.getRight());
+                }
 
-            if (removedNode == removedNodeParent.getLeft()) {
-                removedNodeParent.setLeft(removedNode.getRight());
+            } else {
+                root = removedNode.getRight();
             }
 
             return true;
@@ -203,12 +213,14 @@ public class BinarySearchTree<E> {
         leftmostNode.setLeft(removedNode.getLeft());
         leftmostNode.setRight(removedNode.getRight());
 
-        if (removedNodeParent == null) {
-            root = leftmostNode;
-        } else if (removedNode == removedNodeParent.getRight()) {
-            removedNodeParent.setRight(leftmostNode);
+        if (removedNodeParent != null) {
+            if (!isLeftNode) {
+                removedNodeParent.setRight(leftmostNode);
+            } else {
+                removedNodeParent.setLeft(leftmostNode);
+            }
         } else {
-            removedNodeParent.setLeft(leftmostNode);
+            root = leftmostNode;
         }
 
         return true;
