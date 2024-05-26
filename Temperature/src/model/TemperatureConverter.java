@@ -1,41 +1,44 @@
 package model;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TemperatureConverter implements Model {
-    private final String[] scales = {"Цельсия", "Фаренгейты", "Кельвины"};
+    private final List<Scale> scales = new ArrayList<>();
 
     @Override
-    public double getTemperature(double enteringTemperatureData, String enteringScaleName, String outputScaleName) throws IOException {
-        double temperature;
+    public double getTemperature(double temperature, String inputScaleName, String outputScaleName) {
+        double celsiusTemperature = 0;
+        Scale outputScale = null;
 
-        try {
-            if (enteringScaleName.equals(scales[0])) {
-                temperature = enteringTemperatureData;
-            } else if (enteringScaleName.equals(scales[1])) {
-                temperature = (enteringTemperatureData - 32) * 5 / 9;
-            } else if (enteringScaleName.equals(scales[2])) {
-                temperature = enteringTemperatureData - 273.15;
-            } else {
-                throw new IOException();
+        for (Scale scale : scales) {
+            if (inputScaleName.equals(scale.getTemperatureName())) {
+                celsiusTemperature = scale.getCelsius(temperature);
             }
 
-            if (outputScaleName.equals(scales[0])) {
-                return temperature;
-            } else if (outputScaleName.equals(scales[1])) {
-                return temperature * 9 / 5 + 32;
-            } else if (outputScaleName.equals(scales[2])) {
-                return temperature + 273.15;
-            } else {
-                throw new NumberFormatException();
+            if (outputScaleName.equals(scale.getTemperatureName())) {
+                outputScale = scale;
             }
-        } catch (NumberFormatException | IOException e) {
-            throw e;
         }
+
+        return outputScale.getTemperatureFormCelsius(celsiusTemperature);
+    }
+
+    public void addScale(Scale scale) {
+        scales.add(scale);
     }
 
     @Override
     public String[] getTemperatureScales() {
+        String[] scales = new String[this.scales.size()];
+
+        int i = 0;
+
+        for(Scale scale : this.scales) {
+            scales[i] = scale.getTemperatureName();
+            ++i;
+        }
+
         return scales;
     }
 }

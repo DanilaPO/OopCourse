@@ -1,6 +1,5 @@
 import controller.TemperatureController;
-import model.Model;
-import model.TemperatureConverter;
+import model.*;
 import view.DesktopView;
 import view.View;
 
@@ -9,6 +8,10 @@ public class Main {
         Model model = new TemperatureConverter();
         View view = new DesktopView();
         new TemperatureController(model, view);
+
+        ((TemperatureConverter) model).addScale(new Celsius());
+        ((TemperatureConverter) model).addScale(new Fahrenheit());
+        ((TemperatureConverter) model).addScale(new Kelvin());
 
         view.start();
     }

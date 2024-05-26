@@ -6,23 +6,27 @@ import view.View;
 import java.io.IOException;
 
 public class TemperatureController implements Controller {
-    private final Model converter;
+    private final Model model;
     private final View view;
 
     public TemperatureController(Model converter, View view) {
         this.view = view;
-        this.converter = converter;
+        this.model = converter;
 
         view.setController(this);
     }
 
     @Override
-    public void setTemperatureForConversion(double enteringTemperatureData, String enteringScaleName, String outputScaleName) throws IOException {
-        view.showConversionResult(converter.getTemperature(enteringTemperatureData, enteringScaleName, outputScaleName));
+    public void setTemperatureForConversion(double temperature, String inputScaleName, String outputScaleName) {
+        try {
+            view.showConversionResult(model.getTemperature(temperature, inputScaleName, outputScaleName));
+        } catch (IOException e) {
+            throw new RuntimeException("Передано значение Null");
+        }
     }
 
     @Override
     public String[] getTemperatureScales() {
-        return converter.getTemperatureScales();
+        return model.getTemperatureScales();
     }
 }
