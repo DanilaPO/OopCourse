@@ -112,23 +112,17 @@ public class BinarySearchTree<E> {
 
         TreeNode<E> removedNode = root;
         TreeNode<E> removedNodeParent = null;
-        boolean isLeftChild;
+        boolean isLeftChild = false;
 
         while (true) {
             int comparisonResult = compare(removedNode.getData(), data);
 
-            isLeftChild = false;
-
-            if (comparisonResult == 0) {
-                if (removedNodeParent != null && compare(removedNode.getData(), removedNodeParent.getData()) < 0) {
-                    isLeftChild = true;
-                }
-
-                break;
-            }
-
             if (comparisonResult > 0) {
                 isLeftChild = true;
+            } else if (comparisonResult < 0) {
+                isLeftChild = false;
+            } else {
+                break;
             }
 
             removedNodeParent = removedNode;
@@ -150,66 +144,42 @@ public class BinarySearchTree<E> {
 
         --size;
 
+        TreeNode<E> replacementNode;
+
         if (removedNode.getLeft() == null || removedNode.getRight() == null) {
-            TreeNode<E> replacementNode = null;
+            replacementNode = removedNode.getLeft() == null ? removedNode.getRight() : null;
 
             if (removedNode.getRight() == null) {
                 replacementNode = removedNode.getLeft();
             }
+        } else {
+            TreeNode<E> leftmostNode = removedNode.getRight();
 
-            if (removedNode.getLeft() == null) {
-                replacementNode = removedNode.getRight();
-            }
-
-            if (removedNodeParent == null) {
-                root = replacementNode;
-            } else if (isLeftChild) {
-                removedNodeParent.setLeft(replacementNode);
+            if (leftmostNode.getLeft() == null) {
+                leftmostNode.setLeft(removedNode.getLeft());
             } else {
-                removedNodeParent.setRight(replacementNode);
-            }
+                TreeNode<E> leftmostNodeParentNode = removedNode;
 
-            return true;
-        }
-
-        TreeNode<E> leftmostNode = removedNode.getRight();
-
-        if (leftmostNode.getLeft() == null) {
-            removedNode.getRight().setLeft(removedNode.getLeft());
-
-            if (removedNodeParent == null) {
-                root = leftmostNode;
-            } else {
-                if (isLeftChild) {
-                    removedNodeParent.setLeft(removedNode.getRight());
-                } else {
-                    removedNodeParent.setRight(removedNode.getRight());
+                while (leftmostNode.getLeft() != null) {
+                    leftmostNodeParentNode = leftmostNode;
+                    leftmostNode = leftmostNode.getLeft();
                 }
+
+                leftmostNodeParentNode.setLeft(leftmostNode.getRight());
+
+                leftmostNode.setLeft(removedNode.getLeft());
+                leftmostNode.setRight(removedNode.getRight());
             }
 
-            return true;
+            replacementNode = leftmostNode;
         }
-
-        TreeNode<E> leftmostNodeParentNode = removedNode;
-
-        while (leftmostNode.getLeft() != null) {
-            leftmostNodeParentNode = leftmostNode;
-            leftmostNode = leftmostNode.getLeft();
-        }
-
-        leftmostNodeParentNode.setLeft(leftmostNode.getRight());
-
-        leftmostNode.setLeft(removedNode.getLeft());
-        leftmostNode.setRight(removedNode.getRight());
 
         if (removedNodeParent == null) {
-            root = leftmostNode;
+            root = replacementNode;
+        } else if (isLeftChild) {
+            removedNodeParent.setLeft(replacementNode);
         } else {
-            if (isLeftChild) {
-                removedNodeParent.setLeft(leftmostNode);
-            } else {
-                removedNodeParent.setRight(leftmostNode);
-            }
+            removedNodeParent.setRight(replacementNode);
         }
 
         return true;
