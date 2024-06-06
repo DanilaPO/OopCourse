@@ -4,6 +4,8 @@ import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +25,14 @@ public class DesktopView implements View {
     public void start() {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Конвертер температур");
-            frame.setSize(800, 200);
+            frame.setSize(500, 200);
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
 
             GridLayout panelsGridLayout = new GridLayout(1, 2);
-            panelsGridLayout.setHgap(-190);
+            panelsGridLayout.setHgap(-20);
 
             JPanel panelInput = new JPanel();
             panelInput.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -57,43 +59,41 @@ public class DesktopView implements View {
             panelOutput.add(textFieldOutput);
 
             JPanel buttonsPanel = new JPanel();
-            GridLayout gridLayout = new GridLayout(2, controller.getTemperatureScales().length + 1);
-            buttonsPanel.setLayout(gridLayout);
+
+            GridLayout buttonsPanelLayout = new GridLayout(2, controller.getTemperatureScales().length);
+            buttonsPanel.setLayout(buttonsPanelLayout);
             buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             frame.add(buttonsPanel, BorderLayout.CENTER);
+
+            JPanel buttonsLabelsPanel = new JPanel();
+            GridLayout buttonsLabelsPanelLayout = new GridLayout(2, 1);
+            buttonsLabelsPanel.setLayout(buttonsLabelsPanelLayout);
+            buttonsLabelsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            frame.add(buttonsLabelsPanel, BorderLayout.LINE_START);
 
             for (int i = 0; i < controller.getTemperatureScales().length; i++) {
                 JRadioButton inputDataChoiceTemperatureButton = new JRadioButton(controller.getTemperatureScales()[i]);
                 inputTemperatureRadioButtonsList.add(inputDataChoiceTemperatureButton);
 
+                inputTemperatureRadioButtonsList.get(0).setSelected(true);
+                selectedInputTemperatureButton = inputTemperatureRadioButtonsList.get(0);
+
                 inputDataChoiceTemperatureButton.addActionListener(actionEvent -> {
                     try {
                         for (JRadioButton button : inputTemperatureRadioButtonsList) {
-                            button.setBackground(null);
                             button.setSelected(false);
                             selectedInputTemperatureButton = null;
                         }
 
                         inputDataChoiceTemperatureButton.setSelected(true);
                         selectedInputTemperatureButton = inputDataChoiceTemperatureButton;
-
                         temperature = Double.parseDouble(inputTextField.getText());
 
-                        if (selectedOutputTemperatureButton != null && inputTextField.getText() != null) {
+                        if (inputTextField.getText() != null) {
                             controller.setTemperatureForConversion(temperature, inputDataChoiceTemperatureButton.getText(), selectedOutputTemperatureButton.getText());
-                            selectedOutputTemperatureButton.doClick();
                         }
                     } catch (NumberFormatException | IOException e) {
-                        for (JRadioButton button : inputTemperatureRadioButtonsList) {
-                            button.setBackground(null);
-                            button.setSelected(false);
-                        }
-
-                        for (JRadioButton button : outputTemperatureRadioButtonsList) {
-                            button.setBackground(null);
-                            button.setSelected(false);
-                        }
-
+                        textFieldOutput.setText("");
                         JOptionPane.showMessageDialog(frame, "Требуется ввести число", "Ошибка ввода данных!", JOptionPane.ERROR_MESSAGE);
                     }
                 });
@@ -101,52 +101,49 @@ public class DesktopView implements View {
                 JRadioButton outputDataChoiceTemperatureButton = new JRadioButton(controller.getTemperatureScales()[i]);
                 outputTemperatureRadioButtonsList.add(outputDataChoiceTemperatureButton);
 
+                outputTemperatureRadioButtonsList.get(0).setSelected(true);
+                selectedOutputTemperatureButton = outputTemperatureRadioButtonsList.get(0);
+
                 outputDataChoiceTemperatureButton.addActionListener(actionEvent -> {
-                    try {
-                        for (JRadioButton button : outputTemperatureRadioButtonsList) {
-                            button.setBackground(null);
-                            button.setSelected(false);
-                            selectedOutputTemperatureButton = null;
-                        }
-
-                        outputDataChoiceTemperatureButton.setSelected(true);
-                        selectedOutputTemperatureButton = outputDataChoiceTemperatureButton;
-
-                        temperature = Double.parseDouble(inputTextField.getText());
-
-                        if (selectedInputTemperatureButton != null) {
-                            temperature = Double.parseDouble(inputTextField.getText());
-                            controller.setTemperatureForConversion(temperature, selectedInputTemperatureButton.getText(), inputDataChoiceTemperatureButton.getText());
-                        }
-                    } catch (NumberFormatException | IOException e) {
-                        for (JRadioButton button : inputTemperatureRadioButtonsList) {
-                            button.setBackground(null);
-                            button.setSelected(false);
-                        }
-
-                        for (JRadioButton button : outputTemperatureRadioButtonsList) {
-                            button.setBackground(null);
-                            button.setSelected(false);
-                        }
-
-                        JOptionPane.showMessageDialog(frame, "Требуется ввести число", "Ошибка ввода данных!", JOptionPane.ERROR_MESSAGE);
+                    for (JRadioButton button : outputTemperatureRadioButtonsList) {
+                        button.setSelected(false);
+                        selectedOutputTemperatureButton = null;
                     }
+
+                    outputDataChoiceTemperatureButton.setSelected(true);
+                    selectedOutputTemperatureButton = outputDataChoiceTemperatureButton;
+                    selectedInputTemperatureButton.doClick();
                 });
             }
 
             JLabel inputDataTemperatureChoiceLabel = new JLabel("Конвертируемая температура: ");
-            buttonsPanel.add(inputDataTemperatureChoiceLabel);
+            buttonsLabelsPanel.add(inputDataTemperatureChoiceLabel);
 
             for (JRadioButton button : inputTemperatureRadioButtonsList) {
                 buttonsPanel.add(button);
             }
 
             JLabel outputDataTemperatureChoiceLabel = new JLabel("Конвертировать температуру в: ");
-            buttonsPanel.add(outputDataTemperatureChoiceLabel);
+            buttonsLabelsPanel.add(outputDataTemperatureChoiceLabel);
 
             for (JRadioButton button : outputTemperatureRadioButtonsList) {
                 buttonsPanel.add(button);
             }
+
+            inputTextField.addKeyListener(new KeyListener() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    selectedInputTemperatureButton.doClick();
+                }
+            });
         });
     }
 

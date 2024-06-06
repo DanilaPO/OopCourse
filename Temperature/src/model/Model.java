@@ -3,7 +3,9 @@ package model;
 import java.io.IOException;
 
 public interface Model {
-    double getTemperature(double temperature, String inputScaleName, String outputScaleName) throws IOException;
+    double getTemperature(double temperature, Scale inputScale, Scale outputScale) throws IOException;
 
-    String[] getTemperatureScales();
+    Scale getScaleByName(String ScaleName);
+
+    String[] getScalesNames();
 }

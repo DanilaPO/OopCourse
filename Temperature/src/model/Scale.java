@@ -1,7 +1,9 @@
 package model;
 
 public interface Scale {
-    double getCelsius(double temperature);
-    double getTemperatureFormCelsius(double celsiusTemperature);
-    String getTemperatureName();
+    double convertToCelsius(double temperature);
+
+    double convertFormCelsius(double celsiusTemperature);
+
+    String getName();
 }

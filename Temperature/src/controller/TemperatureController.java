@@ -17,16 +17,12 @@ public class TemperatureController implements Controller {
     }
 
     @Override
-    public void setTemperatureForConversion(double temperature, String inputScaleName, String outputScaleName) {
-        try {
-            view.showConversionResult(model.getTemperature(temperature, inputScaleName, outputScaleName));
-        } catch (IOException e) {
-            throw new RuntimeException("Передано значение Null");
-        }
+    public void setTemperatureForConversion(double temperature, String inputScaleName, String outputScaleName) throws IOException {
+        view.showConversionResult(model.getTemperature(temperature, model.getScaleByName(inputScaleName), model.getScaleByName(outputScaleName)));
     }
 
     @Override
     public String[] getTemperatureScales() {
-        return model.getTemperatureScales();
+        return model.getScalesNames();
     }
 }
