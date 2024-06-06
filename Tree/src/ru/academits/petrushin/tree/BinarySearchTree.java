@@ -147,11 +147,7 @@ public class BinarySearchTree<E> {
         TreeNode<E> replacementNode;
 
         if (removedNode.getLeft() == null || removedNode.getRight() == null) {
-            replacementNode = removedNode.getLeft() == null ? removedNode.getRight() : null;
-
-            if (removedNode.getRight() == null) {
-                replacementNode = removedNode.getLeft();
-            }
+            replacementNode = removedNode.getLeft() == null ? removedNode.getRight() : removedNode.getLeft();
         } else {
             TreeNode<E> leftmostNode = removedNode.getRight();
 
