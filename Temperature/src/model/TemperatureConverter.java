@@ -1,14 +1,13 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class TemperatureConverter implements Model {
     private final List<Scale> scales = new ArrayList<>();
 
-    public TemperatureConverter(Scale... scale) {
-        Collections.addAll(scales, scale);
+    public TemperatureConverter(Scale[] scales) {
+        this.scales.addAll(List.of(scales));
     }
 
     @Override
@@ -19,9 +18,9 @@ public class TemperatureConverter implements Model {
     }
 
     @Override
-    public Scale getScaleByName(String ScaleName) {
+    public Scale getScaleByName(String scaleName) {
         for (Scale scale : scales) {
-            if (ScaleName.equals(scale.getName())) {
+            if (scaleName.equals(scale.getName())) {
                 return scale;
             }
         }
@@ -31,15 +30,15 @@ public class TemperatureConverter implements Model {
 
     @Override
     public String[] getScalesNames() {
-        String[] scales = new String[this.scales.size()];
+        String[] scalesNames = new String[scales.size()];
 
         int i = 0;
 
-        for (Scale scale : this.scales) {
-            scales[i] = scale.getName();
+        for (Scale scale : scales) {
+            scalesNames[i] = scale.getName();
             ++i;
         }
 
-        return scales;
+        return scalesNames;
     }
 }

@@ -5,7 +5,9 @@ import view.View;
 
 public class Main {
     public static void main(String[] args) {
-        Model model = new TemperatureConverter(new CelsiusScale(), new FahrenheitScale(), new KelvinScale());
+        Scale[] scales = {new CelsiusScale(), new FahrenheitScale(), new KelvinScale()};
+
+        Model model = new TemperatureConverter(scales);
         View view = new DesktopView();
         new TemperatureController(model, view);
 

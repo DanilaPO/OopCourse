@@ -4,16 +4,15 @@ import controller.Controller;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DesktopView implements View {
     private Controller controller;
-    private double temperature;
-    private JTextField textFieldOutput;
+    private JTextField temperatureTextOutputField;
 
     private final List<JRadioButton> inputTemperatureRadioButtonsList = new ArrayList<>();
     private final List<JRadioButton> outputTemperatureRadioButtonsList = new ArrayList<>();
@@ -25,7 +24,7 @@ public class DesktopView implements View {
     public void start() {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Конвертер температур");
-            frame.setSize(500, 200);
+            frame.setSize(530, 200);
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -42,8 +41,8 @@ public class DesktopView implements View {
             JLabel labelInput = new JLabel("Введите температуру: ");
             panelInput.add(labelInput);
 
-            JTextField inputTextField = new JTextField(20);
-            panelInput.add(inputTextField);
+            JTextField temperatureTextInputField = new JTextField(20);
+            panelInput.add(temperatureTextInputField);
 
             JPanel panelOutput = new JPanel();
             panelOutput.setLayout(panelsGridLayout);
@@ -53,14 +52,14 @@ public class DesktopView implements View {
             JLabel labelOutput = new JLabel("Результат конвертации температуры: ");
             panelOutput.add(labelOutput);
 
-            textFieldOutput = new JTextField(20);
-            textFieldOutput.setEnabled(false);
-            textFieldOutput.setDisabledTextColor(Color.BLACK);
-            panelOutput.add(textFieldOutput);
+            temperatureTextOutputField = new JTextField(20);
+            temperatureTextOutputField.setEnabled(false);
+            temperatureTextOutputField.setDisabledTextColor(Color.BLACK);
+            panelOutput.add(temperatureTextOutputField);
 
             JPanel buttonsPanel = new JPanel();
 
-            GridLayout buttonsPanelLayout = new GridLayout(2, controller.getTemperatureScales().length);
+            GridLayout buttonsPanelLayout = new GridLayout(2, controller.getScalesNames().length);
             buttonsPanel.setLayout(buttonsPanelLayout);
             buttonsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             frame.add(buttonsPanel, BorderLayout.CENTER);
@@ -71,8 +70,10 @@ public class DesktopView implements View {
             buttonsLabelsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             frame.add(buttonsLabelsPanel, BorderLayout.LINE_START);
 
-            for (int i = 0; i < controller.getTemperatureScales().length; i++) {
-                JRadioButton inputDataChoiceTemperatureButton = new JRadioButton(controller.getTemperatureScales()[i]);
+            for (int i = 0; i < controller.getScalesNames().length; i++) {
+                String scaleName = controller.getScalesNames()[i];
+
+                JRadioButton inputDataChoiceTemperatureButton = new JRadioButton(scaleName);
                 inputTemperatureRadioButtonsList.add(inputDataChoiceTemperatureButton);
 
                 inputTemperatureRadioButtonsList.get(0).setSelected(true);
@@ -87,18 +88,18 @@ public class DesktopView implements View {
 
                         inputDataChoiceTemperatureButton.setSelected(true);
                         selectedInputTemperatureButton = inputDataChoiceTemperatureButton;
-                        temperature = Double.parseDouble(inputTextField.getText());
+                        double temperature = Double.parseDouble(temperatureTextInputField.getText());
 
-                        if (inputTextField.getText() != null) {
+                        if (temperatureTextInputField.getText() != null) {
                             controller.setTemperatureForConversion(temperature, inputDataChoiceTemperatureButton.getText(), selectedOutputTemperatureButton.getText());
                         }
                     } catch (NumberFormatException | IOException e) {
-                        textFieldOutput.setText("");
+                        temperatureTextOutputField.setText("");
                         JOptionPane.showMessageDialog(frame, "Требуется ввести число", "Ошибка ввода данных!", JOptionPane.ERROR_MESSAGE);
                     }
                 });
 
-                JRadioButton outputDataChoiceTemperatureButton = new JRadioButton(controller.getTemperatureScales()[i]);
+                JRadioButton outputDataChoiceTemperatureButton = new JRadioButton(scaleName);
                 outputTemperatureRadioButtonsList.add(outputDataChoiceTemperatureButton);
 
                 outputTemperatureRadioButtonsList.get(0).setSelected(true);
@@ -116,29 +117,21 @@ public class DesktopView implements View {
                 });
             }
 
-            JLabel inputDataTemperatureChoiceLabel = new JLabel("Конвертируемая температура: ");
-            buttonsLabelsPanel.add(inputDataTemperatureChoiceLabel);
+            JLabel inputTemperatureLabel = new JLabel("Конвертируемая температура: ");
+            buttonsLabelsPanel.add(inputTemperatureLabel);
 
             for (JRadioButton button : inputTemperatureRadioButtonsList) {
                 buttonsPanel.add(button);
             }
 
-            JLabel outputDataTemperatureChoiceLabel = new JLabel("Конвертировать температуру в: ");
-            buttonsLabelsPanel.add(outputDataTemperatureChoiceLabel);
+            JLabel outputTemperatureLabel = new JLabel("Конвертировать температуру в: ");
+            buttonsLabelsPanel.add(outputTemperatureLabel);
 
             for (JRadioButton button : outputTemperatureRadioButtonsList) {
                 buttonsPanel.add(button);
             }
 
-            inputTextField.addKeyListener(new KeyListener() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                }
-
-                @Override
-                public void keyPressed(KeyEvent e) {
-                }
-
+            temperatureTextInputField.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
                     selectedInputTemperatureButton.doClick();
@@ -149,7 +142,7 @@ public class DesktopView implements View {
 
     @Override
     public void showConversionResult(double temperature) {
-        textFieldOutput.setText(String.valueOf(temperature));
+        temperatureTextOutputField.setText(String.valueOf(temperature));
     }
 
     @Override
