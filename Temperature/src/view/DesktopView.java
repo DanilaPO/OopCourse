@@ -14,11 +14,18 @@ public class DesktopView implements View {
     private Controller controller;
     private JTextField temperatureTextOutputField;
 
+    private final String[] scalesNames;
+
     private final List<JRadioButton> inputTemperatureRadioButtonsList = new ArrayList<>();
     private final List<JRadioButton> outputTemperatureRadioButtonsList = new ArrayList<>();
 
     private JRadioButton selectedInputTemperatureButton;
     private JRadioButton selectedOutputTemperatureButton;
+
+    public DesktopView() {
+        //noinspection DataFlowIssue
+        scalesNames = controller.getScalesNames();
+    }
 
     @Override
     public void start() {
@@ -71,9 +78,7 @@ public class DesktopView implements View {
             frame.add(buttonsLabelsPanel, BorderLayout.LINE_START);
 
             for (int i = 0; i < controller.getScalesNames().length; i++) {
-                String scaleName = controller.getScalesNames()[i];
-
-                JRadioButton inputDataChoiceTemperatureButton = new JRadioButton(scaleName);
+                JRadioButton inputDataChoiceTemperatureButton = new JRadioButton(scalesNames[i]);
                 inputTemperatureRadioButtonsList.add(inputDataChoiceTemperatureButton);
 
                 inputTemperatureRadioButtonsList.get(0).setSelected(true);
@@ -90,16 +95,14 @@ public class DesktopView implements View {
                         selectedInputTemperatureButton = inputDataChoiceTemperatureButton;
                         double temperature = Double.parseDouble(temperatureTextInputField.getText());
 
-                        if (temperatureTextInputField.getText() != null) {
-                            controller.setTemperatureForConversion(temperature, inputDataChoiceTemperatureButton.getText(), selectedOutputTemperatureButton.getText());
-                        }
+                        controller.setTemperatureForConversion(temperature, inputDataChoiceTemperatureButton.getText(), selectedOutputTemperatureButton.getText());
                     } catch (NumberFormatException | IOException e) {
                         temperatureTextOutputField.setText("");
                         JOptionPane.showMessageDialog(frame, "Требуется ввести число", "Ошибка ввода данных!", JOptionPane.ERROR_MESSAGE);
                     }
                 });
 
-                JRadioButton outputDataChoiceTemperatureButton = new JRadioButton(scaleName);
+                JRadioButton outputDataChoiceTemperatureButton = new JRadioButton(scalesNames[i]);
                 outputTemperatureRadioButtonsList.add(outputDataChoiceTemperatureButton);
 
                 outputTemperatureRadioButtonsList.get(0).setSelected(true);

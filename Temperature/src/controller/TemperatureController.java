@@ -16,10 +16,7 @@ public class TemperatureController implements Controller {
 
     @Override
     public void setTemperatureForConversion(double temperature, String inputScaleName, String outputScaleName) {
-        try {
-            view.showConversionResult(model.getTemperature(temperature, model.getScaleByName(inputScaleName), model.getScaleByName(outputScaleName)));
-        } catch (Exception ignore) {
-        }
+        view.showConversionResult(model.getTemperature(temperature, model.getScaleByName(inputScaleName), model.getScaleByName(outputScaleName)));
     }
 
     @Override
