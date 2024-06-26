@@ -14,18 +14,13 @@ public class DesktopView implements View {
     private Controller controller;
     private JTextField temperatureTextOutputField;
 
-    private final String[] scalesNames;
-
     private final List<JRadioButton> inputTemperatureRadioButtonsList = new ArrayList<>();
     private final List<JRadioButton> outputTemperatureRadioButtonsList = new ArrayList<>();
 
     private JRadioButton selectedInputTemperatureButton;
     private JRadioButton selectedOutputTemperatureButton;
 
-    public DesktopView() {
-        //noinspection DataFlowIssue
-        scalesNames = controller.getScalesNames();
-    }
+    private String[] scalesNames;
 
     @Override
     public void start() {
@@ -77,8 +72,12 @@ public class DesktopView implements View {
             buttonsLabelsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             frame.add(buttonsLabelsPanel, BorderLayout.LINE_START);
 
+            scalesNames = controller.getScalesNames();
+
             for (int i = 0; i < controller.getScalesNames().length; i++) {
-                JRadioButton inputDataChoiceTemperatureButton = new JRadioButton(scalesNames[i]);
+                String scaleName = scalesNames[i];
+
+                JRadioButton inputDataChoiceTemperatureButton = new JRadioButton(scaleName);
                 inputTemperatureRadioButtonsList.add(inputDataChoiceTemperatureButton);
 
                 inputTemperatureRadioButtonsList.get(0).setSelected(true);
@@ -102,7 +101,7 @@ public class DesktopView implements View {
                     }
                 });
 
-                JRadioButton outputDataChoiceTemperatureButton = new JRadioButton(scalesNames[i]);
+                JRadioButton outputDataChoiceTemperatureButton = new JRadioButton(scaleName);
                 outputTemperatureRadioButtonsList.add(outputDataChoiceTemperatureButton);
 
                 outputTemperatureRadioButtonsList.get(0).setSelected(true);
